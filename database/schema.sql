@@ -83,6 +83,32 @@ CREATE TABLE notifications (
     INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE gps_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    bus_id INT NOT NULL,
+    latitude DECIMAL(10, 8) NOT NULL,
+    longitude DECIMAL(11, 8) NOT NULL,
+    speed DECIMAL(5, 2) DEFAULT 0.00,
+    heading DECIMAL(5, 2),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (bus_id) REFERENCES buses(id) ON DELETE CASCADE,
+    INDEX idx_bus (bus_id),
+    INDEX idx_timestamp (timestamp),
+    INDEX idx_bus_timestamp (bus_id, timestamp)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE bus_routes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    bus_id INT NOT NULL,
+    route_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (bus_id) REFERENCES buses(id) ON DELETE CASCADE,
+    FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_bus_route (bus_id, route_id),
+    INDEX idx_bus (bus_id),
+    INDEX idx_route (route_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Insert default admin user (password: admin123)
 INSERT INTO users (email, password, full_name, role) 
 VALUES ('admin@school.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator', 'admin');

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Testing Tool - School Bus Tracking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .endpoint-card { margin-bottom: 20px; }
+        .response-box { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            border-radius: 4px; 
+            padding: 15px; 
+            max-height: 400px; 
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success { color: #198754; }
+        .error { color: #dc3545; }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="mb-4">API Testing Tool</h1>
+        <p class="text-muted">Test all API endpoints easily</p>
+
+        <!-- Login Section -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>1. Authentication - Login</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Email" value="admin@school.com">
+                        <input type="password" id="loginPassword" class="form-control mb-2" placeholder="Password" value="admin123">
+                        <button class="btn btn-primary" onclick="testLogin()">Login</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="response-box" id="loginResponse">Response will appear here...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Get Buses -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>2. Get All Buses</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" onclick="testGetBuses()">Get Buses</button>
+                <div class="response-box" id="busesResponse">Response will appear here...</div>
+            </div>
+        </div>
+
+        <!-- Update GPS -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>3. Update GPS Location</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <input type="number" id="busId" class="form-control" placeholder="Bus ID" value="1">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" step="0.000001" id="latitude" class="form-control" placeholder="Latitude" value="33.8886">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" step="0.000001" id="longitude" class="form-control" placeholder="Longitude" value="35.4955">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" step="0.1" id="speed" class="form-control" placeholder="Speed" value="45.5">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="testUpdateGPS()">Update Location</button>
+                <div class="response-box mt-3" id="gpsResponse">Response will appear here...</div>
+            </div>
+        </div>
+
+        <!-- Get Live Locations -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>4. Get Live Bus Locations</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" onclick="testLiveGPS()">Get Live Locations</button>
+                <div class="response-box" id="liveResponse">Response will appear here...</div>
+            </div>
+        </div>
+
+        <!-- Get Notifications -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>5. Get Notifications (Parent Only)</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" onclick="testGetNotifications()">Get Notifications</button>
+                <div class="response-box" id="notificationsResponse">Response will appear here...</div>
+            </div>
+        </div>
+
+        <!-- Session Info -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>Session Information</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-info mb-3" onclick="checkSession()">Check Session</button>
+                <button class="btn btn-warning mb-3" onclick="logout()">Logout</button>
+                <div class="response-box" id="sessionResponse">Session info will appear here...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/backend/api';
+        let sessionCookie = '';
+
+        async function makeRequest(endpoint, options = {}) {
+            const url = `${API_BASE}${endpoint}`;
+            const defaultOptions = {
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            const config = { ...defaultOptions, ...options };
+            
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+                return { success: true, data, status: response.status };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        function displayResponse(elementId, result) {
+            const element = document.getElementById(elementId);
+            if (result.success) {
+                element.innerHTML = `<pre class="success">${JSON.stringify(result.data, null, 2)}</pre>`;
+            } else {
+                element.innerHTML = `<pre class="error">Error: ${result.error || 'Unknown error'}</pre>`;
+            }
+        }
+
+        async function testLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const result = await makeRequest('/auth/login.php', {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            });
+            
+            displayResponse('loginResponse', result);
+            
+            if (result.success && result.data.success) {
+                alert('Login successful! You can now test other endpoints.');
+            }
+        }
+
+        async function testGetBuses() {
+            const result = await makeRequest('/buses/index.php');
+            displayResponse('busesResponse', result);
+        }
+
+        async function testUpdateGPS() {
+            const busId = document.getElementById('busId').value;
+            const latitude = parseFloat(document.getElementById('latitude').value);
+            const longitude = parseFloat(document.getElementById('longitude').value);
+            const speed = parseFloat(document.getElementById('speed').value);
+            
+            const result = await makeRequest('/gps/update.php', {
+                method: 'POST',
+                body: JSON.stringify({
+                    bus_id: parseInt(busId),
+                    latitude: latitude,
+                    longitude: longitude,
+                    speed: speed
+                })
+            });
+            
+            displayResponse('gpsResponse', result);
+        }
+
+        async function testLiveGPS() {
+            const result = await makeRequest('/gps/live.php');
+            displayResponse('liveResponse', result);
+        }
+
+        async function testGetNotifications() {
+            const result = await makeRequest('/notifications/index.php');
+            displayResponse('notificationsResponse', result);
+        }
+
+        async function checkSession() {
+            const result = await makeRequest('/auth/check.php');
+            displayResponse('sessionResponse', result);
+        }
+
+        async function logout() {
+            const result = await makeRequest('/auth/logout.php', {
+                method: 'POST'
+            });
+            displayResponse('sessionResponse', result);
+            if (result.success) {
+                alert('Logged out successfully');
+            }
+        }
+
+        // Auto-check session on load
+        window.addEventListener('load', () => {
+            checkSession();
+        });
+    </script>
+</body>
+</html>
+
