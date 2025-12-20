@@ -488,36 +488,71 @@ a.stats-card-modern:active {
     margin-top: 1rem;
 }
 
-/* Quick Actions Buttons - Compact Design */
-.quick-action-btn {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem 1rem;
+/* Quick Actions Buttons - Clear Horizontal Design */
+.quick-action-btn-clear {
+    display: block;
+    padding: 1.25rem 1.5rem;
     border-radius: 12px;
     text-decoration: none;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 1px solid #e9ecef;
     background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    height: 100%;
-    min-height: 140px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     width: 100%;
-    word-wrap: break-word;
-    text-align: center;
-    writing-mode: horizontal-tb !important;
-    text-orientation: mixed !important;
-    direction: ltr !important;
-    unicode-bidi: normal !important;
-    transform: none !important;
+    color: inherit;
 }
 
-@media (max-width: 991px) {
-    .quick-action-btn {
-        min-height: 120px;
-        padding: 1.25rem 0.75rem;
-    }
+.quick-action-btn-clear:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: rgba(13, 110, 253, 0.3);
+    background: #f8f9fa;
+}
+
+.quick-action-btn-clear.btn-primary-modern:hover {
+    border-color: #0d6efd;
+    background: rgba(13, 110, 253, 0.05);
+}
+
+.quick-action-btn-clear.btn-success-modern:hover {
+    border-color: #198754;
+    background: rgba(25, 135, 84, 0.05);
+}
+
+.quick-action-btn-clear.btn-info-modern:hover {
+    border-color: #0dcaf0;
+    background: rgba(13, 202, 240, 0.05);
+}
+
+.quick-action-btn-clear.btn-warning-modern:hover {
+    border-color: #ffc107;
+    background: rgba(255, 193, 7, 0.05);
+}
+
+.action-icon-clear {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.action-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.action-desc {
+    font-size: 0.875rem;
+    color: #6c757d;
+    line-height: 1.4;
 }
 
 .quick-action-btn * {
@@ -606,13 +641,52 @@ a.stats-card-modern:active {
     color: #ffc107;
 }
 
-.quick-action-btn .action-text {
-    width: 100%;
-    text-align: center;
-    writing-mode: horizontal-tb !important;
-    text-orientation: mixed !important;
-    direction: ltr !important;
-    unicode-bidi: normal !important;
+/* Clear Quick Stats Design */
+.stat-item-clear {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.stat-item-clear:hover {
+    background: #ffffff;
+    border-color: rgba(13, 110, 253, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon-clear {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.stat-label-clear {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+    line-height: 1.3;
+}
+
+.stat-desc-clear {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.stat-value-clear {
+    font-size: 1.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1;
 }
 
 .quick-action-btn .action-text h6 {
@@ -645,6 +719,54 @@ a.stats-card-modern:active {
 
 .quick-action-btn:hover .action-icon {
     transform: scale(1.05);
+}
+
+/* Clear Quick Stats Design */
+.stat-item-clear {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.stat-item-clear:hover {
+    background: #ffffff;
+    border-color: rgba(13, 110, 253, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon-clear {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.stat-label-clear {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+    line-height: 1.3;
+}
+
+.stat-desc-clear {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.stat-value-clear {
+    font-size: 1.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1;
 }
 
 /* Modern Table Styling */
