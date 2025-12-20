@@ -18,9 +18,19 @@ $db = $database->getConnection();
 $role = getUserRole();
 $stats = [];
 
-// Check if filtering by today
-$filterToday = isset($_GET['filter']) && $_GET['filter'] === 'today';
-$dateFilter = $filterToday ? "AND DATE(created_at) = CURDATE()" : "";
+// Check if filtering by date
+$selectedDate = isset($_GET['date']) ? $_GET['date'] : null;
+$filterByDate = !empty($selectedDate);
+
+// Validate date format
+if ($filterByDate && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $selectedDate)) {
+    $selectedDate = null;
+    $filterByDate = false;
+}
+
+// Default to today if no date selected
+$displayDate = $filterByDate ? $selectedDate : date('Y-m-d');
+$dateFilter = $filterByDate ? "AND DATE(created_at) = :selected_date" : "";
 
 try {
     if ($role === 'admin') {
@@ -47,26 +57,44 @@ try {
                     AND current_longitude IS NOT NULL";
         $stats['tracking_buses'] = $db->query($query)->fetch()['count'];
         
-        // Get unread notifications count (with today filter if applicable)
-        if ($filterToday) {
+        // Get unread notifications count (with date filter if applicable)
+        if ($filterByDate) {
             $query = "SELECT COUNT(*) as count FROM notifications 
-                      WHERE is_read = FALSE AND DATE(created_at) = CURDATE()";
+                      WHERE is_read = FALSE AND DATE(created_at) = :selected_date";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':selected_date', $selectedDate);
+            $stmt->execute();
+            $stats['unread_notifications'] = $stmt->fetch()['count'];
         } else {
             $query = "SELECT COUNT(*) as count FROM notifications WHERE is_read = FALSE";
+            $stats['unread_notifications'] = $db->query($query)->fetch()['count'];
         }
-        $stats['unread_notifications'] = $db->query($query)->fetch()['count'];
         
-        // Today's activity stats
-        if ($filterToday) {
-            // Today's GPS updates
+        // Date-specific activity stats
+        if ($filterByDate) {
+            // GPS updates for selected date
             $query = "SELECT COUNT(DISTINCT bus_id) as count FROM gps_logs 
-                      WHERE DATE(timestamp) = CURDATE()";
-            $stats['today_gps_updates'] = $db->query($query)->fetch()['count'];
+                      WHERE DATE(timestamp) = :selected_date";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':selected_date', $selectedDate);
+            $stmt->execute();
+            $stats['date_gps_updates'] = $stmt->fetch()['count'];
             
-            // Today's notifications sent
+            // Notifications sent on selected date
             $query = "SELECT COUNT(*) as count FROM notifications 
-                      WHERE DATE(created_at) = CURDATE()";
-            $stats['today_notifications'] = $db->query($query)->fetch()['count'];
+                      WHERE DATE(created_at) = :selected_date";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':selected_date', $selectedDate);
+            $stmt->execute();
+            $stats['date_notifications'] = $stmt->fetch()['count'];
+            
+            // Active buses on selected date (buses that had GPS updates)
+            $query = "SELECT COUNT(DISTINCT bus_id) as count FROM gps_logs 
+                      WHERE DATE(timestamp) = :selected_date";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':selected_date', $selectedDate);
+            $stmt->execute();
+            $stats['date_active_buses'] = $stmt->fetch()['count'];
         }
         
         // Recent activity
@@ -121,50 +149,79 @@ require_once '../includes/header.php';
                     <p class="text-muted mb-0">Welcome back, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</p>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <a href="/dashboard.php<?php echo $filterToday ? '' : '?filter=today'; ?>" 
-                           class="btn btn-sm <?php echo $filterToday ? 'btn-primary' : 'btn-outline-secondary'; ?>"
-                           id="todayBtn">
-                            <i class="fas fa-calendar me-1"></i>Today
-                        </a>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" id="exportBtn">
+                    <div class="btn-group me-2 d-flex align-items-center">
+                        <div class="input-group" style="width: auto;">
+                            <span class="input-group-text">
+                                <i class="fas fa-calendar-alt"></i>
+                            </span>
+                            <input type="date" 
+                                   class="form-control form-control-sm" 
+                                   id="datePicker" 
+                                   value="<?php echo htmlspecialchars($displayDate); ?>"
+                                   max="<?php echo date('Y-m-d'); ?>"
+                                   style="width: 160px;">
+                        </div>
+                        <?php if ($filterByDate): ?>
+                            <a href="/dashboard.php" class="btn btn-sm btn-outline-secondary ms-2" title="Clear date filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        <?php endif; ?>
+                        <button type="button" class="btn btn-sm btn-outline-secondary ms-2" id="exportBtn">
                             <i class="fas fa-download me-1"></i>Export
                         </button>
                     </div>
                 </div>
             </div>
 
-            <?php if ($filterToday): ?>
+            <?php if ($filterByDate): ?>
                 <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
                     <i class="fas fa-info-circle me-2"></i>
-                    <strong>Today's View:</strong> Showing statistics and activity for <?php echo date('F j, Y'); ?>
+                    <strong>Date Filter Active:</strong> Showing statistics and activity for 
+                    <strong><?php echo date('F j, Y', strtotime($selectedDate)); ?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php else: ?>
+                <div class="alert alert-light alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-calendar-check me-2"></i>
+                    <strong>Current View:</strong> Showing all-time statistics. Select a date above to filter by specific day.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php endif; ?>
 
             <?php if ($role === 'admin'): ?>
                 <!-- Admin Dashboard -->
-                <?php if ($filterToday && isset($stats['today_gps_updates'])): ?>
+                <?php if ($filterByDate && isset($stats['date_gps_updates'])): ?>
                     <div class="row mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card border-primary">
                                 <div class="card-body">
                                     <h6 class="card-title text-primary">
-                                        <i class="fas fa-satellite me-2"></i>Today's GPS Updates
+                                        <i class="fas fa-satellite me-2"></i>GPS Updates
                                     </h6>
-                                    <h3 class="mb-0"><?php echo $stats['today_gps_updates']; ?></h3>
-                                    <small class="text-muted">Buses with location updates today</small>
+                                    <h3 class="mb-0"><?php echo $stats['date_gps_updates']; ?></h3>
+                                    <small class="text-muted">Buses with location updates</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card border-info">
                                 <div class="card-body">
                                     <h6 class="card-title text-info">
-                                        <i class="fas fa-bell me-2"></i>Today's Notifications
+                                        <i class="fas fa-bell me-2"></i>Notifications
                                     </h6>
-                                    <h3 class="mb-0"><?php echo $stats['today_notifications']; ?></h3>
-                                    <small class="text-muted">Notifications sent today</small>
+                                    <h3 class="mb-0"><?php echo $stats['date_notifications']; ?></h3>
+                                    <small class="text-muted">Notifications sent</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success">
+                                        <i class="fas fa-bus me-2"></i>Active Buses
+                                    </h6>
+                                    <h3 class="mb-0"><?php echo $stats['date_active_buses'] ?? 0; ?></h3>
+                                    <small class="text-muted">Buses active on this date</small>
                                 </div>
                             </div>
                         </div>
@@ -342,15 +399,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Date picker functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const datePicker = document.getElementById('datePicker');
+    if (datePicker) {
+        datePicker.addEventListener('change', function() {
+            const selectedDate = this.value;
+            if (selectedDate) {
+                // Reload page with selected date
+                window.location.href = '/dashboard.php?date=' + selectedDate;
+            }
+        });
+    }
+});
+
 // Export dashboard data to CSV
 function exportDashboardData() {
     const role = '<?php echo $role; ?>';
-    const filterToday = <?php echo $filterToday ? 'true' : 'false'; ?>;
+    const filterByDate = <?php echo $filterByDate ? 'true' : 'false'; ?>;
+    const selectedDate = '<?php echo $filterByDate ? $selectedDate : ""; ?>';
     
     // Get current stats from the page
     const stats = {
         date: new Date().toLocaleDateString(),
-        filter: filterToday ? 'Today' : 'All Time',
+        filter: filterByDate ? 'Date: ' + selectedDate : 'All Time',
         role: role
     };
     
@@ -362,9 +434,10 @@ function exportDashboardData() {
     stats.total_students = <?php echo $stats['total_students'] ?? 0; ?>;
     stats.tracking_buses = <?php echo $stats['tracking_buses'] ?? 0; ?>;
     stats.unread_notifications = <?php echo $stats['unread_notifications'] ?? 0; ?>;
-    <?php if ($filterToday && isset($stats['today_gps_updates'])): ?>
-    stats.today_gps_updates = <?php echo $stats['today_gps_updates'] ?? 0; ?>;
-    stats.today_notifications = <?php echo $stats['today_notifications'] ?? 0; ?>;
+    <?php if ($filterByDate && isset($stats['date_gps_updates'])): ?>
+    stats.date_gps_updates = <?php echo $stats['date_gps_updates'] ?? 0; ?>;
+    stats.date_notifications = <?php echo $stats['date_notifications'] ?? 0; ?>;
+    stats.date_active_buses = <?php echo $stats['date_active_buses'] ?? 0; ?>;
     <?php endif; ?>
     <?php elseif ($role === 'parent'): ?>
     stats.my_children = <?php echo $stats['my_children'] ?? 0; ?>;
