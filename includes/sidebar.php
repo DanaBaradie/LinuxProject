@@ -33,6 +33,11 @@
                         <i class="fas fa-map-marked-alt"></i>Live Tracking
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>" href="/notifications.php">
+                        <i class="fas fa-bell"></i>Send Notifications
+                    </a>
+                </li>
             <?php elseif (getUserRole() === 'parent'): ?>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'my-children.php' ? 'active' : ''; ?>" href="/my-children.php">
@@ -53,6 +58,11 @@
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'update-location.php' ? 'active' : ''; ?>" href="/update-location.php">
                         <i class="fas fa-location-arrow"></i>Update Location
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>" href="/notifications.php">
+                        <i class="fas fa-bell"></i>Send Notifications
                     </a>
                 </li>
             <?php endif; ?>
