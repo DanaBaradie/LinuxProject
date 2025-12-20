@@ -254,7 +254,7 @@ require_once '../includes/header.php';
                 </div>
 
                 <!-- Recent Buses -->
-                <div class="row mb-5">
+                <div class="row mb-5 recent-buses-row">
                     <div class="col-12">
                         <div class="card dashboard-section-card recent-buses-card">
                             <div class="card-header d-flex justify-content-between align-items-center">
@@ -337,7 +337,7 @@ require_once '../includes/header.php';
                     </div>
                     
                 <!-- Quick Stats -->
-                <div class="row">
+                <div class="row quick-stats-row">
                     <div class="col-12">
                         <div class="card dashboard-section-card quick-stats-card">
                             <div class="card-header">

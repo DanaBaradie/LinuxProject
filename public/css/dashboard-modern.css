@@ -598,18 +598,19 @@ a.stats-card-modern:active {
 /* Wide Table for Recent Buses */
 .table-wide {
     width: 100%;
-    min-width: 1000px;
+    min-width: 1200px;
 }
 
 .table-wide thead th {
-    padding: 1.5rem 1.5rem;
-    font-size: 0.85rem;
+    padding: 1.75rem 2rem;
+    font-size: 0.9rem;
     white-space: nowrap;
+    font-weight: 700;
 }
 
 .table-wide tbody td {
-    padding: 1.5rem 1.5rem;
-    font-size: 1rem;
+    padding: 1.75rem 2rem;
+    font-size: 1.05rem;
     white-space: nowrap;
 }
 
@@ -649,10 +650,11 @@ a.stats-card-modern:active {
 
 /* Quick Stats Progress Bars */
 .progress-modern-large {
-    height: 14px;
-    border-radius: 10px;
+    height: 16px;
+    border-radius: 12px;
     background-color: #e9ecef;
     overflow: hidden;
+    margin-top: 0.5rem;
 }
 
 .progress-modern-large .progress-bar {
@@ -665,11 +667,12 @@ a.stats-card-modern:active {
 }
 
 .stat-item-full {
-    padding: 1.5rem;
+    padding: 2rem;
     background: #f8f9fa;
-    border-radius: 12px;
+    border-radius: 16px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
+    height: 100%;
 }
 
 .stat-item-full:hover {
@@ -680,30 +683,33 @@ a.stats-card-modern:active {
 }
 
 .stat-icon-wrapper {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    flex-shrink: 0;
 }
 
 .stat-label-full {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #212529;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
 }
 
 .stat-desc {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: #6c757d;
+    line-height: 1.4;
 }
 
 .stat-value-text {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 /* Table improvements for better text fitting */
@@ -726,31 +732,106 @@ a.stats-card-modern:active {
     text-overflow: clip;
 }
 
-/* Recent Buses Card - Extra Wide */
+/* Recent Buses Card - Extra Wide - Breaks out of container */
+.recent-buses-row {
+    margin-left: -3rem !important;
+    margin-right: -3rem !important;
+    width: calc(100% + 6rem);
+}
+
 .recent-buses-card {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.recent-buses-card .card-body {
+    padding-left: 4rem;
+    padding-right: 4rem;
+}
+
+/* Quick Stats Card - Extra Wide - Breaks out of container */
+.quick-stats-row {
+    margin-left: -3rem !important;
+    margin-right: -3rem !important;
+    width: calc(100% + 6rem);
+}
+
+.quick-stats-card {
     width: 100%;
     max-width: 100%;
 }
 
-.recent-buses-card .card-body {
-    padding-left: 3rem;
-    padding-right: 3rem;
+.quick-stats-card .card-body {
+    padding-left: 4rem;
+    padding-right: 4rem;
+}
+
+.quick-stats-card .stat-item-full {
+    padding: 2rem;
+    min-height: 180px;
 }
 
 @media (min-width: 1400px) {
+    .recent-buses-row,
+    .quick-stats-row {
+        margin-left: -5rem !important;
+        margin-right: -5rem !important;
+        width: calc(100% + 10rem);
+    }
+    
     .recent-buses-card .card-body {
-        padding-left: 4rem;
-        padding-right: 4rem;
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
+    
+    .quick-stats-card .card-body {
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
+    
+    .quick-stats-card .stat-item-full {
+        padding: 2.5rem;
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .recent-buses-row,
+    .quick-stats-row {
+        margin-left: -2rem !important;
+        margin-right: -2rem !important;
+        width: calc(100% + 4rem);
+    }
+    
+    .recent-buses-card .card-body,
+    .quick-stats-card .card-body {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
     }
 }
 
 @media (max-width: 768px) {
-    .recent-buses-card .card-body {
+    .recent-buses-row,
+    .quick-stats-row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
+    }
+    
+    .recent-buses-card .card-body,
+    .quick-stats-card .card-body {
         padding: 1.5rem;
     }
     
     .table-wide {
         min-width: 800px;
+    }
+    
+    .quick-stats-card .stat-item-full {
+        padding: 1.5rem;
+        min-height: auto;
     }
 }
 
