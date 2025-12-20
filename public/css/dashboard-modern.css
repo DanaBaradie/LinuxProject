@@ -449,8 +449,19 @@ a.stats-card-modern:active {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(90deg, #764ba2 0%, #667eea 50%, #0dcaf0 100%);
     border-radius: 20px 20px 0 0;
+    z-index: 1;
+}
+
+.quick-stats-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.quick-stats-card .card-header {
+    background: white !important;
+    border-bottom: none !important;
+    padding: 1.5rem 2rem 0.5rem 2rem;
 }
 
 .dashboard-section-card:hover {
@@ -644,19 +655,20 @@ a.stats-card-modern:active {
 /* Clear Quick Stats Design */
 .stat-item-clear {
     padding: 1.75rem;
-    background: #f8f9fa;
+    background: #ffffff;
     border-radius: 12px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
     height: 100%;
     width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .stat-item-clear:hover {
     background: #ffffff;
-    border-color: rgba(13, 110, 253, 0.3);
+    border-color: rgba(13, 110, 253, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .stat-icon-clear {
@@ -736,19 +748,20 @@ a.stats-card-modern:active {
 /* Clear Quick Stats Design */
 .stat-item-clear {
     padding: 1.75rem;
-    background: #f8f9fa;
+    background: #ffffff;
     border-radius: 12px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
     height: 100%;
     width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .stat-item-clear:hover {
     background: #ffffff;
-    border-color: rgba(13, 110, 253, 0.3);
+    border-color: rgba(13, 110, 253, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .stat-icon-clear {

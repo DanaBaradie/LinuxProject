@@ -196,12 +196,15 @@ require_once '../includes/header.php';
                 <!-- Quick Stats -->
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card dashboard-section-card">
-                            <div class="card-header">
-                                <h4 class="mb-1"><i class="fas fa-chart-line me-2 text-info"></i>Quick Stats</h4>
+                        <div class="card dashboard-section-card quick-stats-card">
+                            <div class="card-header bg-white border-0 pb-2">
+                                <div class="d-flex align-items-center mb-1">
+                                    <i class="fas fa-chart-line me-2 text-info" style="font-size: 1.25rem;"></i>
+                                    <h4 class="mb-0 fw-bold">Quick Stats</h4>
+                                </div>
                                 <p class="text-muted mb-0 small">System performance metrics</p>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-4 pt-2">
                                 <div class="row g-4">
                                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                         <div class="stat-item-clear">
