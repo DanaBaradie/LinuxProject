@@ -39,9 +39,10 @@ body.with-navbar {
     left: 0;
     z-index: 100;
     padding: 48px 0 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow for separation */
     background-color: white;
     width: 240px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for visual separation */
 }
 
 .sidebar-sticky {
@@ -78,7 +79,7 @@ body.with-navbar {
 /* Main Content */
 main {
     margin-left: 240px;
-    padding: 20px;
+    padding: 20px 20px 20px 50px !important; /* Added left padding (50px) for spacing from sidebar */
     padding-top: 50px; /* Extra spacing from fixed navbar */
     min-height: calc(100vh - 56px);
 }
@@ -86,6 +87,7 @@ main {
 /* Container spacing after navbar */
 .container-fluid {
     padding-top: 25px; /* Additional spacing from navbar */
+    padding-left: 0 !important; /* Remove extra left padding to allow main's padding to work */
 }
 
 /* Page headers get extra spacing */

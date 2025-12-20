@@ -13,7 +13,7 @@
             background-color: #f8f9fa; 
             padding-top: 70px; /* Space for fixed navbar */
         }
-        .sidebar { position: fixed; top: 56px; bottom: 0; left: 0; z-index: 100; padding: 48px 0 0; box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1); }
+        .sidebar { position: fixed; top: 56px; bottom: 0; left: 0; z-index: 100; padding: 48px 0 0; box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1); width: 240px; }
         .sidebar-sticky { position: relative; top: 0; height: calc(100vh - 48px); padding-top: .5rem; overflow-x: hidden; overflow-y: auto; }
         .sidebar .nav-link { font-weight: 500; color: #333; padding: 10px 20px; }
         .sidebar .nav-link:hover { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
@@ -21,8 +21,11 @@
         .sidebar .nav-link i { width: 20px; margin-right: 10px; }
         main { 
             margin-left: 240px; 
-            padding: 20px; 
+            padding: 20px 20px 20px 50px !important; /* Added left padding (50px) for spacing from sidebar */
             padding-top: 30px; /* Extra spacing from navbar */
+        }
+        .container-fluid { 
+            padding-left: 0 !important; /* Remove extra left padding from container */
         }
         .container-fluid { 
             padding-top: 25px; /* Additional spacing */
