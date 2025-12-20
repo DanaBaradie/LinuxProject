@@ -139,11 +139,11 @@ require_once '../includes/header.php';
                 </div>
             <?php endif; ?>
 
-            <div class="row">
+            <div class="row g-4">
                 <!-- Send Notification Form -->
-                <div class="col-lg-8 mb-4">
+                <div class="col-lg-8">
                     <div class="card">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header text-white" style="background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);">
                             <h5 class="mb-0 text-white" style="color: white !important;"><i class="fas fa-paper-plane me-2"></i>Send New Notification</h5>
                         </div>
                         <div class="card-body p-4">
@@ -213,7 +213,7 @@ require_once '../includes/header.php';
                 <!-- Recent Notifications -->
                 <div class="col-lg-4">
                     <div class="card">
-                        <div class="card-header bg-info text-white">
+                        <div class="card-header text-white" style="background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);">
                             <h5 class="mb-0 text-white" style="color: white !important;"><i class="fas fa-history me-2"></i>Recent Notifications</h5>
                         </div>
                         <div class="card-body p-4">
