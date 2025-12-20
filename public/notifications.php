@@ -144,7 +144,7 @@ require_once '../includes/header.php';
                 <div class="col-lg-8 mb-4">
                     <div class="card form-container">
                         <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Send New Notification</h5>
+                            <h5 class="mb-0 text-white" style="color: white !important;"><i class="fas fa-paper-plane me-2"></i>Send New Notification</h5>
                         </div>
                         <div class="card-body p-4">
                             <form method="POST" id="notificationForm">
@@ -214,7 +214,7 @@ require_once '../includes/header.php';
                 <div class="col-lg-4">
                     <div class="card form-container">
                         <div class="card-header bg-info text-white">
-                            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Notifications</h5>
+                            <h5 class="mb-0 text-white" style="color: white !important;"><i class="fas fa-history me-2"></i>Recent Notifications</h5>
                         </div>
                         <div class="card-body p-3">
                             <?php if (!empty($recentNotifications)): ?>

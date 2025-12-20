@@ -16,6 +16,31 @@
     margin-bottom: 2rem;
 }
 
+/* Card Header with Colored Backgrounds - Ensure White Text */
+.form-container .card-header.bg-primary,
+.form-container .card-header.bg-success,
+.form-container .card-header.bg-info,
+.form-container .card-header.bg-danger,
+.form-container .card-header.bg-warning {
+    color: white !important;
+}
+
+.form-container .card-header.bg-primary h5,
+.form-container .card-header.bg-success h5,
+.form-container .card-header.bg-info h5,
+.form-container .card-header.bg-danger h5,
+.form-container .card-header.bg-warning h5 {
+    color: white !important;
+}
+
+.form-container .card-header.bg-primary *,
+.form-container .card-header.bg-success *,
+.form-container .card-header.bg-info *,
+.form-container .card-header.bg-danger *,
+.form-container .card-header.bg-warning * {
+    color: white !important;
+}
+
 .form-header {
     border-bottom: 2px solid #e9ecef;
     padding-bottom: 1rem;
