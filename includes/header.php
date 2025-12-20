@@ -7,21 +7,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
+        body { 
+            background-color: #f8f9fa; 
+            padding-top: 70px; /* Space for fixed navbar */
+        }
         .sidebar { position: fixed; top: 56px; bottom: 0; left: 0; z-index: 100; padding: 48px 0 0; box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1); }
         .sidebar-sticky { position: relative; top: 0; height: calc(100vh - 48px); padding-top: .5rem; overflow-x: hidden; overflow-y: auto; }
         .sidebar .nav-link { font-weight: 500; color: #333; padding: 10px 20px; }
         .sidebar .nav-link:hover { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
         .sidebar .nav-link.active { background-color: #0d6efd; color: white; }
         .sidebar .nav-link i { width: 20px; margin-right: 10px; }
-        main { margin-left: 240px; padding: 20px; }
+        main { 
+            margin-left: 240px; 
+            padding: 20px; 
+            padding-top: 30px; /* Extra spacing from navbar */
+        }
+        .container-fluid { 
+            padding-top: 25px; /* Additional spacing */
+        }
+        .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center {
+            margin-top: 10px;
+            padding-top: 15px;
+        }
         @media (max-width: 768px) {
+            body { padding-top: 56px; }
             .sidebar { position: static; }
-            main { margin-left: 0; }
+            main { margin-left: 0; padding-top: 20px; }
         }
     </style>
 </head>
-<body>
+<body class="with-navbar">
     <nav class="navbar navbar-dark bg-primary fixed-top shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand" href="/dashboard.php">

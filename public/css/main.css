@@ -21,6 +21,16 @@ body {
     background-color: var(--light-color);
 }
 
+/* Add padding-top only when navbar is present (pages with header.php) */
+body:has(nav.navbar) {
+    padding-top: 70px; /* Space for fixed navbar (56px navbar + 14px extra) */
+}
+
+/* Alternative: Add class to body in header.php */
+body.with-navbar {
+    padding-top: 70px;
+}
+
 /* Sidebar Styles */
 .sidebar {
     position: fixed;
@@ -69,7 +79,32 @@ body {
 main {
     margin-left: 240px;
     padding: 20px;
+    padding-top: 50px; /* Extra spacing from fixed navbar */
     min-height: calc(100vh - 56px);
+}
+
+/* Container spacing after navbar */
+.container-fluid {
+    padding-top: 25px; /* Additional spacing from navbar */
+}
+
+/* Page headers get extra spacing */
+.d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center {
+    margin-top: 10px; /* Extra space for page headers */
+    padding-top: 15px; /* Additional padding for headers */
+}
+
+/* First element in main content gets extra top margin */
+main > .d-flex:first-child,
+main > .container-fluid:first-child,
+main > .row:first-child {
+    margin-top: 15px;
+}
+
+/* Page title/header sections get extra spacing */
+.pt-3.pb-2.mb-3 {
+    margin-top: 20px !important;
+    padding-top: 25px !important;
 }
 
 @media (max-width: 768px) {
