@@ -77,11 +77,16 @@ body.with-navbar {
 }
 
 /* Main Content */
-main {
-    margin-left: 240px;
+main,
+main.main-content-area,
+.main-content-area {
+    margin-left: 240px !important;
+    width: calc(100% - 240px);
     padding: 20px 20px 20px 50px !important; /* Added left padding (50px) for spacing from sidebar */
-    padding-top: 50px; /* Extra spacing from fixed navbar */
+    padding-top: 50px !important; /* Extra spacing from fixed navbar */
     min-height: calc(100vh - 56px);
+    position: relative;
+    z-index: 1;
 }
 
 /* Container spacing after navbar */
