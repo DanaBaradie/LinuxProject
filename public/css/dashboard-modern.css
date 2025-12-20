@@ -643,13 +643,13 @@ a.stats-card-modern:active {
 
 /* Clear Quick Stats Design */
 .stat-item-clear {
-    padding: 2rem;
+    padding: 1.75rem;
     background: #f8f9fa;
     border-radius: 12px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
     height: 100%;
-    max-width: 100%;
+    width: 100%;
 }
 
 .stat-item-clear:hover {
@@ -671,15 +671,20 @@ a.stats-card-modern:active {
 }
 
 .stat-label-clear {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: #212529;
     line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .stat-desc-clear {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: #6c757d;
 }
 
 .stat-value-clear {
@@ -688,6 +693,12 @@ a.stats-card-modern:active {
     white-space: nowrap;
     flex-shrink: 0;
     line-height: 1;
+    min-width: 60px;
+    text-align: right;
+}
+
+.min-w-0 {
+    min-width: 0;
 }
 
 .quick-action-btn .action-text h6 {
@@ -724,13 +735,13 @@ a.stats-card-modern:active {
 
 /* Clear Quick Stats Design */
 .stat-item-clear {
-    padding: 2rem;
+    padding: 1.75rem;
     background: #f8f9fa;
     border-radius: 12px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
     height: 100%;
-    max-width: 100%;
+    width: 100%;
 }
 
 .stat-item-clear:hover {
@@ -752,15 +763,20 @@ a.stats-card-modern:active {
 }
 
 .stat-label-clear {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: #212529;
     line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .stat-desc-clear {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: #6c757d;
 }
 
 .stat-value-clear {
@@ -769,6 +785,12 @@ a.stats-card-modern:active {
     white-space: nowrap;
     flex-shrink: 0;
     line-height: 1;
+    min-width: 60px;
+    text-align: right;
+}
+
+.min-w-0 {
+    min-width: 0;
 }
 
 /* Modern Table Styling */
