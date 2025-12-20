@@ -201,9 +201,9 @@ require_once '../includes/header.php';
                                 <h4 class="mb-1"><i class="fas fa-chart-line me-2 text-info"></i>Quick Stats</h4>
                                 <p class="text-muted mb-0 small">System performance metrics</p>
                             </div>
-                            <div class="card-body p-4">
-                                <div class="row g-4">
-                                    <div class="col-xl-4 col-lg-4 col-md-12">
+                            <div class="card-body p-5">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-xl-5 col-lg-5 col-md-12">
                                         <div class="stat-item-clear">
                                             <div class="d-flex align-items-start mb-3">
                                                 <div class="stat-icon-clear bg-primary bg-opacity-10 text-primary me-3">
@@ -221,7 +221,7 @@ require_once '../includes/header.php';
                                         </div>
                                     </div>
                                     
-                                    <div class="col-xl-4 col-lg-4 col-md-12">
+                                    <div class="col-xl-5 col-lg-5 col-md-12">
                                         <div class="stat-item-clear">
                                             <div class="d-flex align-items-start mb-3">
                                                 <div class="stat-icon-clear bg-success bg-opacity-10 text-success me-3">
@@ -239,7 +239,7 @@ require_once '../includes/header.php';
                                         </div>
                                     </div>
                                     
-                                    <div class="col-xl-4 col-lg-4 col-md-12">
+                                    <div class="col-xl-5 col-lg-5 col-md-12">
                                         <div class="stat-item-clear">
                                             <div class="d-flex align-items-start mb-3">
                                                 <div class="stat-icon-clear bg-info bg-opacity-10 text-info me-3">

@@ -643,12 +643,13 @@ a.stats-card-modern:active {
 
 /* Clear Quick Stats Design */
 .stat-item-clear {
-    padding: 1.5rem;
+    padding: 2rem;
     background: #f8f9fa;
     border-radius: 12px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
     height: 100%;
+    max-width: 100%;
 }
 
 .stat-item-clear:hover {
@@ -723,12 +724,13 @@ a.stats-card-modern:active {
 
 /* Clear Quick Stats Design */
 .stat-item-clear {
-    padding: 1.5rem;
+    padding: 2rem;
     background: #f8f9fa;
     border-radius: 12px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
     height: 100%;
+    max-width: 100%;
 }
 
 .stat-item-clear:hover {
