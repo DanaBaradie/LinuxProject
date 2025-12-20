@@ -195,31 +195,56 @@ require_once '../includes/header.php';
 
                 <!-- Quick Actions -->
                 <div class="row mb-5">
-                    <div class="col-md-12">
-                        <div class="card dashboard-section-card">
-                            <div class="card-header bg-white">
-                                <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                    <div class="col-12">
+                        <div class="card dashboard-section-card quick-actions-card">
+                            <div class="card-header">
+                                <h4 class="mb-0"><i class="fas fa-bolt me-2 text-warning"></i>Quick Actions</h4>
+                                <p class="text-muted mb-0 small">Access frequently used features</p>
                             </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-md-3">
-                                        <a href="/tracking-enhanced.php" class="btn btn-primary w-100">
-                                            <i class="fas fa-map-marked-alt me-2"></i>Live Tracking
+                            <div class="card-body p-4">
+                                <div class="row g-4">
+                                    <div class="col-lg-3 col-md-6">
+                                        <a href="/tracking-enhanced.php" class="quick-action-btn btn-primary-modern">
+                                            <div class="action-icon">
+                                                <i class="fas fa-map-marked-alt"></i>
+                                            </div>
+                                            <div class="action-text">
+                                                <h6>Live Tracking</h6>
+                                                <small>Track buses in real-time</small>
+                                            </div>
                                         </a>
                                     </div>
-                                    <div class="col-md-3">
-                                        <a href="/buses.php" class="btn btn-success w-100">
-                                            <i class="fas fa-bus me-2"></i>Manage Buses
+                                    <div class="col-lg-3 col-md-6">
+                                        <a href="/buses.php" class="quick-action-btn btn-success-modern">
+                                            <div class="action-icon">
+                                                <i class="fas fa-bus"></i>
+                                            </div>
+                                            <div class="action-text">
+                                                <h6>Manage Buses</h6>
+                                                <small>View and edit fleet</small>
+                                            </div>
                                         </a>
                                     </div>
-                                    <div class="col-md-3">
-                                        <a href="/routes.php" class="btn btn-info w-100">
-                                            <i class="fas fa-route me-2"></i>Manage Routes
+                                    <div class="col-lg-3 col-md-6">
+                                        <a href="/routes.php" class="quick-action-btn btn-info-modern">
+                                            <div class="action-icon">
+                                                <i class="fas fa-route"></i>
+                                            </div>
+                                            <div class="action-text">
+                                                <h6>Manage Routes</h6>
+                                                <small>Configure bus routes</small>
+                                            </div>
                                         </a>
                                     </div>
-                                    <div class="col-md-3">
-                                        <a href="/students.php" class="btn btn-warning w-100">
-                                            <i class="fas fa-user-graduate me-2"></i>Manage Students
+                                    <div class="col-lg-3 col-md-6">
+                                        <a href="/students.php" class="quick-action-btn btn-warning-modern">
+                                            <div class="action-icon">
+                                                <i class="fas fa-user-graduate"></i>
+                                            </div>
+                                            <div class="action-text">
+                                                <h6>Manage Students</h6>
+                                                <small>Student information</small>
+                                            </div>
                                         </a>
                                     </div>
                                 </div>
@@ -230,49 +255,65 @@ require_once '../includes/header.php';
 
                 <!-- Recent Buses -->
                 <div class="row dashboard-sections-row">
-                    <div class="col-md-8">
-                        <div class="card dashboard-section-card">
-                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0"><i class="fas fa-bus me-2"></i>Recent Buses</h5>
-                                <a href="/buses.php" class="btn btn-sm btn-outline-primary">View All</a>
+                    <div class="col-lg-8 col-md-12 mb-4 mb-lg-0">
+                        <div class="card dashboard-section-card recent-buses-card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="mb-1"><i class="fas fa-bus me-2 text-primary"></i>Recent Buses</h4>
+                                    <p class="text-muted mb-0 small">Latest bus activity and status</p>
+                                </div>
+                                <a href="/buses.php" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-arrow-right me-1"></i>View All
+                                </a>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body p-4">
                                 <?php if (!empty($buses)): ?>
                                     <div class="table-responsive">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover table-modern">
                                             <thead>
                                                 <tr>
-                                                    <th>Bus Number</th>
+                                                    <th class="ps-3">Bus Number</th>
                                                     <th>Driver</th>
                                                     <th>Status</th>
                                                     <th>GPS</th>
-                                                    <th>Actions</th>
+                                                    <th class="text-end pe-3">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($buses as $bus): ?>
                                                     <tr>
-                                                        <td><strong><?php echo htmlspecialchars($bus['bus_number']); ?></strong></td>
-                                                        <td><?php echo htmlspecialchars($bus['driver_name'] ?? 'Unassigned'); ?></td>
+                                                        <td class="ps-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="fas fa-bus text-primary me-2"></i>
+                                                                <strong><?php echo htmlspecialchars($bus['bus_number']); ?></strong>
+                                                            </div>
+                                                        </td>
                                                         <td>
-                                                            <span class="badge bg-<?php echo $bus['status'] === 'active' ? 'success' : 'secondary'; ?>">
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="fas fa-user-tie text-muted me-2"></i>
+                                                                <?php echo htmlspecialchars($bus['driver_name'] ?? 'Unassigned'); ?>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-status bg-<?php echo $bus['status'] === 'active' ? 'success' : 'secondary'; ?>">
+                                                                <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
                                                                 <?php echo ucfirst($bus['status']); ?>
                                                             </span>
                                                         </td>
                                                         <td>
                                                             <?php if ($bus['current_latitude'] && $bus['current_longitude']): ?>
-                                                                <span class="badge bg-success">
-                                                                    <i class="fas fa-check-circle me-1"></i>Active
+                                                                <span class="badge badge-status bg-success">
+                                                                    <i class="fas fa-satellite-dish me-1"></i>Active
                                                                 </span>
                                                             <?php else: ?>
-                                                                <span class="badge bg-secondary">
-                                                                    <i class="fas fa-times-circle me-1"></i>Offline
+                                                                <span class="badge badge-status bg-secondary">
+                                                                    <i class="fas fa-wifi-slash me-1"></i>Offline
                                                                 </span>
                                                             <?php endif; ?>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-end pe-3">
                                                             <a href="/tracking-enhanced.php?bus=<?php echo $bus['id']; ?>" class="btn btn-sm btn-outline-primary">
-                                                                <i class="fas fa-eye"></i>
+                                                                <i class="fas fa-eye me-1"></i>View
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -295,37 +336,49 @@ require_once '../includes/header.php';
                         </div>
                     </div>
                     
-                    <div class="col-md-4">
-                        <div class="card dashboard-section-card">
-                            <div class="card-header bg-white">
-                                <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Quick Stats</h5>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card dashboard-section-card quick-stats-card">
+                            <div class="card-header">
+                                <h4 class="mb-1"><i class="fas fa-chart-line me-2 text-info"></i>Quick Stats</h4>
+                                <p class="text-muted mb-0 small">System performance metrics</p>
                             </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span>Bus Utilization</span>
-                                        <span>75%</span>
+                            <div class="card-body p-4">
+                                <div class="stat-item mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-bus text-primary me-2"></i>
+                                            <span class="fw-semibold">Bus Utilization</span>
+                                        </div>
+                                        <span class="stat-value-text text-primary fw-bold">75%</span>
                                     </div>
-                                    <div class="progress-modern">
-                                        <div class="progress-bar" style="width: 75%"></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span>Route Coverage</span>
-                                        <span>90%</span>
-                                    </div>
-                                    <div class="progress-modern">
-                                        <div class="progress-bar bg-success" style="width: 90%"></div>
+                                    <div class="progress progress-modern-large">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span>GPS Accuracy</span>
-                                        <span>98%</span>
+                                
+                                <div class="stat-item mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-route text-success me-2"></i>
+                                            <span class="fw-semibold">Route Coverage</span>
+                                        </div>
+                                        <span class="stat-value-text text-success fw-bold">90%</span>
                                     </div>
-                                    <div class="progress-modern">
-                                        <div class="progress-bar bg-info" style="width: 98%"></div>
+                                    <div class="progress progress-modern-large">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-satellite-dish text-info me-2"></i>
+                                            <span class="fw-semibold">GPS Accuracy</span>
+                                        </div>
+                                        <span class="stat-value-text text-info fw-bold">98%</span>
+                                    </div>
+                                    <div class="progress progress-modern-large">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                             </div>

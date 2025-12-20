@@ -403,6 +403,16 @@ a.stats-card-modern:active {
     position: relative;
     overflow: visible;
     transition: all 0.3s ease;
+    min-height: auto;
+}
+
+.dashboard-section-card .card-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.dashboard-section-card .card-body {
+    padding: 2rem;
 }
 
 .dashboard-section-card::before {
@@ -461,6 +471,164 @@ a.stats-card-modern:active {
 /* Add spacing between sections */
 .row.mb-5 {
     margin-bottom: 3rem !important;
+}
+
+/* Quick Actions Buttons - Modern Design */
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    min-height: 180px;
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-8px);
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.quick-action-btn .action-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.quick-action-btn.btn-primary-modern {
+    border-color: rgba(13, 110, 253, 0.2);
+}
+
+.quick-action-btn.btn-primary-modern:hover {
+    border-color: #0d6efd;
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(13, 110, 253, 0.1) 100%);
+}
+
+.quick-action-btn.btn-primary-modern .action-icon {
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.15) 0%, rgba(13, 110, 253, 0.25) 100%);
+    color: #0d6efd;
+}
+
+.quick-action-btn.btn-success-modern {
+    border-color: rgba(25, 135, 84, 0.2);
+}
+
+.quick-action-btn.btn-success-modern:hover {
+    border-color: #198754;
+    background: linear-gradient(135deg, rgba(25, 135, 84, 0.05) 0%, rgba(25, 135, 84, 0.1) 100%);
+}
+
+.quick-action-btn.btn-success-modern .action-icon {
+    background: linear-gradient(135deg, rgba(25, 135, 84, 0.15) 0%, rgba(25, 135, 84, 0.25) 100%);
+    color: #198754;
+}
+
+.quick-action-btn.btn-info-modern {
+    border-color: rgba(13, 202, 240, 0.2);
+}
+
+.quick-action-btn.btn-info-modern:hover {
+    border-color: #0dcaf0;
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.05) 0%, rgba(13, 202, 240, 0.1) 100%);
+}
+
+.quick-action-btn.btn-info-modern .action-icon {
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.15) 0%, rgba(13, 202, 240, 0.25) 100%);
+    color: #0dcaf0;
+}
+
+.quick-action-btn.btn-warning-modern {
+    border-color: rgba(255, 193, 7, 0.2);
+}
+
+.quick-action-btn.btn-warning-modern:hover {
+    border-color: #ffc107;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.05) 0%, rgba(255, 193, 7, 0.1) 100%);
+}
+
+.quick-action-btn.btn-warning-modern .action-icon {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 193, 7, 0.25) 100%);
+    color: #ffc107;
+}
+
+.quick-action-btn .action-text h6 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #212529;
+}
+
+.quick-action-btn .action-text small {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.quick-action-btn:hover .action-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Modern Table Styling */
+.table-modern {
+    font-size: 0.95rem;
+}
+
+.table-modern thead th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-modern tbody td {
+    padding: 1.25rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table-modern tbody tr:hover {
+    background-color: #f8f9ff;
+}
+
+.badge-status {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Quick Stats Progress Bars */
+.progress-modern-large {
+    height: 12px;
+    border-radius: 10px;
+    background-color: #e9ecef;
+    overflow: hidden;
+}
+
+.progress-modern-large .progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+.stat-item {
+    padding: 0.5rem 0;
+}
+
+.stat-value-text {
+    font-size: 1.25rem;
 }
 
 /* Modern Scrollbar */
