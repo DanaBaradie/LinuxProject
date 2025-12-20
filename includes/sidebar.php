@@ -1,4 +1,5 @@
-<nav class="d-md-block bg-light sidebar">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<nav class="d-md-block bg-light sidebar" id="sidebar">
     <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
