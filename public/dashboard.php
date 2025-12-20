@@ -205,58 +205,52 @@ require_once '../includes/header.php';
                                 <p class="text-muted mb-0 small">System performance metrics</p>
                             </div>
                             <div class="card-body p-4 pt-2">
-                                <div class="row g-4">
-                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                        <div class="stat-item-clear">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <div class="stat-icon-clear bg-primary bg-opacity-10 text-primary me-3">
-                                                    <i class="fas fa-bus"></i>
-                                                </div>
-                                                <div class="flex-grow-1 min-w-0">
-                                                    <div class="stat-label-clear mb-1">Bus Utilization</div>
-                                                    <div class="stat-desc-clear text-muted">Active buses in use</div>
-                                                </div>
-                                                <div class="stat-value-clear text-primary fw-bold ms-2">75%</div>
+                                <div class="d-flex flex-wrap flex-md-nowrap gap-4 quick-stats-horizontal">
+                                    <div class="flex-fill stat-item-clear">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="stat-icon-clear bg-primary bg-opacity-10 text-primary me-3">
+                                                <i class="fas fa-bus"></i>
                                             </div>
-                                            <div class="progress" style="height: 12px; border-radius: 6px; background-color: #e9ecef;">
-                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="flex-grow-1 min-w-0">
+                                                <div class="stat-label-clear mb-1">Bus Utilization</div>
+                                                <div class="stat-desc-clear text-muted">Active buses in use</div>
                                             </div>
+                                            <div class="stat-value-clear text-primary fw-bold ms-2">75%</div>
+                                        </div>
+                                        <div class="progress" style="height: 12px; border-radius: 6px; background-color: #e9ecef;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     
-                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                        <div class="stat-item-clear">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <div class="stat-icon-clear bg-success bg-opacity-10 text-success me-3">
-                                                    <i class="fas fa-route"></i>
-                                                </div>
-                                                <div class="flex-grow-1 min-w-0">
-                                                    <div class="stat-label-clear mb-1">Route Coverage</div>
-                                                    <div class="stat-desc-clear text-muted">Active routes operating</div>
-                                                </div>
-                                                <div class="stat-value-clear text-success fw-bold ms-2">90%</div>
+                                    <div class="flex-fill stat-item-clear">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="stat-icon-clear bg-success bg-opacity-10 text-success me-3">
+                                                <i class="fas fa-route"></i>
                                             </div>
-                                            <div class="progress" style="height: 12px; border-radius: 6px; background-color: #e9ecef;">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="flex-grow-1 min-w-0">
+                                                <div class="stat-label-clear mb-1">Route Coverage</div>
+                                                <div class="stat-desc-clear text-muted">Active routes operating</div>
                                             </div>
+                                            <div class="stat-value-clear text-success fw-bold ms-2">90%</div>
+                                        </div>
+                                        <div class="progress" style="height: 12px; border-radius: 6px; background-color: #e9ecef;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     
-                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                        <div class="stat-item-clear">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <div class="stat-icon-clear bg-info bg-opacity-10 text-info me-3">
-                                                    <i class="fas fa-satellite-dish"></i>
-                                                </div>
-                                                <div class="flex-grow-1 min-w-0">
-                                                    <div class="stat-label-clear mb-1">GPS Accuracy</div>
-                                                    <div class="stat-desc-clear text-muted">Tracking system reliability</div>
-                                                </div>
-                                                <div class="stat-value-clear text-info fw-bold ms-2">98%</div>
+                                    <div class="flex-fill stat-item-clear">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="stat-icon-clear bg-info bg-opacity-10 text-info me-3">
+                                                <i class="fas fa-satellite-dish"></i>
                                             </div>
-                                            <div class="progress" style="height: 12px; border-radius: 6px; background-color: #e9ecef;">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="flex-grow-1 min-w-0">
+                                                <div class="stat-label-clear mb-1">GPS Accuracy</div>
+                                                <div class="stat-desc-clear text-muted">Tracking system reliability</div>
                                             </div>
+                                            <div class="stat-value-clear text-info fw-bold ms-2">98%</div>
+                                        </div>
+                                        <div class="progress" style="height: 12px; border-radius: 6px; background-color: #e9ecef;">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                 </div>
