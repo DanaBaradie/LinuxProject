@@ -9,6 +9,7 @@
     <link href="/css/main.css" rel="stylesheet">
     <link href="/css/modern-theme.css" rel="stylesheet">
     <link href="/css/forms.css" rel="stylesheet">
+    <link href="/css/dashboard-modern.css" rel="stylesheet">
     <style>
         body { 
             background-color: #f8f9fa; 
@@ -88,7 +89,14 @@
                 <span class="text-white me-3">
                     <i class="fas fa-user-circle me-1"></i>
                     <?php echo htmlspecialchars($_SESSION['user_name']); ?>
-                    <span class="badge bg-light text-primary ms-2"><?php echo ucfirst(getUserRole()); ?></span>
+                    <?php 
+                    $role = getUserRole();
+                    $badgeClass = $role === 'admin' ? 'bg-danger' : ($role === 'driver' ? 'bg-success' : 'bg-info');
+                    ?>
+                    <span class="badge <?php echo $badgeClass; ?> ms-2">
+                        <i class="fas fa-<?php echo $role === 'admin' ? 'shield-alt' : ($role === 'driver' ? 'user-tie' : 'users'); ?> me-1"></i>
+                        <?php echo ucfirst($role); ?>
+                    </span>
                 </span>
                 <a href="/logout.php" class="btn btn-light btn-sm">
                     <i class="fas fa-sign-out-alt me-1"></i>Logout

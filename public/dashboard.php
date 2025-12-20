@@ -43,6 +43,10 @@ try {
                     AND current_longitude IS NOT NULL";
         $stats['tracking_buses'] = $db->query($query)->fetch()['count'];
         
+        // Get unread notifications count
+        $query = "SELECT COUNT(*) as count FROM notifications WHERE is_read = FALSE";
+        $stats['unread_notifications'] = $db->query($query)->fetch()['count'];
+        
         // Recent activity
         $query = "SELECT b.*, u.full_name as driver_name 
                   FROM buses b 
@@ -175,18 +179,18 @@ require_once '../includes/header.php';
                         </div>
                     </a>
 
-                    <div class="stats-card-modern">
+                    <a href="/api/notifications/index.php" class="stats-card-modern text-decoration-none d-block">
                         <div class="stat-icon">
-                            <i class="fas fa-chart-line"></i>
+                            <i class="fas fa-bell"></i>
                         </div>
-                        <div class="stat-label">System Health</div>
-                        <div class="stat-value" style="color: #28a745;">
-                            98%
+                        <div class="stat-label">Notifications</div>
+                        <div class="stat-value" style="color: #dc3545;">
+                            <?php echo $stats['unread_notifications'] ?? 0; ?>
                         </div>
                         <div class="text-muted small mt-2">
-                            <i class="fas fa-heartbeat text-success"></i> Optimal
+                            <i class="fas fa-envelope text-danger"></i> Unread
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Quick Actions -->
