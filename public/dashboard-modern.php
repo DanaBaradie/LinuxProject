@@ -24,16 +24,16 @@ try {
         $query = "SELECT COUNT(*) as count FROM buses WHERE status = 'active'";
         $stats['active_buses'] = $db->query($query)->fetch()['count'];
         
-        $query = "SELECT COUNT(*) as count FROM users WHERE role = 'driver' AND status = 'active'";
+        $query = "SELECT COUNT(*) as count FROM users WHERE role = 'driver'";
         $stats['total_drivers'] = $db->query($query)->fetch()['count'];
         
-        $query = "SELECT COUNT(*) as count FROM users WHERE role = 'parent' AND status = 'active'";
+        $query = "SELECT COUNT(*) as count FROM users WHERE role = 'parent'";
         $stats['total_parents'] = $db->query($query)->fetch()['count'];
         
         $query = "SELECT COUNT(*) as count FROM routes WHERE active = 1";
         $stats['active_routes'] = $db->query($query)->fetch()['count'];
         
-        $query = "SELECT COUNT(*) as count FROM students WHERE status = 'active'";
+        $query = "SELECT COUNT(*) as count FROM students";
         $stats['total_students'] = $db->query($query)->fetch()['count'];
         
         // Get buses with GPS status
