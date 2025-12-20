@@ -179,7 +179,7 @@ require_once '../includes/header.php';
                         </div>
                     </a>
 
-                    <a href="/api/notifications/index.php" class="stats-card-modern text-decoration-none d-block">
+                    <div class="stats-card-modern" onclick="showNotifications()" style="cursor: pointer;">
                         <div class="stat-icon">
                             <i class="fas fa-bell"></i>
                         </div>
@@ -413,6 +413,29 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(refreshStats, 30000);
     }
 });
+
+// Show notifications
+function showNotifications() {
+    // For now, show an alert. Later can be replaced with a modal or page
+    fetch('/api/notifications/index.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const count = data.data.unread_count || 0;
+                if (count > 0) {
+                    alert(`You have ${count} unread notification(s).\n\nA notifications page will be available soon.`);
+                } else {
+                    alert('No unread notifications.');
+                }
+            } else {
+                alert('Unable to load notifications.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Unable to load notifications.');
+        });
+}
 </script>
 
 <?php require_once '../includes/footer.php'; ?>

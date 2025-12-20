@@ -30,6 +30,14 @@ function getUserRole() {
     return $_SESSION['user_role'] ?? null;
 }
 
+function getUserId() {
+    return $_SESSION['user_id'] ?? null;
+}
+
+function getUserName() {
+    return $_SESSION['user_name'] ?? null;
+}
+
 function requireLogin() {
     if (!isLoggedIn()) {
         header('Location: /login.php');
@@ -58,6 +66,31 @@ function formatTime($time) {
 
 function formatDateTime($datetime) {
     return date('M d, Y h:i A', strtotime($datetime));
+}
+
+/**
+ * Send JSON response
+ * 
+ * @param bool $success Success status
+ * @param mixed $data Response data
+ * @param string $message Response message
+ * @param int $statusCode HTTP status code
+ */
+function sendJsonResponse($success, $data = null, $message = '', $statusCode = 200) {
+    http_response_code($statusCode);
+    header('Content-Type: application/json');
+    
+    $response = [
+        'success' => $success,
+        'message' => $message
+    ];
+    
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    
+    echo json_encode($response);
+    exit();
 }
 
 // Check session timeout

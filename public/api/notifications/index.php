@@ -23,33 +23,52 @@ requireAuth();
 $userRole = getUserRole();
 $userId = getUserId();
 
-// Only parents can view notifications
-if ($userRole !== 'parent') {
-    sendJsonResponse(false, null, 'Only parents can view notifications', 403);
-}
-
 $unreadOnly = isset($_GET['unread_only']) && $_GET['unread_only'] === 'true';
 
 try {
     $database = new Database();
     $db = $database->getConnection();
     
-    $query = "SELECT n.id, n.bus_id, n.message, n.notification_type, n.is_read, n.created_at,
-                     b.bus_number
-              FROM notifications n
-              LEFT JOIN buses b ON n.bus_id = b.id
-              WHERE n.parent_id = :parent_id";
-    
-    if ($unreadOnly) {
-        $query .= " AND n.is_read = FALSE";
+    // Admins can see all notifications, parents only see their own
+    if ($userRole === 'admin') {
+        $query = "SELECT n.id, n.bus_id, n.message, n.notification_type, n.is_read, n.created_at,
+                         b.bus_number, u.full_name as parent_name
+                  FROM notifications n
+                  LEFT JOIN buses b ON n.bus_id = b.id
+                  LEFT JOIN users u ON n.parent_id = u.id";
+        
+        $params = [];
+        
+        if ($unreadOnly) {
+            $query .= " WHERE n.is_read = FALSE";
+        }
+        
+        $query .= " ORDER BY n.created_at DESC LIMIT 100";
+        
+        $stmt = $db->prepare($query);
+    } else {
+        // Only parents can view their own notifications
+        if ($userRole !== 'parent') {
+            sendJsonResponse(false, null, 'Only parents and admins can view notifications', 403);
+        }
+        
+        $query = "SELECT n.id, n.bus_id, n.message, n.notification_type, n.is_read, n.created_at,
+                         b.bus_number
+                  FROM notifications n
+                  LEFT JOIN buses b ON n.bus_id = b.id
+                  WHERE n.parent_id = :parent_id";
+        
+        if ($unreadOnly) {
+            $query .= " AND n.is_read = FALSE";
+        }
+        
+        $query .= " ORDER BY n.created_at DESC LIMIT 100";
+        
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':parent_id', $userId);
     }
     
-    $query .= " ORDER BY n.created_at DESC LIMIT 100";
-    
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':parent_id', $userId);
     $stmt->execute();
-    
     $notifications = $stmt->fetchAll();
     
     // Format dates
@@ -58,11 +77,18 @@ try {
     }
     
     // Get unread count
-    $countQuery = "SELECT COUNT(*) as unread_count 
-                   FROM notifications 
-                   WHERE parent_id = :parent_id AND is_read = FALSE";
-    $countStmt = $db->prepare($countQuery);
-    $countStmt->bindParam(':parent_id', $userId);
+    if ($userRole === 'admin') {
+        $countQuery = "SELECT COUNT(*) as unread_count 
+                       FROM notifications 
+                       WHERE is_read = FALSE";
+        $countStmt = $db->prepare($countQuery);
+    } else {
+        $countQuery = "SELECT COUNT(*) as unread_count 
+                       FROM notifications 
+                       WHERE parent_id = :parent_id AND is_read = FALSE";
+        $countStmt = $db->prepare($countQuery);
+        $countStmt->bindParam(':parent_id', $userId);
+    }
     $countStmt->execute();
     $unreadCount = $countStmt->fetch()['unread_count'];
     
