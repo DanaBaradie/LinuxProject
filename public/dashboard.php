@@ -193,71 +193,68 @@ require_once '../includes/header.php';
                     </a>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="row mb-5">
+                <!-- Quick Stats -->
+                <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card dashboard-section-card quick-actions-card">
+                        <div class="card dashboard-section-card">
                             <div class="card-header">
-                                <h4 class="mb-0"><i class="fas fa-bolt me-2 text-warning"></i>Quick Actions</h4>
-                                <p class="text-muted mb-0 small">Access frequently used features</p>
+                                <h4 class="mb-1"><i class="fas fa-chart-line me-2 text-info"></i>Quick Stats</h4>
+                                <p class="text-muted mb-0 small">System performance metrics</p>
                             </div>
                             <div class="card-body p-4">
-                                <div class="row g-3">
-                                    <div class="col-xl-3 col-lg-6 col-md-6">
-                                        <a href="/tracking-enhanced.php" class="quick-action-btn-clear btn-primary-modern">
-                                            <div class="d-flex align-items-center">
-                                                <div class="action-icon-clear bg-primary bg-opacity-10 text-primary me-3">
-                                                    <i class="fas fa-map-marked-alt"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="action-title">Live Tracking</div>
-                                                    <div class="action-desc">Track buses in real-time</div>
-                                                </div>
-                                                <i class="fas fa-chevron-right text-muted"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xl-3 col-lg-6 col-md-6">
-                                        <a href="/buses.php" class="quick-action-btn-clear btn-success-modern">
-                                            <div class="d-flex align-items-center">
-                                                <div class="action-icon-clear bg-success bg-opacity-10 text-success me-3">
+                                <div class="row g-4">
+                                    <div class="col-xl-4 col-lg-4 col-md-12">
+                                        <div class="stat-item-clear">
+                                            <div class="d-flex align-items-start mb-3">
+                                                <div class="stat-icon-clear bg-primary bg-opacity-10 text-primary me-3">
                                                     <i class="fas fa-bus"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <div class="action-title">Manage Buses</div>
-                                                    <div class="action-desc">View and edit fleet</div>
+                                                    <div class="stat-label-clear mb-1">Bus Utilization</div>
+                                                    <div class="stat-desc-clear text-muted small">Active buses in use</div>
                                                 </div>
-                                                <i class="fas fa-chevron-right text-muted"></i>
+                                                <div class="stat-value-clear text-primary fw-bold">75%</div>
                                             </div>
-                                        </a>
+                                            <div class="progress" style="height: 10px; border-radius: 5px;">
+                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-xl-3 col-lg-6 col-md-6">
-                                        <a href="/routes.php" class="quick-action-btn-clear btn-info-modern">
-                                            <div class="d-flex align-items-center">
-                                                <div class="action-icon-clear bg-info bg-opacity-10 text-info me-3">
+                                    
+                                    <div class="col-xl-4 col-lg-4 col-md-12">
+                                        <div class="stat-item-clear">
+                                            <div class="d-flex align-items-start mb-3">
+                                                <div class="stat-icon-clear bg-success bg-opacity-10 text-success me-3">
                                                     <i class="fas fa-route"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <div class="action-title">Manage Routes</div>
-                                                    <div class="action-desc">Configure bus routes</div>
+                                                    <div class="stat-label-clear mb-1">Route Coverage</div>
+                                                    <div class="stat-desc-clear text-muted small">Active routes operating</div>
                                                 </div>
-                                                <i class="fas fa-chevron-right text-muted"></i>
+                                                <div class="stat-value-clear text-success fw-bold">90%</div>
                                             </div>
-                                        </a>
+                                            <div class="progress" style="height: 10px; border-radius: 5px;">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-xl-3 col-lg-6 col-md-6">
-                                        <a href="/students.php" class="quick-action-btn-clear btn-warning-modern">
-                                            <div class="d-flex align-items-center">
-                                                <div class="action-icon-clear bg-warning bg-opacity-10 text-warning me-3">
-                                                    <i class="fas fa-user-graduate"></i>
+                                    
+                                    <div class="col-xl-4 col-lg-4 col-md-12">
+                                        <div class="stat-item-clear">
+                                            <div class="d-flex align-items-start mb-3">
+                                                <div class="stat-icon-clear bg-info bg-opacity-10 text-info me-3">
+                                                    <i class="fas fa-satellite-dish"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <div class="action-title">Manage Students</div>
-                                                    <div class="action-desc">Student information</div>
+                                                    <div class="stat-label-clear mb-1">GPS Accuracy</div>
+                                                    <div class="stat-desc-clear text-muted small">Tracking system reliability</div>
                                                 </div>
-                                                <i class="fas fa-chevron-right text-muted"></i>
+                                                <div class="stat-value-clear text-info fw-bold">98%</div>
                                             </div>
-                                        </a>
+                                            <div class="progress" style="height: 10px; border-radius: 5px;">
+                                                <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -348,68 +345,71 @@ require_once '../includes/header.php';
                     </div>
                 </div>
 
-                <!-- Quick Stats -->
+                <!-- Quick Actions -->
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card dashboard-section-card">
+                        <div class="card dashboard-section-card quick-actions-card">
                             <div class="card-header">
-                                <h4 class="mb-1"><i class="fas fa-chart-line me-2 text-info"></i>Quick Stats</h4>
-                                <p class="text-muted mb-0 small">System performance metrics</p>
+                                <h4 class="mb-0"><i class="fas fa-bolt me-2 text-warning"></i>Quick Actions</h4>
+                                <p class="text-muted mb-0 small">Access frequently used features</p>
                             </div>
                             <div class="card-body p-4">
-                                <div class="row g-4">
-                                    <div class="col-xl-4 col-lg-4 col-md-12">
-                                        <div class="stat-item-clear">
-                                            <div class="d-flex align-items-start mb-3">
-                                                <div class="stat-icon-clear bg-primary bg-opacity-10 text-primary me-3">
+                                <div class="row g-3">
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
+                                        <a href="/tracking-enhanced.php" class="quick-action-btn-clear btn-primary-modern">
+                                            <div class="d-flex align-items-center">
+                                                <div class="action-icon-clear bg-primary bg-opacity-10 text-primary me-3">
+                                                    <i class="fas fa-map-marked-alt"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <div class="action-title">Live Tracking</div>
+                                                    <div class="action-desc">Track buses in real-time</div>
+                                                </div>
+                                                <i class="fas fa-chevron-right text-muted"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
+                                        <a href="/buses.php" class="quick-action-btn-clear btn-success-modern">
+                                            <div class="d-flex align-items-center">
+                                                <div class="action-icon-clear bg-success bg-opacity-10 text-success me-3">
                                                     <i class="fas fa-bus"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <div class="stat-label-clear mb-1">Bus Utilization</div>
-                                                    <div class="stat-desc-clear text-muted small">Active buses in use</div>
+                                                    <div class="action-title">Manage Buses</div>
+                                                    <div class="action-desc">View and edit fleet</div>
                                                 </div>
-                                                <div class="stat-value-clear text-primary fw-bold">75%</div>
+                                                <i class="fas fa-chevron-right text-muted"></i>
                                             </div>
-                                            <div class="progress" style="height: 10px; border-radius: 5px;">
-                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+                                        </a>
                                     </div>
-                                    
-                                    <div class="col-xl-4 col-lg-4 col-md-12">
-                                        <div class="stat-item-clear">
-                                            <div class="d-flex align-items-start mb-3">
-                                                <div class="stat-icon-clear bg-success bg-opacity-10 text-success me-3">
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
+                                        <a href="/routes.php" class="quick-action-btn-clear btn-info-modern">
+                                            <div class="d-flex align-items-center">
+                                                <div class="action-icon-clear bg-info bg-opacity-10 text-info me-3">
                                                     <i class="fas fa-route"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <div class="stat-label-clear mb-1">Route Coverage</div>
-                                                    <div class="stat-desc-clear text-muted small">Active routes operating</div>
+                                                    <div class="action-title">Manage Routes</div>
+                                                    <div class="action-desc">Configure bus routes</div>
                                                 </div>
-                                                <div class="stat-value-clear text-success fw-bold">90%</div>
+                                                <i class="fas fa-chevron-right text-muted"></i>
                                             </div>
-                                            <div class="progress" style="height: 10px; border-radius: 5px;">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+                                        </a>
                                     </div>
-                                    
-                                    <div class="col-xl-4 col-lg-4 col-md-12">
-                                        <div class="stat-item-clear">
-                                            <div class="d-flex align-items-start mb-3">
-                                                <div class="stat-icon-clear bg-info bg-opacity-10 text-info me-3">
-                                                    <i class="fas fa-satellite-dish"></i>
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
+                                        <a href="/students.php" class="quick-action-btn-clear btn-warning-modern">
+                                            <div class="d-flex align-items-center">
+                                                <div class="action-icon-clear bg-warning bg-opacity-10 text-warning me-3">
+                                                    <i class="fas fa-user-graduate"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <div class="stat-label-clear mb-1">GPS Accuracy</div>
-                                                    <div class="stat-desc-clear text-muted small">Tracking system reliability</div>
+                                                    <div class="action-title">Manage Students</div>
+                                                    <div class="action-desc">Student information</div>
                                                 </div>
-                                                <div class="stat-value-clear text-info fw-bold">98%</div>
+                                                <i class="fas fa-chevron-right text-muted"></i>
                                             </div>
-                                            <div class="progress" style="height: 10px; border-radius: 5px;">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
