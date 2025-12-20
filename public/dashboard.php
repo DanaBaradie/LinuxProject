@@ -201,7 +201,7 @@ require_once '../includes/header.php';
                                 <h4 class="mb-0"><i class="fas fa-bolt me-2 text-warning"></i>Quick Actions</h4>
                                 <p class="text-muted mb-0 small">Access frequently used features</p>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-5">
                                 <div class="row g-4">
                                     <div class="col-xl-3 col-lg-6 col-md-6">
                                         <a href="/tracking-enhanced.php" class="quick-action-btn btn-primary-modern">
@@ -209,8 +209,8 @@ require_once '../includes/header.php';
                                                 <i class="fas fa-map-marked-alt"></i>
                                             </div>
                                             <div class="action-text">
-                                                <h6>Live Tracking</h6>
-                                                <small>Track buses in real-time</small>
+                                                <h6 class="mb-2">Live Tracking</h6>
+                                                <small class="d-block">Track buses in real-time</small>
                                             </div>
                                         </a>
                                     </div>
@@ -220,8 +220,8 @@ require_once '../includes/header.php';
                                                 <i class="fas fa-bus"></i>
                                             </div>
                                             <div class="action-text">
-                                                <h6>Manage Buses</h6>
-                                                <small>View and edit fleet</small>
+                                                <h6 class="mb-2">Manage Buses</h6>
+                                                <small class="d-block">View and edit fleet</small>
                                             </div>
                                         </a>
                                     </div>
@@ -231,8 +231,8 @@ require_once '../includes/header.php';
                                                 <i class="fas fa-route"></i>
                                             </div>
                                             <div class="action-text">
-                                                <h6>Manage Routes</h6>
-                                                <small>Configure bus routes</small>
+                                                <h6 class="mb-2">Manage Routes</h6>
+                                                <small class="d-block">Configure bus routes</small>
                                             </div>
                                         </a>
                                     </div>
@@ -242,8 +242,8 @@ require_once '../includes/header.php';
                                                 <i class="fas fa-user-graduate"></i>
                                             </div>
                                             <div class="action-text">
-                                                <h6>Manage Students</h6>
-                                                <small>Student information</small>
+                                                <h6 class="mb-2">Manage Students</h6>
+                                                <small class="d-block">Student information</small>
                                             </div>
                                         </a>
                                     </div>
