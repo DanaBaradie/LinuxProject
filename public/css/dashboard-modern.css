@@ -133,14 +133,35 @@
 .grid-responsive {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1.75rem;
+    margin-bottom: 3rem;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 1400px) {
+    .grid-responsive {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1399px) {
+    .grid-responsive {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.75rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .grid-responsive {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 767px) {
     .grid-responsive {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.25rem;
     }
 }
 
@@ -168,8 +189,10 @@
     margin-bottom: 2.5rem !important;
 }
 
-.row:not(.mb-4) {
-    margin-bottom: 2rem;
+/* Welcome section spacing */
+.pt-3.pb-2.mb-4 {
+    margin-bottom: 2.5rem !important;
+    padding-bottom: 1rem !important;
 }
 
 /* Ensure cards don't overlap */
@@ -415,6 +438,16 @@ a.stats-card-modern:active {
     padding: 2rem;
 }
 
+.quick-actions-card .card-body {
+    padding: 2.5rem;
+}
+
+@media (max-width: 767px) {
+    .quick-actions-card .card-body {
+        padding: 1.5rem;
+    }
+}
+
 .dashboard-section-card::before {
     content: '';
     position: absolute;
@@ -432,9 +465,9 @@ a.stats-card-modern:active {
     border-color: rgba(13, 110, 253, 0.3);
 }
 
-/* Full width sections */
+/* Full width sections with consistent spacing */
 .row.mb-5 {
-    margin-bottom: 3rem !important;
+    margin-bottom: 3.5rem !important;
 }
 
 .row:last-child {
@@ -446,9 +479,15 @@ a.stats-card-modern:active {
     width: 100%;
 }
 
-/* Add spacing between sections */
-.row.mb-5 {
-    margin-bottom: 3rem !important;
+/* Dashboard section spacing */
+.dashboard-section-card {
+    margin-bottom: 0;
+}
+
+/* Better visual separation between major sections */
+.grid-responsive + .row,
+.row.mb-5 + .row.mb-5 {
+    margin-top: 1rem;
 }
 
 /* Quick Actions Buttons - Modern Design */
@@ -457,7 +496,7 @@ a.stats-card-modern:active {
     flex-direction: column !important;
     align-items: center;
     justify-content: center;
-    padding: 2.5rem 2rem;
+    padding: 2.5rem 1.75rem;
     border-radius: 16px;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -465,8 +504,8 @@ a.stats-card-modern:active {
     background: white;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     height: 100%;
-    min-height: 200px;
-    min-width: 220px;
+    min-height: 220px;
+    min-width: 200px;
     width: 100%;
     word-wrap: break-word;
     text-align: center;
@@ -475,6 +514,13 @@ a.stats-card-modern:active {
     direction: ltr !important;
     unicode-bidi: normal !important;
     transform: none !important;
+}
+
+@media (max-width: 991px) {
+    .quick-action-btn {
+        min-height: 200px;
+        padding: 2rem 1.5rem;
+    }
 }
 
 .quick-action-btn * {

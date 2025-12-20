@@ -335,9 +335,10 @@ require_once '../includes/header.php';
                             </div>
                         </div>
                     </div>
-                    
+                </div>
+
                 <!-- Quick Stats -->
-                <div class="row quick-stats-row">
+                <div class="row mb-5 quick-stats-row">
                     <div class="col-12">
                         <div class="card dashboard-section-card quick-stats-card">
                             <div class="card-header">
@@ -409,7 +410,6 @@ require_once '../includes/header.php';
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
 
             <?php elseif ($role === 'parent'): ?>
