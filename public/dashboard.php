@@ -203,7 +203,7 @@ require_once '../includes/header.php';
                             </div>
                             <div class="card-body p-4">
                                 <div class="row g-4">
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
                                         <a href="/tracking-enhanced.php" class="quick-action-btn btn-primary-modern">
                                             <div class="action-icon">
                                                 <i class="fas fa-map-marked-alt"></i>
@@ -214,7 +214,7 @@ require_once '../includes/header.php';
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
                                         <a href="/buses.php" class="quick-action-btn btn-success-modern">
                                             <div class="action-icon">
                                                 <i class="fas fa-bus"></i>
@@ -225,7 +225,7 @@ require_once '../includes/header.php';
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
                                         <a href="/routes.php" class="quick-action-btn btn-info-modern">
                                             <div class="action-icon">
                                                 <i class="fas fa-route"></i>
@@ -236,7 +236,7 @@ require_once '../includes/header.php';
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-xl-3 col-lg-6 col-md-6">
                                         <a href="/students.php" class="quick-action-btn btn-warning-modern">
                                             <div class="action-icon">
                                                 <i class="fas fa-user-graduate"></i>
@@ -254,8 +254,8 @@ require_once '../includes/header.php';
                 </div>
 
                 <!-- Recent Buses -->
-                <div class="row dashboard-sections-row">
-                    <div class="col-lg-8 col-md-12 mb-4 mb-lg-0">
+                <div class="row mb-5">
+                    <div class="col-12">
                         <div class="card dashboard-section-card recent-buses-card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
@@ -291,7 +291,7 @@ require_once '../includes/header.php';
                                                         <td>
                                                             <div class="d-flex align-items-center">
                                                                 <i class="fas fa-user-tie text-muted me-2"></i>
-                                                                <?php echo htmlspecialchars($bus['driver_name'] ?? 'Unassigned'); ?>
+                                                                <span class="text-nowrap"><?php echo htmlspecialchars($bus['driver_name'] ?? 'Unassigned'); ?></span>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -336,54 +336,80 @@ require_once '../includes/header.php';
                         </div>
                     </div>
                     
-                    <div class="col-lg-4 col-md-12">
+                <!-- Quick Stats -->
+                <div class="row">
+                    <div class="col-12">
                         <div class="card dashboard-section-card quick-stats-card">
                             <div class="card-header">
                                 <h4 class="mb-1"><i class="fas fa-chart-line me-2 text-info"></i>Quick Stats</h4>
                                 <p class="text-muted mb-0 small">System performance metrics</p>
                             </div>
                             <div class="card-body p-4">
-                                <div class="stat-item mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-bus text-primary me-2"></i>
-                                            <span class="fw-semibold">Bus Utilization</span>
+                                <div class="row g-4">
+                                    <div class="col-lg-4 col-md-4">
+                                        <div class="stat-item-full">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="stat-icon-wrapper bg-primary">
+                                                        <i class="fas fa-bus text-white"></i>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <div class="stat-label-full">Bus Utilization</div>
+                                                        <div class="stat-desc">Fleet usage rate</div>
+                                                    </div>
+                                                </div>
+                                                <span class="stat-value-text text-primary fw-bold">75%</span>
+                                            </div>
+                                            <div class="progress progress-modern-large">
+                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
                                         </div>
-                                        <span class="stat-value-text text-primary fw-bold">75%</span>
                                     </div>
-                                    <div class="progress progress-modern-large">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="stat-item mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-route text-success me-2"></i>
-                                            <span class="fw-semibold">Route Coverage</span>
+                                    
+                                    <div class="col-lg-4 col-md-4">
+                                        <div class="stat-item-full">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="stat-icon-wrapper bg-success">
+                                                        <i class="fas fa-route text-white"></i>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <div class="stat-label-full">Route Coverage</div>
+                                                        <div class="stat-desc">Active routes</div>
+                                                    </div>
+                                                </div>
+                                                <span class="stat-value-text text-success fw-bold">90%</span>
+                                            </div>
+                                            <div class="progress progress-modern-large">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
                                         </div>
-                                        <span class="stat-value-text text-success fw-bold">90%</span>
                                     </div>
-                                    <div class="progress progress-modern-large">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="stat-item">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-satellite-dish text-info me-2"></i>
-                                            <span class="fw-semibold">GPS Accuracy</span>
+                                    
+                                    <div class="col-lg-4 col-md-4">
+                                        <div class="stat-item-full">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="stat-icon-wrapper bg-info">
+                                                        <i class="fas fa-satellite-dish text-white"></i>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <div class="stat-label-full">GPS Accuracy</div>
+                                                        <div class="stat-desc">Tracking precision</div>
+                                                    </div>
+                                                </div>
+                                                <span class="stat-value-text text-info fw-bold">98%</span>
+                                            </div>
+                                            <div class="progress progress-modern-large">
+                                                <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
                                         </div>
-                                        <span class="stat-value-text text-info fw-bold">98%</span>
-                                    </div>
-                                    <div class="progress progress-modern-large">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
 
             <?php elseif ($role === 'parent'): ?>
