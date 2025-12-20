@@ -344,21 +344,21 @@ require_once '../includes/header.php';
                                 <h4 class="mb-1"><i class="fas fa-chart-line me-2 text-info"></i>Quick Stats</h4>
                                 <p class="text-muted mb-0 small">System performance metrics</p>
                             </div>
-                            <div class="card-body p-4">
-                                <div class="row g-4">
-                                    <div class="col-lg-4 col-md-4">
+                            <div class="card-body p-5">
+                                <div class="row g-5">
+                                    <div class="col-xl-4 col-lg-4 col-md-12">
                                         <div class="stat-item-full">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="stat-icon-wrapper bg-primary">
+                                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                                <div class="d-flex align-items-start flex-grow-1">
+                                                    <div class="stat-icon-wrapper bg-primary me-4">
                                                         <i class="fas fa-bus text-white"></i>
                                                     </div>
-                                                    <div class="ms-3">
-                                                        <div class="stat-label-full">Bus Utilization</div>
-                                                        <div class="stat-desc">Fleet usage rate</div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="stat-label-full mb-2">Bus Utilization</div>
+                                                        <div class="stat-desc">Fleet usage rate across all active buses</div>
                                                     </div>
                                                 </div>
-                                                <span class="stat-value-text text-primary fw-bold">75%</span>
+                                                <span class="stat-value-text text-primary fw-bold ms-3">75%</span>
                                             </div>
                                             <div class="progress progress-modern-large">
                                                 <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
@@ -366,19 +366,19 @@ require_once '../includes/header.php';
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-4 col-md-4">
+                                    <div class="col-xl-4 col-lg-4 col-md-12">
                                         <div class="stat-item-full">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="stat-icon-wrapper bg-success">
+                                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                                <div class="d-flex align-items-start flex-grow-1">
+                                                    <div class="stat-icon-wrapper bg-success me-4">
                                                         <i class="fas fa-route text-white"></i>
                                                     </div>
-                                                    <div class="ms-3">
-                                                        <div class="stat-label-full">Route Coverage</div>
-                                                        <div class="stat-desc">Active routes</div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="stat-label-full mb-2">Route Coverage</div>
+                                                        <div class="stat-desc">Percentage of active routes in operation</div>
                                                     </div>
                                                 </div>
-                                                <span class="stat-value-text text-success fw-bold">90%</span>
+                                                <span class="stat-value-text text-success fw-bold ms-3">90%</span>
                                             </div>
                                             <div class="progress progress-modern-large">
                                                 <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
@@ -386,19 +386,19 @@ require_once '../includes/header.php';
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-4 col-md-4">
+                                    <div class="col-xl-4 col-lg-4 col-md-12">
                                         <div class="stat-item-full">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="stat-icon-wrapper bg-info">
+                                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                                <div class="d-flex align-items-start flex-grow-1">
+                                                    <div class="stat-icon-wrapper bg-info me-4">
                                                         <i class="fas fa-satellite-dish text-white"></i>
                                                     </div>
-                                                    <div class="ms-3">
-                                                        <div class="stat-label-full">GPS Accuracy</div>
-                                                        <div class="stat-desc">Tracking precision</div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="stat-label-full mb-2">GPS Accuracy</div>
+                                                        <div class="stat-desc">Real-time tracking precision and reliability</div>
                                                     </div>
                                                 </div>
-                                                <span class="stat-value-text text-info fw-bold">98%</span>
+                                                <span class="stat-value-text text-info fw-bold ms-3">98%</span>
                                             </div>
                                             <div class="progress progress-modern-large">
                                                 <div class="progress-bar bg-info" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
