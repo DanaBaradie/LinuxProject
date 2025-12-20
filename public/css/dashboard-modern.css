@@ -164,6 +164,25 @@
     padding: 1.25rem 1.5rem;
     font-weight: 600;
     border-radius: 16px 16px 0 0;
+    color: #212529 !important;
+}
+
+/* Ensure colored card headers have visible text */
+.card-header[style*="background"] h5,
+.card-header.bg-primary h5,
+.card-header.bg-success h5,
+.card-header.bg-info h5,
+.card-header.bg-danger h5,
+.card-header.bg-warning h5 {
+    color: white !important;
+}
+
+.card-header.bg-primary,
+.card-header.bg-success,
+.card-header.bg-info,
+.card-header.bg-danger,
+.card-header.bg-warning {
+    color: white !important;
 }
 
 /* Enhanced Buttons */

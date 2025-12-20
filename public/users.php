@@ -93,8 +93,8 @@ require_once '../includes/header.php';
 
             <!-- Admins -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-user-shield me-2"></i>Administrators</h5>
+                <div class="card-header" style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); color: white;">
+                    <h5 class="mb-0" style="color: white !important;"><i class="fas fa-user-shield me-2"></i>Administrators</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -139,8 +139,8 @@ require_once '../includes/header.php';
 
             <!-- Drivers -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Drivers</h5>
+                <div class="card-header" style="background: linear-gradient(135deg, #198754 0%, #157347 100%); color: white;">
+                    <h5 class="mb-0" style="color: white !important;"><i class="fas fa-user-tie me-2"></i>Drivers</h5>
                 </div>
                 <div class="card-body">
                     <?php 
@@ -185,8 +185,8 @@ require_once '../includes/header.php';
 
             <!-- Parents -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-users me-2"></i>Parents</h5>
+                <div class="card-header" style="background: linear-gradient(135deg, #0dcaf0 0%, #0aa2c0 100%); color: white;">
+                    <h5 class="mb-0" style="color: white !important;"><i class="fas fa-users me-2"></i>Parents</h5>
                 </div>
                 <div class="card-body">
                     <?php 
