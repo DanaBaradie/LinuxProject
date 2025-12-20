@@ -266,54 +266,54 @@ require_once '../includes/header.php';
                                     <i class="fas fa-arrow-right me-1"></i>View All
                                 </a>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-5">
                                 <?php if (!empty($buses)): ?>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-modern">
+                                    <div class="table-responsive table-responsive-wide">
+                                        <table class="table table-hover table-modern table-wide">
                                             <thead>
                                                 <tr>
-                                                    <th class="ps-3">Bus Number</th>
-                                                    <th>Driver</th>
-                                                    <th>Status</th>
-                                                    <th>GPS</th>
-                                                    <th class="text-end pe-3">Actions</th>
+                                                    <th class="ps-4" style="min-width: 180px;">Bus Number</th>
+                                                    <th style="min-width: 200px;">Driver</th>
+                                                    <th style="min-width: 120px;">Status</th>
+                                                    <th style="min-width: 130px;">GPS Status</th>
+                                                    <th class="text-end pe-4" style="min-width: 140px;">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($buses as $bus): ?>
                                                     <tr>
-                                                        <td class="ps-3">
+                                                        <td class="ps-4">
                                                             <div class="d-flex align-items-center">
-                                                                <i class="fas fa-bus text-primary me-2"></i>
-                                                                <strong><?php echo htmlspecialchars($bus['bus_number']); ?></strong>
+                                                                <i class="fas fa-bus text-primary me-3" style="font-size: 1.2rem;"></i>
+                                                                <strong style="font-size: 1.05rem;"><?php echo htmlspecialchars($bus['bus_number']); ?></strong>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="d-flex align-items-center">
-                                                                <i class="fas fa-user-tie text-muted me-2"></i>
-                                                                <span class="text-nowrap"><?php echo htmlspecialchars($bus['driver_name'] ?? 'Unassigned'); ?></span>
+                                                                <i class="fas fa-user-tie text-muted me-3" style="font-size: 1.1rem;"></i>
+                                                                <span style="font-size: 1rem;"><?php echo htmlspecialchars($bus['driver_name'] ?? 'Unassigned'); ?></span>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <span class="badge badge-status bg-<?php echo $bus['status'] === 'active' ? 'success' : 'secondary'; ?>">
-                                                                <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                                                            <span class="badge badge-status bg-<?php echo $bus['status'] === 'active' ? 'success' : 'secondary'; ?>" style="padding: 0.6rem 1rem; font-size: 0.9rem;">
+                                                                <i class="fas fa-circle me-2" style="font-size: 0.6rem;"></i>
                                                                 <?php echo ucfirst($bus['status']); ?>
                                                             </span>
                                                         </td>
                                                         <td>
                                                             <?php if ($bus['current_latitude'] && $bus['current_longitude']): ?>
-                                                                <span class="badge badge-status bg-success">
-                                                                    <i class="fas fa-satellite-dish me-1"></i>Active
+                                                                <span class="badge badge-status bg-success" style="padding: 0.6rem 1rem; font-size: 0.9rem;">
+                                                                    <i class="fas fa-satellite-dish me-2"></i>Active
                                                                 </span>
                                                             <?php else: ?>
-                                                                <span class="badge badge-status bg-secondary">
-                                                                    <i class="fas fa-wifi-slash me-1"></i>Offline
+                                                                <span class="badge badge-status bg-secondary" style="padding: 0.6rem 1rem; font-size: 0.9rem;">
+                                                                    <i class="fas fa-wifi-slash me-2"></i>Offline
                                                                 </span>
                                                             <?php endif; ?>
                                                         </td>
-                                                        <td class="text-end pe-3">
-                                                            <a href="/tracking-enhanced.php?bus=<?php echo $bus['id']; ?>" class="btn btn-sm btn-outline-primary">
-                                                                <i class="fas fa-eye me-1"></i>View
+                                                        <td class="text-end pe-4">
+                                                            <a href="/tracking-enhanced.php?bus=<?php echo $bus['id']; ?>" class="btn btn-sm btn-outline-primary" style="padding: 0.5rem 1rem;">
+                                                                <i class="fas fa-eye me-2"></i>View
                                                             </a>
                                                         </td>
                                                     </tr>

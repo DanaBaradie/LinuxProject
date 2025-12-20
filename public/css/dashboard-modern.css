@@ -595,6 +595,52 @@ a.stats-card-modern:active {
     background-color: #f8f9ff;
 }
 
+/* Wide Table for Recent Buses */
+.table-wide {
+    width: 100%;
+    min-width: 1000px;
+}
+
+.table-wide thead th {
+    padding: 1.5rem 1.5rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.table-wide tbody td {
+    padding: 1.5rem 1.5rem;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.table-responsive-wide {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.recent-buses-card {
+    width: 100%;
+}
+
+.recent-buses-card .card-body {
+    padding: 2.5rem 3rem;
+}
+
+@media (min-width: 1400px) {
+    .recent-buses-card .card-body {
+        padding: 3rem 4rem;
+    }
+    
+    .table-wide thead th {
+        padding: 1.75rem 2rem;
+    }
+    
+    .table-wide tbody td {
+        padding: 1.75rem 2rem;
+    }
+}
+
 .badge-status {
     padding: 0.5rem 0.875rem;
     font-size: 0.85rem;
@@ -671,18 +717,40 @@ a.stats-card-modern:active {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px;
 }
 
-.table-modern td {
-    white-space: normal;
-    word-wrap: break-word;
+.table-wide th,
+.table-wide td {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
 }
 
-@media (max-width: 1200px) {
-    .table-modern th,
-    .table-modern td {
-        max-width: 150px;
+/* Recent Buses Card - Extra Wide */
+.recent-buses-card {
+    width: 100%;
+    max-width: 100%;
+}
+
+.recent-buses-card .card-body {
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+@media (min-width: 1400px) {
+    .recent-buses-card .card-body {
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .recent-buses-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .table-wide {
+        min-width: 800px;
     }
 }
 
