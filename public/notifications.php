@@ -142,7 +142,7 @@ require_once '../includes/header.php';
             <div class="row">
                 <!-- Send Notification Form -->
                 <div class="col-lg-8 mb-4">
-                    <div class="card form-container">
+                    <div class="card">
                         <div class="card-header bg-primary text-white">
                             <h5 class="mb-0 text-white" style="color: white !important;"><i class="fas fa-paper-plane me-2"></i>Send New Notification</h5>
                         </div>
@@ -212,17 +212,17 @@ require_once '../includes/header.php';
 
                 <!-- Recent Notifications -->
                 <div class="col-lg-4">
-                    <div class="card form-container">
+                    <div class="card">
                         <div class="card-header bg-info text-white">
                             <h5 class="mb-0 text-white" style="color: white !important;"><i class="fas fa-history me-2"></i>Recent Notifications</h5>
                         </div>
-                        <div class="card-body p-3">
+                        <div class="card-body p-4">
                             <?php if (!empty($recentNotifications)): ?>
                                 <div class="list-group list-group-flush">
                                     <?php foreach ($recentNotifications as $notif): ?>
-                                        <div class="list-group-item px-0 py-3 border-bottom">
+                                        <div class="list-group-item px-0 py-3 border-bottom notification-item-recent">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                                <div>
+                                                <div class="flex-grow-1">
                                                     <span class="badge bg-<?php 
                                                         echo $notif['notification_type'] == 'traffic' ? 'warning' : 
                                                             ($notif['notification_type'] == 'nearby' ? 'success' : 
@@ -231,23 +231,23 @@ require_once '../includes/header.php';
                                                     ?> mb-2">
                                                         <?php echo ucfirst(str_replace('_', ' ', $notif['notification_type'])); ?>
                                                     </span>
-                                                    <div class="small text-muted">
-                                                        <i class="fas fa-user me-1"></i><?php echo htmlspecialchars($notif['parent_name']); ?>
+                                                    <div class="small text-muted mb-2">
+                                                        <div><i class="fas fa-user me-1"></i><?php echo htmlspecialchars($notif['parent_name']); ?></div>
                                                         <?php if ($notif['bus_number']): ?>
-                                                            <br><i class="fas fa-bus me-1"></i><?php echo htmlspecialchars($notif['bus_number']); ?>
+                                                            <div class="mt-1"><i class="fas fa-bus me-1"></i><?php echo htmlspecialchars($notif['bus_number']); ?></div>
                                                         <?php endif; ?>
                                                     </div>
                                                 </div>
-                                                <small class="text-muted">
+                                                <small class="text-muted ms-2 text-nowrap">
                                                     <?php echo date('M j, H:i', strtotime($notif['created_at'])); ?>
                                                 </small>
                                             </div>
-                                            <p class="mb-0 small"><?php echo htmlspecialchars($notif['message']); ?></p>
+                                            <p class="mb-0 notification-message-text" style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;"><?php echo htmlspecialchars($notif['message']); ?></p>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
                             <?php else: ?>
-                                <p class="text-muted text-center mb-0">No notifications sent yet</p>
+                                <p class="text-muted text-center mb-0 py-4">No notifications sent yet</p>
                             <?php endif; ?>
                         </div>
                     </div>

@@ -16,29 +16,56 @@
     margin-bottom: 2rem;
 }
 
+/* When form-container is used with card, remove double padding */
+.card.form-container {
+    padding: 0;
+}
+
+.card.form-container .card-body {
+    padding: 1.5rem 2rem;
+}
+
 /* Card Header with Colored Backgrounds - Ensure White Text */
-.form-container .card-header.bg-primary,
-.form-container .card-header.bg-success,
-.form-container .card-header.bg-info,
-.form-container .card-header.bg-danger,
-.form-container .card-header.bg-warning {
+.card-header.bg-primary,
+.card-header.bg-success,
+.card-header.bg-info,
+.card-header.bg-danger,
+.card-header.bg-warning {
     color: white !important;
 }
 
-.form-container .card-header.bg-primary h5,
-.form-container .card-header.bg-success h5,
-.form-container .card-header.bg-info h5,
-.form-container .card-header.bg-danger h5,
-.form-container .card-header.bg-warning h5 {
+.card-header.bg-primary h5,
+.card-header.bg-success h5,
+.card-header.bg-info h5,
+.card-header.bg-danger h5,
+.card-header.bg-warning h5 {
     color: white !important;
 }
 
-.form-container .card-header.bg-primary *,
-.form-container .card-header.bg-success *,
-.form-container .card-header.bg-info *,
-.form-container .card-header.bg-danger *,
-.form-container .card-header.bg-warning * {
+.card-header.bg-primary *,
+.card-header.bg-success *,
+.card-header.bg-info *,
+.card-header.bg-danger *,
+.card-header.bg-warning * {
     color: white !important;
+}
+
+/* Notification Item Styling */
+.notification-item-recent {
+    transition: background-color 0.2s ease;
+}
+
+.notification-item-recent:hover {
+    background-color: #f8f9fa;
+}
+
+.notification-message-text {
+    color: #495057;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .form-header {
