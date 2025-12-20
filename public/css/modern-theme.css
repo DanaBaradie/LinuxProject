@@ -127,6 +127,7 @@
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
+    color: inherit;
 }
 
 .stats-card-modern::before {
@@ -142,6 +143,21 @@
 .stats-card-modern:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
+}
+
+/* Make clickable stat cards more obvious */
+a.stats-card-modern {
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+a.stats-card-modern:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+}
+
+a.stats-card-modern:active {
+    transform: translateY(-4px) scale(1.01);
 }
 
 .stats-card-modern .stat-icon {

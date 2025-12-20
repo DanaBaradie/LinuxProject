@@ -77,7 +77,7 @@ require_once '../includes/header.php';
     <div class="row">
         <?php require_once '../includes/sidebar.php'; ?>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="main-content-area">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-user-graduate me-2"></i>Manage Students</h1>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
@@ -179,32 +179,42 @@ require_once '../includes/header.php';
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
                     
-                    <div class="mb-3">
-                        <label class="form-label">Student Name *</label>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user-graduate me-1"></i>Student Name <span class="required">*</span>
+                        </label>
                         <input type="text" class="form-control" name="student_name" required 
                                placeholder="e.g., Alex Johnson">
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">Grade</label>
-                        <input type="text" class="form-control" name="grade" 
-                               placeholder="e.g., Grade 5">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-graduation-cap me-1"></i>Grade
+                            </label>
+                            <input type="text" class="form-control" name="grade" 
+                                   placeholder="e.g., Grade 5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user me-1"></i>Parent <span class="required">*</span>
+                            </label>
+                            <select class="form-select" name="parent_id" required>
+                                <option value="">-- Select Parent --</option>
+                                <?php foreach ($parents as $parent): ?>
+                                    <option value="<?php echo $parent['id']; ?>">
+                                        <?php echo htmlspecialchars($parent['full_name']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">Parent *</label>
-                        <select class="form-select" name="parent_id" required>
-                            <option value="">-- Select Parent --</option>
-                            <?php foreach ($parents as $parent): ?>
-                                <option value="<?php echo $parent['id']; ?>">
-                                    <?php echo htmlspecialchars($parent['full_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Assigned Stop (Optional)</label>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-map-marker-alt me-1"></i>Assigned Stop (Optional)
+                        </label>
                         <select class="form-select" name="assigned_stop_id">
                             <option value="">-- No Stop Yet --</option>
                             <?php foreach ($stops as $stop): ?>
@@ -213,7 +223,7 @@ require_once '../includes/header.php';
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <small class="text-muted">You need to add route stops first</small>
+                        <small class="form-text">You need to add route stops first</small>
                     </div>
                 </div>
                 <div class="modal-footer">

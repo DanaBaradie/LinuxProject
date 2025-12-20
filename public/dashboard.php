@@ -109,7 +109,7 @@ require_once '../includes/header.php';
             <?php if ($role === 'admin'): ?>
                 <!-- Admin Dashboard -->
                 <div class="grid-responsive mb-4">
-                    <div class="stats-card-modern">
+                    <a href="/buses.php" class="stats-card-modern text-decoration-none d-block">
                         <div class="stat-icon">
                             <i class="fas fa-bus"></i>
                         </div>
@@ -121,9 +121,9 @@ require_once '../includes/header.php';
                             <i class="fas fa-satellite text-success"></i> 
                             <?php echo $stats['tracking_buses'] ?? 0; ?> tracking
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="stats-card-modern">
+                    <a href="/users.php?filter=driver" class="stats-card-modern text-decoration-none d-block">
                         <div class="stat-icon">
                             <i class="fas fa-user-tie"></i>
                         </div>
@@ -134,9 +134,9 @@ require_once '../includes/header.php';
                         <div class="text-muted small mt-2">
                             <i class="fas fa-check-circle text-success"></i> All active
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="stats-card-modern">
+                    <a href="/users.php?filter=parent" class="stats-card-modern text-decoration-none d-block">
                         <div class="stat-icon">
                             <i class="fas fa-users"></i>
                         </div>
@@ -147,9 +147,9 @@ require_once '../includes/header.php';
                         <div class="text-muted small mt-2">
                             <i class="fas fa-user-check"></i> Registered
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="stats-card-modern">
+                    <a href="/routes.php" class="stats-card-modern text-decoration-none d-block">
                         <div class="stat-icon">
                             <i class="fas fa-route"></i>
                         </div>
@@ -160,9 +160,9 @@ require_once '../includes/header.php';
                         <div class="text-muted small mt-2">
                             <i class="fas fa-map-marked-alt"></i> In operation
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="stats-card-modern">
+                    <a href="/students.php" class="stats-card-modern text-decoration-none d-block">
                         <div class="stat-icon">
                             <i class="fas fa-user-graduate"></i>
                         </div>
@@ -173,7 +173,7 @@ require_once '../includes/header.php';
                         <div class="text-muted small mt-2">
                             <i class="fas fa-school"></i> Enrolled
                         </div>
-                    </div>
+                    </a>
 
                     <div class="stats-card-modern">
                         <div class="stat-icon">

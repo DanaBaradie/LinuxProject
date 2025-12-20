@@ -87,7 +87,7 @@ require_once '../includes/header.php';
     <div class="row">
         <?php require_once '../includes/sidebar.php'; ?>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="main-content-area">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-bus me-2"></i>Manage Buses</h1>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBusModal">
@@ -182,7 +182,7 @@ require_once '../includes/header.php';
 
 <!-- Add Bus Modal -->
 <div class="modal fade" id="addBusModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
@@ -192,26 +192,37 @@ require_once '../includes/header.php';
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
                     
-                    <div class="mb-3">
-                        <label class="form-label">Bus Number *</label>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-hashtag me-1"></i>Bus Number <span class="required">*</span>
+                        </label>
                         <input type="text" class="form-control" name="bus_number" required 
                                placeholder="e.g., BUS-001">
+                        <small class="form-text">Unique identifier for this bus</small>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">License Plate</label>
-                        <input type="text" class="form-control" name="license_plate" 
-                               placeholder="e.g., ABC-1234">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-id-card me-1"></i>License Plate
+                            </label>
+                            <input type="text" class="form-control" name="license_plate" 
+                                   placeholder="e.g., ABC-1234">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-users me-1"></i>Capacity <span class="required">*</span>
+                            </label>
+                            <input type="number" class="form-control" name="capacity" required 
+                                   min="1" max="100" placeholder="Number of students">
+                        </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">Capacity *</label>
-                        <input type="number" class="form-control" name="capacity" required 
-                               min="1" max="100" placeholder="Number of students">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Assign Driver</label>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user-tie me-1"></i>Assign Driver
+                        </label>
                         <select class="form-select" name="driver_id">
                             <option value="">-- No Driver Yet --</option>
                             <?php foreach ($available_drivers as $driver): ?>
@@ -220,12 +231,12 @@ require_once '../includes/header.php';
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <small class="text-muted">Only unassigned drivers are shown</small>
+                        <small class="form-text">Only unassigned drivers are shown</small>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary btn-form btn-form-primary">
                         <i class="fas fa-plus me-2"></i>Add Bus
                     </button>
                 </div>

@@ -56,7 +56,7 @@ require_once '../includes/header.php';
     <div class="row">
         <?php require_once '../includes/sidebar.php'; ?>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="main-content-area">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-location-arrow me-2"></i>Update My Location</h1>
             </div>
@@ -167,31 +167,34 @@ require_once '../includes/header.php';
                             </div>
                         <?php endif; ?>
 
-                        <form method="POST">
+                        <form method="POST" class="form-container">
                             <input type="hidden" name="action" value="update_location">
                             
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label"><strong>Latitude *</strong></label>
-                                    <input type="number" step="0.000001" class="form-control form-control-lg" 
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Latitude <span class="required">*</span>
+                                    </label>
+                                    <input type="number" step="0.000001" class="form-control" 
                                            name="latitude" placeholder="33.8886" required
                                            value="<?php echo $my_bus['current_latitude'] ?? ''; ?>">
-                                    <small class="text-muted">Example: 33.8886 (Beirut)</small>
+                                    <small class="form-text">Example: 33.8886 (Beirut)</small>
                                 </div>
 
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label"><strong>Longitude *</strong></label>
-                                    <input type="number" step="0.000001" class="form-control form-control-lg" 
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Longitude <span class="required">*</span>
+                                    </label>
+                                    <input type="number" step="0.000001" class="form-control" 
                                            name="longitude" placeholder="35.4955" required
                                            value="<?php echo $my_bus['current_longitude'] ?? ''; ?>">
-                                    <small class="text-muted">Example: 35.4955 (Beirut)</small>
+                                    <small class="form-text">Example: 35.4955 (Beirut)</small>
                                 </div>
                             </div>
 
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg py-3">
-                                    <i class="fas fa-save fa-2x mb-2"></i><br>
-                                    Update My Location Now
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary btn-form btn-form-primary">
+                                    <i class="fas fa-save me-2"></i>Update My Location Now
                                 </button>
                             </div>
                         </form>

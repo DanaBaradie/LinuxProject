@@ -69,7 +69,7 @@ require_once '../includes/header.php';
     <div class="row">
         <?php require_once '../includes/sidebar.php'; ?>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="main-content-area">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-users me-2"></i>Manage Users</h1>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
@@ -244,35 +244,49 @@ require_once '../includes/header.php';
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
                     
-                    <div class="mb-3">
-                        <label class="form-label">Full Name *</label>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user me-1"></i>Full Name <span class="required">*</span>
+                        </label>
                         <input type="text" class="form-control" name="full_name" required>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">Email *</label>
-                        <input type="email" class="form-control" name="email" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-envelope me-1"></i>Email <span class="required">*</span>
+                            </label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-phone me-1"></i>Phone
+                            </label>
+                            <input type="text" class="form-control" name="phone" placeholder="e.g., 961-3-123456">
+                        </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Password *</label>
-                        <input type="password" class="form-control" name="password" required minlength="6">
-                        <small class="text-muted">Minimum 6 characters</small>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Role *</label>
-                        <select class="form-select" name="role" required>
-                            <option value="">-- Select Role --</option>
-                            <option value="driver">Driver</option>
-                            <option value="parent">Parent</option>
-                            <option value="admin">Administrator</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-lock me-1"></i>Password <span class="required">*</span>
+                            </label>
+                            <input type="password" class="form-control" name="password" required minlength="6">
+                            <small class="form-text">Minimum 6 characters</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user-tag me-1"></i>Role <span class="required">*</span>
+                            </label>
+                            <select class="form-select" name="role" required>
+                                <option value="">-- Select Role --</option>
+                                <option value="driver">Driver</option>
+                                <option value="parent">Parent</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

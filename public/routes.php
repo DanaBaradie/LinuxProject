@@ -77,7 +77,7 @@ require_once '../includes/header.php';
     <div class="row">
         <?php require_once '../includes/sidebar.php'; ?>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="main-content-area">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-route me-2"></i>Manage Routes</h1>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRouteModal">
@@ -170,26 +170,36 @@ require_once '../includes/header.php';
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
                     
-                    <div class="mb-3">
-                        <label class="form-label">Route Name *</label>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-route me-1"></i>Route Name <span class="required">*</span>
+                        </label>
                         <input type="text" class="form-control" name="route_name" required 
                                placeholder="e.g., Morning Route A">
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-align-left me-1"></i>Description
+                        </label>
                         <textarea class="form-control" name="description" rows="3" 
                                   placeholder="Brief description of the route"></textarea>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label">Start Time *</label>
-                        <input type="time" class="form-control" name="start_time" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">End Time *</label>
-                        <input type="time" class="form-control" name="end_time" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-clock me-1"></i>Start Time <span class="required">*</span>
+                            </label>
+                            <input type="time" class="form-control" name="start_time" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-clock me-1"></i>End Time <span class="required">*</span>
+                            </label>
+                            <input type="time" class="form-control" name="end_time" required>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
