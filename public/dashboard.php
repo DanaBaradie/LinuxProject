@@ -18,6 +18,10 @@ $db = $database->getConnection();
 $role = getUserRole();
 $stats = [];
 
+// Check if filtering by today
+$filterToday = isset($_GET['filter']) && $_GET['filter'] === 'today';
+$dateFilter = $filterToday ? "AND DATE(created_at) = CURDATE()" : "";
+
 try {
     if ($role === 'admin') {
         // Enhanced statistics
@@ -43,9 +47,27 @@ try {
                     AND current_longitude IS NOT NULL";
         $stats['tracking_buses'] = $db->query($query)->fetch()['count'];
         
-        // Get unread notifications count
-        $query = "SELECT COUNT(*) as count FROM notifications WHERE is_read = FALSE";
+        // Get unread notifications count (with today filter if applicable)
+        if ($filterToday) {
+            $query = "SELECT COUNT(*) as count FROM notifications 
+                      WHERE is_read = FALSE AND DATE(created_at) = CURDATE()";
+        } else {
+            $query = "SELECT COUNT(*) as count FROM notifications WHERE is_read = FALSE";
+        }
         $stats['unread_notifications'] = $db->query($query)->fetch()['count'];
+        
+        // Today's activity stats
+        if ($filterToday) {
+            // Today's GPS updates
+            $query = "SELECT COUNT(DISTINCT bus_id) as count FROM gps_logs 
+                      WHERE DATE(timestamp) = CURDATE()";
+            $stats['today_gps_updates'] = $db->query($query)->fetch()['count'];
+            
+            // Today's notifications sent
+            $query = "SELECT COUNT(*) as count FROM notifications 
+                      WHERE DATE(created_at) = CURDATE()";
+            $stats['today_notifications'] = $db->query($query)->fetch()['count'];
+        }
         
         // Recent activity
         $query = "SELECT b.*, u.full_name as driver_name 
@@ -100,18 +122,55 @@ require_once '../includes/header.php';
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <a href="/dashboard.php<?php echo $filterToday ? '' : '?filter=today'; ?>" 
+                           class="btn btn-sm <?php echo $filterToday ? 'btn-primary' : 'btn-outline-secondary'; ?>"
+                           id="todayBtn">
                             <i class="fas fa-calendar me-1"></i>Today
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                        </a>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="exportBtn">
                             <i class="fas fa-download me-1"></i>Export
                         </button>
                     </div>
                 </div>
             </div>
 
+            <?php if ($filterToday): ?>
+                <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Today's View:</strong> Showing statistics and activity for <?php echo date('F j, Y'); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
             <?php if ($role === 'admin'): ?>
                 <!-- Admin Dashboard -->
+                <?php if ($filterToday && isset($stats['today_gps_updates'])): ?>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card border-primary">
+                                <div class="card-body">
+                                    <h6 class="card-title text-primary">
+                                        <i class="fas fa-satellite me-2"></i>Today's GPS Updates
+                                    </h6>
+                                    <h3 class="mb-0"><?php echo $stats['today_gps_updates']; ?></h3>
+                                    <small class="text-muted">Buses with location updates today</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <h6 class="card-title text-info">
+                                        <i class="fas fa-bell me-2"></i>Today's Notifications
+                                    </h6>
+                                    <h3 class="mb-0"><?php echo $stats['today_notifications']; ?></h3>
+                                    <small class="text-muted">Notifications sent today</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                
                 <div class="grid-responsive mb-4">
                     <a href="/buses.php" class="stats-card-modern text-decoration-none d-block">
                         <div class="stat-icon">
@@ -273,7 +332,70 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof refreshStats === 'function') {
         setInterval(refreshStats, 30000);
     }
+    
+    // Export button functionality
+    const exportBtn = document.getElementById('exportBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', function() {
+            exportDashboardData();
+        });
+    }
 });
+
+// Export dashboard data to CSV
+function exportDashboardData() {
+    const role = '<?php echo $role; ?>';
+    const filterToday = <?php echo $filterToday ? 'true' : 'false'; ?>;
+    
+    // Get current stats from the page
+    const stats = {
+        date: new Date().toLocaleDateString(),
+        filter: filterToday ? 'Today' : 'All Time',
+        role: role
+    };
+    
+    <?php if ($role === 'admin'): ?>
+    stats.active_buses = <?php echo $stats['active_buses'] ?? 0; ?>;
+    stats.total_drivers = <?php echo $stats['total_drivers'] ?? 0; ?>;
+    stats.total_parents = <?php echo $stats['total_parents'] ?? 0; ?>;
+    stats.active_routes = <?php echo $stats['active_routes'] ?? 0; ?>;
+    stats.total_students = <?php echo $stats['total_students'] ?? 0; ?>;
+    stats.tracking_buses = <?php echo $stats['tracking_buses'] ?? 0; ?>;
+    stats.unread_notifications = <?php echo $stats['unread_notifications'] ?? 0; ?>;
+    <?php if ($filterToday && isset($stats['today_gps_updates'])): ?>
+    stats.today_gps_updates = <?php echo $stats['today_gps_updates'] ?? 0; ?>;
+    stats.today_notifications = <?php echo $stats['today_notifications'] ?? 0; ?>;
+    <?php endif; ?>
+    <?php elseif ($role === 'parent'): ?>
+    stats.my_children = <?php echo $stats['my_children'] ?? 0; ?>;
+    stats.unread_notifications = <?php echo $stats['unread_notifications'] ?? 0; ?>;
+    <?php endif; ?>
+    
+    // Create CSV content
+    let csvContent = "Dashboard Statistics Export\n";
+    csvContent += "Generated: " + stats.date + "\n";
+    csvContent += "Filter: " + stats.filter + "\n";
+    csvContent += "Role: " + stats.role + "\n\n";
+    csvContent += "Metric,Value\n";
+    
+    for (const [key, value] of Object.entries(stats)) {
+        if (key !== 'date' && key !== 'filter' && key !== 'role') {
+            const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            csvContent += label + "," + value + "\n";
+        }
+    }
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'dashboard_export_' + new Date().toISOString().split('T')[0] + '.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
 // Show notifications
 function showNotifications() {
