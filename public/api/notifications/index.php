@@ -46,11 +46,8 @@ try {
         $query .= " ORDER BY n.created_at DESC LIMIT 100";
         
         $stmt = $db->prepare($query);
-    } else {
-        // Only parents can view their own notifications
-        if ($userRole !== 'parent') {
-            sendJsonResponse(false, null, 'Only parents and admins can view notifications', 403);
-        }
+    } elseif ($userRole === 'parent') {
+        // Parents can view their own notifications
         
         $query = "SELECT n.id, n.bus_id, n.message, n.notification_type, n.is_read, n.created_at,
                          b.bus_number

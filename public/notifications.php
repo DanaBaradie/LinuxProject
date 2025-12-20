@@ -15,8 +15,8 @@ requireLogin();
 
 $userRole = getUserRole();
 
-// Only admin and driver can send notifications
-if (!in_array($userRole, ['admin', 'driver'])) {
+// Admin, driver, and parent can send notifications
+if (!in_array($userRole, ['admin', 'driver', 'parent'])) {
     header('Location: /dashboard.php');
     exit();
 }
@@ -149,38 +149,64 @@ require_once '../includes/header.php';
                         <div class="card-body p-4">
                             <form method="POST" id="notificationForm">
                                 <div class="row g-3">
-                                    <div class="col-md-12">
-                                        <label for="parent_id" class="form-label">
-                                            <i class="fas fa-user me-2 text-primary"></i>Parent <span class="text-danger">*</span>
-                                        </label>
-                                        <select class="form-select form-control-modern" id="parent_id" name="parent_id" required>
-                                            <option value="">Select a parent...</option>
-                                            <?php foreach ($parents as $parent): ?>
-                                                <option value="<?php echo $parent['id']; ?>" <?php echo (isset($_POST['parent_id']) && $_POST['parent_id'] == $parent['id']) ? 'selected' : ''; ?>>
-                                                    <?php echo htmlspecialchars($parent['full_name']); ?> (<?php echo htmlspecialchars($parent['email']); ?>)
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+                                    <?php if ($userRole === 'parent'): ?>
+                                        <!-- Parent view: Send to bus (driver) -->
+                                        <div class="col-md-12">
+                                            <label for="bus_id" class="form-label">
+                                                <i class="fas fa-bus me-2 text-primary"></i>Send to Bus <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select form-control-modern" id="bus_id" name="bus_id" required>
+                                                <option value="">Select a bus...</option>
+                                                <?php foreach ($buses as $bus): ?>
+                                                    <option value="<?php echo $bus['id']; ?>" <?php echo (isset($_POST['bus_id']) && $_POST['bus_id'] == $bus['id']) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars($bus['bus_number']); ?> - <?php echo htmlspecialchars($bus['license_plate']); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <small class="form-text text-muted">This notification will be sent to the driver of the selected bus.</small>
+                                        </div>
+                                    <?php else: ?>
+                                        <!-- Admin/Driver view: Send to parent -->
+                                        <div class="col-md-12">
+                                            <label for="parent_id" class="form-label">
+                                                <i class="fas fa-user me-2 text-primary"></i>Recipient Parent <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select form-control-modern" id="parent_id" name="parent_id" required>
+                                                <option value="">Select a parent...</option>
+                                                <?php foreach ($parents as $parent): ?>
+                                                    <option value="<?php echo $parent['id']; ?>" <?php echo (isset($_POST['parent_id']) && $_POST['parent_id'] == $parent['id']) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars($parent['full_name']); ?> (<?php echo htmlspecialchars($parent['email']); ?>)
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label for="bus_id" class="form-label">
-                                            <i class="fas fa-bus me-2 text-primary"></i>Bus (Optional)
-                                        </label>
-                                        <select class="form-select form-control-modern" id="bus_id" name="bus_id">
-                                            <option value="">Select a bus (optional)...</option>
-                                            <?php foreach ($buses as $bus): ?>
-                                                <option value="<?php echo $bus['id']; ?>" <?php echo (isset($_POST['bus_id']) && $_POST['bus_id'] == $bus['id']) ? 'selected' : ''; ?>>
-                                                    <?php echo htmlspecialchars($bus['bus_number']); ?> - <?php echo htmlspecialchars($bus['license_plate']); ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+                                        <div class="col-md-6">
+                                            <label for="bus_id" class="form-label">
+                                                <i class="fas fa-bus me-2 text-primary"></i>Associated Bus (Optional)
+                                            </label>
+                                            <select class="form-select form-control-modern" id="bus_id" name="bus_id">
+                                                <option value="">Select a bus (optional)...</option>
+                                                <?php foreach ($buses as $bus): ?>
+                                                    <option value="<?php echo $bus['id']; ?>" <?php echo (isset($_POST['bus_id']) && $_POST['bus_id'] == $bus['id']) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars($bus['bus_number']); ?> - <?php echo htmlspecialchars($bus['license_plate']); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    <?php endif; ?>
 
+                                    <?php if ($userRole !== 'parent'): ?>
                                     <div class="col-md-6">
                                         <label for="notification_type" class="form-label">
                                             <i class="fas fa-tag me-2 text-primary"></i>Notification Type <span class="text-danger">*</span>
                                         </label>
+                                    <?php else: ?>
+                                    <div class="col-md-12">
+                                        <label for="notification_type" class="form-label">
+                                            <i class="fas fa-tag me-2 text-primary"></i>Notification Type <span class="text-danger">*</span>
+                                        </label>
+                                    <?php endif; ?>
                                         <select class="form-select form-control-modern" id="notification_type" name="notification_type" required>
                                             <option value="">Select type...</option>
                                             <option value="general" <?php echo (isset($_POST['notification_type']) && $_POST['notification_type'] == 'general') ? 'selected' : ''; ?>>General</option>
