@@ -2,82 +2,84 @@
 
 /* Mobile-first approach */
 @media (max-width: 768px) {
+
     /* General mobile optimizations */
     body {
         font-size: 14px;
     }
-    
+
     .container-fluid {
         padding-left: 10px;
         padding-right: 10px;
     }
-    
+
     /* Header adjustments */
     .main-content-area h1.h2 {
         font-size: 1.5rem;
     }
-    
+
     .main-content-area h4 {
         font-size: 1.2rem;
     }
-    
+
     /* Button groups */
     .d-flex.justify-content-between {
         flex-direction: column;
         gap: 10px;
     }
-    
-    .d-flex.justify-content-between > div {
+
+    .d-flex.justify-content-between>div {
         width: 100%;
     }
-    
+
     .d-flex.justify-content-between .btn {
         width: 100%;
         margin-bottom: 5px;
     }
-    
+
     /* Cards */
     .card {
         margin-bottom: 15px;
     }
-    
+
     .card-body {
         padding: 15px;
     }
-    
+
     /* Tables */
     .table-responsive {
         font-size: 0.875rem;
     }
-    
-    .table td, .table th {
+
+    .table td,
+    .table th {
         padding: 0.5rem;
     }
-    
+
     /* Hide less important columns on mobile */
     .table .hide-mobile {
         display: none;
     }
-    
+
     /* Forms */
     .form-row {
         flex-direction: column;
     }
-    
+
     .form-row .form-group {
         width: 100% !important;
         margin-bottom: 15px;
     }
-    
+
     /* Modals */
     .modal-dialog {
         margin: 10px;
     }
-    
+
     .modal-body {
         padding: 15px;
     }
-    
+
     /* Navigation */
     .sidebar {
         position: fixed;
@@ -88,62 +90,63 @@
         transition: left 0.3s ease;
         z-index: 1050;
     }
-    
+
     .sidebar.show {
         left: 0;
     }
-    
+
     .main-content-area {
         margin-left: 0 !important;
         width: 100%;
     }
-    
+
     /* Statistics cards */
-    .row > [class*='col-'] {
+    .row>[class*='col-'] {
         margin-bottom: 15px;
     }
-    
+
     /* Children cards on parent dashboard */
     .col-md-6.col-lg-4 {
         margin-bottom: 20px;
     }
-    
+
     /* Bus tracking map */
     #map {
         height: 300px !important;
     }
-    
+
     /* Action buttons in tables */
     .btn-sm {
         padding: 0.25rem 0.4rem;
         font-size: 0.75rem;
     }
-    
+
     /* Alerts */
     .alert {
         font-size: 0.875rem;
         padding: 10px;
     }
-    
+
     /* Badges */
     .badge {
         font-size: 0.7rem;
     }
-    
+
     /* List groups */
     .list-group-item {
         padding: 10px;
     }
-    
+
     .list-group-item h6 {
         font-size: 0.95rem;
     }
-    
+
     /* Profile page */
-    .col-md-8, .col-md-4 {
+    .col-md-8,
+    .col-md-4 {
         width: 100%;
     }
-    
+
     /* Dashboard quick actions */
     .d-grid {
         margin-top: 10px;
@@ -155,15 +158,15 @@
     .col-md-6 {
         width: 50%;
     }
-    
+
     .col-lg-4 {
         width: 33.333%;
     }
-    
+
     .main-content-area {
         margin-left: 200px;
     }
-    
+
     .sidebar {
         width: 200px;
     }
@@ -171,31 +174,35 @@
 
 /* Touch-friendly improvements */
 @media (hover: none) and (pointer: coarse) {
+
     /* Larger touch targets */
     .btn {
         min-height: 44px;
         padding: 12px 20px;
     }
-    
+
     .btn-sm {
         min-height: 36px;
         padding: 8px 12px;
     }
-    
+
     /* Larger form inputs */
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
         min-height: 44px;
-        font-size: 16px; /* Prevents zoom on iOS */
+        font-size: 16px;
+        /* Prevents zoom on iOS */
     }
-    
+
     /* Larger clickable areas */
     .list-group-item {
         min-height: 44px;
         padding: 12px;
     }
-    
+
     /* Larger table rows */
-    .table td, .table th {
+    .table td,
+    .table th {
         padding: 12px 8px;
     }
 }
@@ -205,7 +212,7 @@
     #map {
         height: 250px !important;
     }
-    
+
     .card-body {
         padding: 10px;
     }
@@ -216,16 +223,16 @@
     .main-content-area h1.h2 {
         font-size: 1.25rem;
     }
-    
+
     .btn {
         font-size: 0.875rem;
         padding: 8px 12px;
     }
-    
+
     .card-header h5 {
         font-size: 1rem;
     }
-    
+
     .table {
         font-size: 0.75rem;
     }
@@ -233,15 +240,19 @@
 
 /* Print styles */
 @media print {
-    .sidebar, .btn, .alert, .modal {
+
+    .sidebar,
+    .btn,
+    .alert,
+    .modal {
         display: none !important;
     }
-    
+
     .main-content-area {
         margin-left: 0 !important;
         width: 100% !important;
     }
-    
+
     .card {
         break-inside: avoid;
     }
@@ -282,8 +293,13 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Utility classes for mobile */
@@ -295,7 +311,7 @@
     .mobile-only {
         display: block;
     }
-    
+
     .desktop-only {
         display: none;
     }
@@ -308,6 +324,49 @@
         top: 0;
         z-index: 100;
         background: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* MOBILE FIX: Login Page Responsiveness */
+@media (max-width: 768px) {
+
+    /* Override Bootstrap p-5 (3rem) on mobile */
+    .card-body.p-5 {
+        padding: 1.5rem !important;
+        /* 24px instead of 48px */
+    }
+
+    /* Ensure login card doesn't touch edges */
+    .col-md-5.col-lg-4 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /* Login Icon size reduction */
+    .fa-3x {
+        font-size: 2em;
+        /* Reduce from 3em */
+    }
+
+    /* Login Heading */
+    h2.fw-bold {
+        font-size: 1.5rem;
+    }
+}
+
+/* MOBILE FIX: Parent Dashboard Table */
+@media (max-width: 768px) {
+
+    /* Hide 'Route' column (3rd) in schedule table to save space */
+    /* Note: This assumes standard 5-column layout: Student, Bus, Route, Start, End */
+    .table-responsive .table th:nth-child(3),
+    .table-responsive .table td:nth-child(3) {
+        display: none;
+    }
+
+    /* Make 'Bus' column (2nd) smaller text */
+    .table-responsive .table td:nth-child(2) {
+        font-size: 0.8em;
     }
 }
