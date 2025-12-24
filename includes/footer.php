@@ -22,13 +22,16 @@
                 if (isMobile()) {
                     sidebar.classList.remove('collapsed');
                     sidebar.classList.remove('show');
+                    document.body.classList.remove('sidebar-collapsed');
                     if (sidebarOverlay) sidebarOverlay.classList.remove('show');
                 } else {
                     sidebar.classList.remove('show');
                     if (savedState === 'collapsed') {
                         sidebar.classList.add('collapsed');
+                        document.body.classList.add('sidebar-collapsed');
                     } else {
                         sidebar.classList.remove('collapsed');
+                        document.body.classList.remove('sidebar-collapsed');
                     }
                 }
             }
@@ -46,6 +49,8 @@
                     }
                 } else {
                     sidebar.classList.toggle('collapsed');
+                    document.body.classList.toggle('sidebar-collapsed');
+
                     // Save state
                     if (sidebar.classList.contains('collapsed')) {
                         localStorage.setItem('sidebarState', 'collapsed');
@@ -62,6 +67,7 @@
                     if (sidebarOverlay) sidebarOverlay.classList.remove('show');
                 } else {
                     sidebar.classList.add('collapsed');
+                    document.body.classList.add('sidebar-collapsed');
                     localStorage.setItem('sidebarState', 'collapsed');
                 }
             }
@@ -91,7 +97,7 @@
                     const clickedLink = e.target.closest('.nav-link');
                     // Check if it's a link and we are not just expanding a submenu (if any)
                     if (clickedLink && clickedLink.href && clickedLink.getAttribute('href') !== '#') {
-                        // On mobile: always close. 
+                        // On mobile: always close.
                         // On desktop: The user requested "whenever a thing is chosen... should be closed"
                         // So we force close (collapse) on desktop too and save that state.
                         closeSidebar();
@@ -109,13 +115,16 @@
                         const savedState = localStorage.getItem('sidebarState');
                         if (savedState === 'collapsed') {
                             sidebar.classList.add('collapsed');
+                            document.body.classList.add('sidebar-collapsed');
                         } else {
                             sidebar.classList.remove('collapsed');
+                            document.body.classList.remove('sidebar-collapsed');
                         }
                         sidebar.classList.remove('show'); // Remove mobile class
                     } else {
                         sidebar.classList.remove('collapsed'); // Remove desktop class
                         sidebar.classList.remove('show'); // Start hidden on mobile resize
+                        document.body.classList.remove('sidebar-collapsed');
                     }
                 }, 250);
             });

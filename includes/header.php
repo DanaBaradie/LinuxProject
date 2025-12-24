@@ -94,9 +94,18 @@
         }
 
         .sidebar.collapsed~main.main-content-area,
-        .sidebar.collapsed~.main-content-area {
+        .sidebar.collapsed~.main-content-area,
+        body.sidebar-collapsed main.main-content-area,
+        body.sidebar-collapsed .main-content-area {
             margin-left: 0 !important;
             width: 100% !important;
+        }
+
+        /* Adjust Header when sidebar is collapsed */
+        body.sidebar-collapsed .navbar-brand {
+            width: auto !important;
+            margin-right: 1rem;
+            flex: 0 0 auto;
         }
 
         .container-fluid {
