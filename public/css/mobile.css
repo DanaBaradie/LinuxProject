@@ -4,13 +4,28 @@
 @media (max-width: 768px) {
 
     /* General mobile optimizations */
+    /* General mobile optimizations */
     body {
         font-size: 14px;
+        overflow-x: hidden;
+        /* Prevent horizontal scroll */
+        width: 100%;
+        position: relative;
     }
 
-    .container-fluid {
-        padding-left: 10px;
-        padding-right: 10px;
+    .container-fluid,
+    .container {
+        padding-left: 15px;
+        /* Standard Bootstrap padding */
+        padding-right: 15px;
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+
+    .row {
+        margin-left: -15px;
+        margin-right: -15px;
+        max-width: 100vw;
     }
 
     /* Header adjustments */
@@ -163,12 +178,20 @@
         width: 33.333%;
     }
 
-    .main-content-area {
-        margin-left: 200px;
-    }
+    /* REMOVED hardcoded margins that cause gutters on tablets/landscape phones */
+    /* Handled by header.php and body classes now */
 
     .sidebar {
         width: 200px;
+    }
+
+    /* Ensure content adjusts to sidebar width if visible */
+    body:not(.sidebar-collapsed) .main-content-area {
+        margin-left: 200px;
+    }
+
+    body.sidebar-collapsed .main-content-area {
+        margin-left: 0 !important;
     }
 }
 
