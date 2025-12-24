@@ -86,7 +86,7 @@ require_once '../includes/header.php';
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header bg-light text-primary border-bottom">
                                 <h5 class="mb-0"><i class="fas fa-bus me-2"></i>My Bus</h5>
                             </div>
                             <div class="card-body">
@@ -128,14 +128,15 @@ require_once '../includes/header.php';
 
                     <div class="col-md-6">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-success text-white">
+                            <div class="card-header bg-light text-success border-bottom">
                                 <h5 class="mb-0"><i class="fas fa-route me-2"></i>Routes</h5>
                             </div>
                             <div class="card-body">
                                 <?php if (empty($routes)): ?>
                                     <p class="text-muted">No routes assigned yet</p>
                                 <?php else: ?>
-                                    <?php foreach ($routes as $route): ?>
+                                    <?php $routeCount = count($routes); ?>
+                                    <?php foreach ($routes as $index => $route): ?>
                                         <div class="mb-3">
                                             <h6><i
                                                     class="fas fa-map-signs text-warning me-2"></i><?php echo htmlspecialchars($route['route_name']); ?>
@@ -153,7 +154,7 @@ require_once '../includes/header.php';
                                                 <?php echo $route['active'] ? 'Active' : 'Inactive'; ?>
                                             </span>
                                         </div>
-                                        <?php if (!$loop->last): ?>
+                                        <?php if ($index < $routeCount - 1): ?>
                                             <hr><?php endif; ?>
                                     <?php endforeach; ?>
                                 <?php endif; ?>

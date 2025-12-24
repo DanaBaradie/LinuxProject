@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     if ($my_bus) {
         $latitude = floatval($_POST['latitude']);
         $longitude = floatval($_POST['longitude']);
-        
+
         try {
             $query = "UPDATE buses 
                       SET current_latitude = :lat, 
@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $stmt->bindParam(':lng', $longitude);
             $stmt->bindParam(':bus_id', $my_bus['id']);
             $stmt->execute();
-            
+
             $success = 'Location updated successfully!';
-            
+
             // Refresh bus data
             $stmt = $db->prepare("SELECT * FROM buses WHERE driver_id = :driver_id");
             $stmt->bindParam(':driver_id', $_SESSION['user_id']);
@@ -57,7 +57,8 @@ require_once '../includes/header.php';
         <?php require_once '../includes/sidebar.php'; ?>
 
         <main class="main-content-area">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-bus me-2"></i>My Bus</h1>
             </div>
 
@@ -79,7 +80,7 @@ require_once '../includes/header.php';
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header bg-light text-primary border-bottom">
                                 <h5 class="mb-0">
                                     <i class="fas fa-bus me-2"></i>Bus Information
                                 </h5>
@@ -89,24 +90,25 @@ require_once '../includes/header.php';
                                     <strong>Bus Number:</strong>
                                     <h4 class="text-primary"><?php echo htmlspecialchars($my_bus['bus_number']); ?></h4>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <strong><i class="fas fa-users me-2"></i>Capacity:</strong>
                                     <?php echo $my_bus['capacity']; ?> students
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <strong><i class="fas fa-id-card me-2"></i>License Plate:</strong>
                                     <?php echo htmlspecialchars($my_bus['license_plate'] ?? 'N/A'); ?>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <strong><i class="fas fa-circle me-2 text-success"></i>Status:</strong>
-                                    <span class="badge bg-<?php echo $my_bus['status'] === 'active' ? 'success' : 'secondary'; ?>">
+                                    <span
+                                        class="badge bg-<?php echo $my_bus['status'] === 'active' ? 'success' : 'secondary'; ?>">
                                         <?php echo ucfirst($my_bus['status']); ?>
                                     </span>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <strong><i class="fas fa-clock me-2"></i>Last Location Update:</strong><br>
                                     <?php if ($my_bus['last_location_update']): ?>
@@ -129,7 +131,7 @@ require_once '../includes/header.php';
 
                     <div class="col-md-6">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-success text-white">
+                            <div class="card-header bg-light text-success border-bottom">
                                 <h5 class="mb-0">
                                     <i class="fas fa-location-arrow me-2"></i>Update Location
                                 </h5>
@@ -140,7 +142,8 @@ require_once '../includes/header.php';
                                     Use the button below to automatically detect and update your current GPS location.
                                 </div>
 
-                                <button class="btn btn-success btn-lg w-100 mb-3" onclick="updateMyLocation()" id="updateBtn">
+                                <button class="btn btn-success btn-lg w-100 mb-3" onclick="updateMyLocation()"
+                                    id="updateBtn">
                                     <i class="fas fa-crosshairs me-2"></i>Get My Current Location
                                 </button>
 
@@ -162,13 +165,13 @@ require_once '../includes/header.php';
                                     <input type="hidden" name="action" value="update_location">
                                     <div class="mb-3">
                                         <label class="form-label">Latitude</label>
-                                        <input type="number" step="0.000001" class="form-control" name="latitude" 
-                                               placeholder="33.8886" required>
+                                        <input type="number" step="0.000001" class="form-control" name="latitude"
+                                            placeholder="33.8886" required>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Longitude</label>
-                                        <input type="number" step="0.000001" class="form-control" name="longitude" 
-                                               placeholder="35.4955" required>
+                                        <input type="number" step="0.000001" class="form-control" name="longitude"
+                                            placeholder="35.4955" required>
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100">
                                         <i class="fas fa-save me-2"></i>Update Manually
@@ -189,30 +192,30 @@ require_once '../includes/header.php';
 </div>
 
 <script>
-function updateMyLocation() {
-    const btn = document.getElementById('updateBtn');
-    const status = document.getElementById('locationStatus');
-    
-    if (navigator.geolocation) {
-        btn.disabled = true;
-        status.style.display = 'block';
-        
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                document.getElementById('latitude').value = position.coords.latitude;
-                document.getElementById('longitude').value = position.coords.longitude;
-                document.getElementById('locationForm').submit();
-            },
-            function(error) {
-                status.className = 'alert alert-danger';
-                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error: ' + error.message;
-                btn.disabled = false;
-            }
-        );
-    } else {
-        alert('Geolocation is not supported by your browser');
+    function updateMyLocation() {
+        const btn = document.getElementById('updateBtn');
+        const status = document.getElementById('locationStatus');
+
+        if (navigator.geolocation) {
+            btn.disabled = true;
+            status.style.display = 'block';
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    document.getElementById('latitude').value = position.coords.latitude;
+                    document.getElementById('longitude').value = position.coords.longitude;
+                    document.getElementById('locationForm').submit();
+                },
+                function (error) {
+                    status.className = 'alert alert-danger';
+                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error: ' + error.message;
+                    btn.disabled = false;
+                }
+            );
+        } else {
+            alert('Geolocation is not supported by your browser');
+        }
     }
-}
 </script>
 
 <?php require_once '../includes/footer.php'; ?>
