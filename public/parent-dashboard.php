@@ -202,28 +202,37 @@ require_once '../includes/header.php';
                     <?php if (empty($notifications)): ?>
                         <p class="text-muted text-center py-3">No notifications yet</p>
                     <?php else: ?>
-                        <div class="list-group list-group-flush">
+                        <div class="list-group list-group-flush" id="notifications-list">
                             <?php foreach ($notifications as $notif): ?>
-                                <div class="list-group-item <?php echo !$notif['is_read'] ? 'bg-light' : ''; ?>">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">
-                                            <?php
-                                            $icons = [
-                                                'traffic' => 'fa-traffic-light text-warning',
-                                                'speed_warning' => 'fa-exclamation-triangle text-danger',
-                                                'nearby' => 'fa-map-marker-alt text-success',
-                                                'route_change' => 'fa-route text-info',
-                                                'general' => 'fa-info-circle text-primary'
-                                            ];
-                                            $icon = $icons[$notif['notification_type']] ?? 'fa-bell text-secondary';
-                                            ?>
-                                            <i class="fas <?php echo $icon; ?> me-2"></i>
-                                            <?php echo ucfirst(str_replace('_', ' ', $notif['notification_type'])); ?>
-                                        </h6>
-                                        <small
-                                            class="text-muted"><?php echo date('M d, H:i', strtotime($notif['created_at'])); ?></small>
+                                <div class="list-group-item <?php echo !$notif['is_read'] ? 'bg-light' : ''; ?>"
+                                    id="notif-<?php echo $notif['id']; ?>">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">
+                                                <?php
+                                                $icons = [
+                                                    'traffic' => 'fa-traffic-light text-warning',
+                                                    'speed_warning' => 'fa-exclamation-triangle text-danger',
+                                                    'nearby' => 'fa-map-marker-alt text-success',
+                                                    'route_change' => 'fa-route text-info',
+                                                    'general' => 'fa-info-circle text-primary'
+                                                ];
+                                                $icon = $icons[$notif['notification_type']] ?? 'fa-bell text-secondary';
+                                                ?>
+                                                <i class="fas <?php echo $icon; ?> me-2"></i>
+                                                <?php echo ucfirst(str_replace('_', ' ', $notif['notification_type'])); ?>
+                                            </h6>
+                                            <p class="mb-1"><?php echo htmlspecialchars($notif['message']); ?></p>
+                                            <small
+                                                class="text-muted"><?php echo date('M d, H:i', strtotime($notif['created_at'])); ?></small>
+                                        </div>
+                                        <?php if (!$notif['is_read']): ?>
+                                            <button class="btn btn-sm btn-outline-secondary ms-3 mark-read-btn"
+                                                onclick="markAsRead(<?php echo $notif['id']; ?>)" title="Mark as Read">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
-                                    <p class="mb-1"><?php echo htmlspecialchars($notif['message']); ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -238,5 +247,68 @@ require_once '../includes/header.php';
         </main>
     </div>
 </div>
+
+<script>
+function markAsRead(notificationId) {
+    if (!notificationId) return;
+    
+    // Find the button and show loading state
+    const btn = document.querySelector(`#notif-${notificationId} .mark-read-btn`);
+    if (btn) {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div>';
+        btn.disabled = true;
+    }
+
+    fetch('/api/notifications/mark-read.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            notification_id: notificationId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update UI
+            const item = document.getElementById(`notif-${notificationId}`);
+            if (item) {
+                // Remove highlighting
+                item.classList.remove('bg-light');
+                // Remove button
+                if (btn) btn.remove();
+                
+                // Update badge count if exists
+                const badge = document.querySelector('.badge.bg-danger');
+                if (badge) {
+                    let count = parseInt(badge.innerText);
+                    if (count > 1) {
+                        badge.innerText = count - 1;
+                    } else {
+                        badge.remove();
+                    }
+                }
+            }
+        } else {
+            console.error('Failed to mark read:', data.message);
+            // Revert button state
+            if (btn) {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                alert('Failed to mark as read. Please try again.');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if (btn) {
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
+        }
+    });
+}
+</script>
 
 <?php require_once '../includes/footer.php'; ?>

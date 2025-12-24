@@ -1,76 +1,44 @@
 <?php
-/**
- * Notifications API - Mark Notification as Read
- * 
- * POST /api/notifications/mark-read.php
- * Body: { "notification_id": 1 }
- * 
- * @author Dana Baradie
- * @course IT404
- */
+header('Content-Type: application/json');
+require_once '../../../config/config.php';
+require_once '../../../config/database.php';
 
-require_once __DIR__ . '/../../../config/config.php';
-require_once __DIR__ . '/../../../config/database.php';
-require_once __DIR__ . '/../../../includes/middleware.php';
+requireLogin();
 
-// Only allow POST requests
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    sendJsonResponse(false, null, 'Method not allowed', 405);
-}
-
-requireAuth();
-
-$userId = getUserId();
-$userRole = getUserRole();
+$database = new Database();
+$db = $database->getConnection();
+$user_id = $_SESSION['user_id'];
 
 // Get JSON input
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($input['notification_id'])) {
-    sendJsonResponse(false, null, 'Notification ID is required', 400);
+    echo json_encode(['success' => false, 'message' => 'Notification ID required']);
+    exit;
 }
 
-$notificationId = intval($input['notification_id']);
+$notification_id = $input['notification_id'];
 
 try {
-    $database = new Database();
-    $db = $database->getConnection();
-    
-    // Verify notification exists and belongs to user
-    if ($userRole === 'parent') {
-        $verifyQuery = "SELECT id FROM notifications WHERE id = :id AND parent_id = :user_id";
-    } elseif ($userRole === 'driver') {
-        // For drivers, check if notification is for their bus
-        $verifyQuery = "SELECT n.id FROM notifications n
-                       INNER JOIN buses b ON n.bus_id = b.id
-                       WHERE n.id = :id AND b.driver_id = :user_id";
+    // Verify ownership and mark as read
+    // Allow if it belongs to user OR if user is admin (optional, but sticking to owner for now)
+    $query = "UPDATE notifications 
+              SET is_read = TRUE 
+              WHERE id = :id AND parent_id = :user_id";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':id' => $notification_id,
+        ':user_id' => $user_id
+    ]);
+
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => true, 'message' => 'Marked as read']);
     } else {
-        // Admin can mark any notification as read
-        $verifyQuery = "SELECT id FROM notifications WHERE id = :id";
+        // Could be already read, or doesn't belong to user
+        echo json_encode(['success' => false, 'message' => 'Notification not found or already read']);
     }
-    
-    $verifyStmt = $db->prepare($verifyQuery);
-    $verifyStmt->bindParam(':id', $notificationId);
-    if ($userRole !== 'admin') {
-        $verifyStmt->bindParam(':user_id', $userId);
-    }
-    $verifyStmt->execute();
-    
-    if ($verifyStmt->rowCount() === 0) {
-        sendJsonResponse(false, null, 'Notification not found or access denied', 404);
-    }
-    
-    // Mark as read
-    $updateQuery = "UPDATE notifications SET is_read = TRUE, read_at = NOW() WHERE id = :id";
-    $updateStmt = $db->prepare($updateQuery);
-    $updateStmt->bindParam(':id', $notificationId);
-    $updateStmt->execute();
-    
-    sendJsonResponse(true, null, 'Notification marked as read', 200);
-    
 } catch (Exception $e) {
-    error_log("Mark notification read error: " . $e->getMessage());
-    sendJsonResponse(false, null, 'Error marking notification as read', 500);
+    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }
 ?>
-

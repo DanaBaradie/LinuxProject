@@ -13,7 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = sanitizeInput($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if (empty($email) || empty($password)) {
+    // Verify CSRF Token
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+        $error = 'Invalid session token. Please refresh the page and try again.';
+    } elseif (empty($email) || empty($password)) {
         $error = 'Please enter both email and password.';
     } else {
         try {
@@ -27,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->rowCount() > 0) {
                 $user = $stmt->fetch();
-                
+
                 if (password_verify($password, $user['password'])) {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_email'] = $user['email'];
                     $_SESSION['user_name'] = $user['full_name'];
                     $_SESSION['user_role'] = $user['role'];
-                    
+
                     header('Location: /dashboard.php');
                     exit();
                 } else {
@@ -51,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
     <div class="container">
         <div class="row justify-content-center align-items-center min-vh-100">
@@ -77,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
 
                         <form method="POST">
+                            <?php csrfField(); ?>
                             <div class="mb-3">
                                 <label class="form-label">Email Address</label>
                                 <input type="email" class="form-control" name="email" required>
@@ -101,4 +107,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
+
 </html>

@@ -24,38 +24,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = sanitizeInput($_POST['email']);
     $phone = sanitizeInput($_POST['phone']);
 
-    try {
-        // Check if email is already taken by another user
-        $query = "SELECT id FROM users WHERE email = :email AND id != :user_id";
-        $stmt = $db->prepare($query);
-        $stmt->execute([':email' => $email, ':user_id' => $user_id]);
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+        $error = 'Invalid session token. Please refresh the page and try again.';
+    } else {
 
-        if ($stmt->rowCount() > 0) {
-            $error = 'Email address is already in use by another account.';
-        } else {
-            $query = "UPDATE users SET full_name = :full_name, email = :email, phone = :phone WHERE id = :id";
+        try {
+            // Check if email is already taken by another user
+            $query = "SELECT id FROM users WHERE email = :email AND id != :user_id";
             $stmt = $db->prepare($query);
-            $stmt->execute([
-                ':full_name' => $full_name,
-                ':email' => $email,
-                ':phone' => $phone,
-                ':id' => $user_id
-            ]);
+            $stmt->execute([':email' => $email, ':user_id' => $user_id]);
 
-            // Update session
-            $_SESSION['user_name'] = $full_name;
+            if ($stmt->rowCount() > 0) {
+                $error = 'Email address is already in use by another account.';
+            } else {
+                $query = "UPDATE users SET full_name = :full_name, email = :email, phone = :phone WHERE id = :id";
+                $stmt = $db->prepare($query);
+                $stmt->execute([
+                    ':full_name' => $full_name,
+                    ':email' => $email,
+                    ':phone' => $phone,
+                    ':id' => $user_id
+                ]);
 
-            $success = 'Profile updated successfully!';
+                // Update session
+                $_SESSION['user_name'] = $full_name;
 
-            // Refresh user data
-            $query = "SELECT * FROM users WHERE id = :id";
-            $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $user_id);
-            $stmt->execute();
-            $user = $stmt->fetch();
+                $success = 'Profile updated successfully!';
+
+                // Refresh user data
+                $query = "SELECT * FROM users WHERE id = :id";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':id', $user_id);
+                $stmt->execute();
+                $user = $stmt->fetch();
+            }
+        } catch (Exception $e) {
+            $error = 'Error updating profile: ' . $e->getMessage();
         }
-    } catch (Exception $e) {
-        $error = 'Error updating profile: ' . $e->getMessage();
     }
 }
 
@@ -97,6 +102,7 @@ require_once '../includes/header.php';
                         </div>
                         <div class="card-body">
                             <form method="POST">
+                                <?php csrfField(); ?>
                                 <div class="mb-3">
                                     <label class="form-label">
                                         <i class="fas fa-user me-1"></i>Full Name <span class="text-danger">*</span>

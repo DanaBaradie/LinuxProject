@@ -1,4 +1,3 @@
-
 <?php
 // Application Configuration
 session_start();
@@ -22,30 +21,36 @@ define('GOOGLE_MAPS_API_KEY', 'YOUR_API_KEY_HERE');
 date_default_timezone_set('Asia/Beirut');
 
 // Helper functions
-function isLoggedIn() {
+function isLoggedIn()
+{
     return isset($_SESSION['user_id']);
 }
 
-function getUserRole() {
+function getUserRole()
+{
     return $_SESSION['user_role'] ?? null;
 }
 
-function getUserId() {
+function getUserId()
+{
     return $_SESSION['user_id'] ?? null;
 }
 
-function getUserName() {
+function getUserName()
+{
     return $_SESSION['user_name'] ?? null;
 }
 
-function requireLogin() {
+function requireLogin()
+{
     if (!isLoggedIn()) {
         header('Location: /login.php');
         exit();
     }
 }
 
-function requireRole($role) {
+function requireRole($role)
+{
     requireLogin();
     if (getUserRole() !== $role) {
         header('Location: /dashboard.php');
@@ -53,19 +58,56 @@ function requireRole($role) {
     }
 }
 
-function sanitizeInput($data) {
+function sanitizeInput($data)
+{
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
     return $data;
 }
 
-function formatTime($time) {
+function formatTime($time)
+{
     return date('h:i A', strtotime($time));
 }
 
-function formatDateTime($datetime) {
+function formatDateTime($datetime)
+{
     return date('M d, Y h:i A', strtotime($datetime));
+}
+
+/**
+ * Generate CSRF Token
+ * @return string
+ */
+function generateCsrfToken()
+{
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+/**
+ * Verify CSRF Token
+ * @param string $token
+ * @return bool
+ */
+function verifyCsrfToken($token)
+{
+    if (!isset($_SESSION['csrf_token']) || empty($token)) {
+        return false;
+    }
+    return hash_equals($_SESSION['csrf_token'], $token);
+}
+
+/**
+ * Output CSRF Input Field
+ */
+function csrfField()
+{
+    $token = generateCsrfToken();
+    echo '<input type="hidden" name="csrf_token" value="' . $token . '">';
 }
 
 /**
@@ -76,19 +118,20 @@ function formatDateTime($datetime) {
  * @param string $message Response message
  * @param int $statusCode HTTP status code
  */
-function sendJsonResponse($success, $data = null, $message = '', $statusCode = 200) {
+function sendJsonResponse($success, $data = null, $message = '', $statusCode = 200)
+{
     http_response_code($statusCode);
     header('Content-Type: application/json');
-    
+
     $response = [
         'success' => $success,
         'message' => $message
     ];
-    
+
     if ($data !== null) {
         $response['data'] = $data;
     }
-    
+
     echo json_encode($response);
     exit();
 }
