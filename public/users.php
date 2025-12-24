@@ -319,10 +319,10 @@ require_once '../includes/header.php';
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
+                                        <th class="d-none d-md-table-cell">Email</th>
+                                        <th class="d-none d-md-table-cell">Phone</th>
                                         <th>Assigned Bus</th>
-                                        <th>Status</th>
+                                        <th class="d-none d-md-table-cell">Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -331,8 +331,10 @@ require_once '../includes/header.php';
                                         <tr class="user-row" data-name="<?php echo strtolower($user['full_name']); ?>"
                                             data-email="<?php echo strtolower($user['email']); ?>">
                                             <td><strong><?php echo htmlspecialchars($user['full_name']); ?></strong></td>
-                                            <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                            <td><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
+                                            <td class="d-none d-md-table-cell"><?php echo htmlspecialchars($user['email']); ?>
+                                            </td>
+                                            <td class="d-none d-md-table-cell">
+                                                <?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
                                             <td>
                                                 <?php if ($user['bus_number']): ?>
                                                     <span class="badge bg-success">
@@ -343,7 +345,7 @@ require_once '../includes/header.php';
                                                     <span class="text-muted">Not assigned</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td>
+                                            <td class="d-none d-md-table-cell">
                                                 <?php if ($user['bus_number']): ?>
                                                     <span class="badge bg-success">Active</span>
                                                 <?php else: ?>
@@ -351,26 +353,28 @@ require_once '../includes/header.php';
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-primary me-1"
-                                                    onclick="viewDriverDetails(<?php echo $user['id']; ?>)">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-success me-1"
-                                                    onclick="sendEmailToUser('<?php echo htmlspecialchars($user['email']); ?>', '<?php echo htmlspecialchars($user['full_name']); ?>')">
-                                                    <i class="fas fa-envelope"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-info me-1"
-                                                    onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <form method="POST" class="d-inline"
-                                                    onsubmit="return confirm('Delete this user?')">
-                                                    <input type="hidden" name="action" value="delete">
-                                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
+                                                <div class="d-flex">
+                                                    <button class="btn btn-sm btn-primary me-1"
+                                                        onclick="viewDriverDetails(<?php echo $user['id']; ?>)">
+                                                        <i class="fas fa-eye"></i>
                                                     </button>
-                                                </form>
+                                                    <button class="btn btn-sm btn-success me-1 d-none d-md-inline-block"
+                                                        onclick="sendEmailToUser('<?php echo htmlspecialchars($user['email']); ?>', '<?php echo htmlspecialchars($user['full_name']); ?>')">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-info me-1"
+                                                        onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <form method="POST" class="d-inline"
+                                                        onsubmit="return confirm('Delete this user?')">
+                                                        <input type="hidden" name="action" value="delete">
+                                                        <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -399,8 +403,8 @@ require_once '../includes/header.php';
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
+                                        <th class="d-none d-md-table-cell">Email</th>
+                                        <th class="d-none d-md-table-cell">Phone</th>
                                         <th>Students</th>
                                         <th>Actions</th>
                                     </tr>
@@ -410,8 +414,10 @@ require_once '../includes/header.php';
                                         <tr class="user-row" data-name="<?php echo strtolower($user['full_name']); ?>"
                                             data-email="<?php echo strtolower($user['email']); ?>">
                                             <td><strong><?php echo htmlspecialchars($user['full_name']); ?></strong></td>
-                                            <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                            <td><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
+                                            <td class="d-none d-md-table-cell"><?php echo htmlspecialchars($user['email']); ?>
+                                            </td>
+                                            <td class="d-none d-md-table-cell">
+                                                <?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
                                             <td>
                                                 <?php if ($user['student_count'] > 0): ?>
                                                     <span class="badge bg-info">
@@ -424,26 +430,28 @@ require_once '../includes/header.php';
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-primary me-1"
-                                                    onclick="viewParentDetails(<?php echo $user['id']; ?>)">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-success me-1"
-                                                    onclick="sendEmailToUser('<?php echo htmlspecialchars($user['email']); ?>', '<?php echo htmlspecialchars($user['full_name']); ?>')">
-                                                    <i class="fas fa-envelope"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-info me-1"
-                                                    onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <form method="POST" class="d-inline"
-                                                    onsubmit="return confirm('Delete this user?')">
-                                                    <input type="hidden" name="action" value="delete">
-                                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
+                                                <div class="d-flex">
+                                                    <button class="btn btn-sm btn-primary me-1"
+                                                        onclick="viewParentDetails(<?php echo $user['id']; ?>)">
+                                                        <i class="fas fa-eye"></i>
                                                     </button>
-                                                </form>
+                                                    <button class="btn btn-sm btn-success me-1 d-none d-md-inline-block"
+                                                        onclick="sendEmailToUser('<?php echo htmlspecialchars($user['email']); ?>', '<?php echo htmlspecialchars($user['full_name']); ?>')">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-info me-1"
+                                                        onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <form method="POST" class="d-inline"
+                                                        onsubmit="return confirm('Delete this user?')">
+                                                        <input type="hidden" name="action" value="delete">
+                                                        <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -641,28 +649,28 @@ require_once '../includes/header.php';
                 <div class="modal-body">
                     <input type="hidden" name="type" value="custom">
                     <input type="hidden" id="email_to_name" name="to_name">
-                    
+
                     <div class="form-group mb-3">
                         <label class="form-label">
                             <i class="fas fa-user me-1"></i>To <span class="required">*</span>
                         </label>
                         <input type="email" class="form-control" id="email_to" name="to" required readonly>
                     </div>
-                    
+
                     <div class="form-group mb-3">
                         <label class="form-label">
                             <i class="fas fa-heading me-1"></i>Subject <span class="required">*</span>
                         </label>
-                        <input type="text" class="form-control" id="email_subject" name="subject" required 
-                               placeholder="Enter email subject">
+                        <input type="text" class="form-control" id="email_subject" name="subject" required
+                            placeholder="Enter email subject">
                     </div>
-                    
+
                     <div class="form-group mb-3">
                         <label class="form-label">
                             <i class="fas fa-comment me-1"></i>Message <span class="required">*</span>
                         </label>
-                        <textarea class="form-control" id="email_message" name="message" rows="8" required 
-                                  placeholder="Enter your message here..."></textarea>
+                        <textarea class="form-control" id="email_message" name="message" rows="8" required
+                            placeholder="Enter your message here..."></textarea>
                         <small class="form-text">You can use HTML formatting in your message</small>
                     </div>
                 </div>
@@ -850,7 +858,7 @@ require_once '../includes/header.php';
         document.getElementById('email_to_name').value = userName;
         document.getElementById('email_subject').value = '';
         document.getElementById('email_message').value = '';
-        
+
         var modal = new bootstrap.Modal(document.getElementById('sendEmailModal'));
         modal.show();
     }
@@ -858,35 +866,35 @@ require_once '../includes/header.php';
     // Handle email form submission
     function submitEmailForm(event) {
         event.preventDefault();
-        
+
         const submitBtn = document.getElementById('sendEmailBtn');
         const originalText = submitBtn.innerHTML;
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
-        
+
         const formData = new FormData(document.getElementById('emailForm'));
-        
+
         fetch('/api/email/send.php', {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('✅ Email sent successfully!');
-                bootstrap.Modal.getInstance(document.getElementById('sendEmailModal')).hide();
-                document.getElementById('emailForm').reset();
-            } else {
-                alert('❌ Failed to send email: ' + (data.message || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            alert('❌ Error sending email: ' + error.message);
-        })
-        .finally(() => {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Email sent successfully!');
+                    bootstrap.Modal.getInstance(document.getElementById('sendEmailModal')).hide();
+                    document.getElementById('emailForm').reset();
+                } else {
+                    alert('❌ Failed to send email: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                alert('❌ Error sending email: ' + error.message);
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            });
     }
 </script>
 

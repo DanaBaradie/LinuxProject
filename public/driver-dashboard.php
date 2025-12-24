@@ -175,11 +175,11 @@ require_once '../includes/header.php';
                                 <table class="table table-hover">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Student Name</th>
-                                            <th>Grade</th>
+                                            <th>Student</th>
+                                            <th class="d-none d-md-table-cell">Grade</th>
                                             <th>Stop</th>
-                                            <th>Parent</th>
-                                            <th>Parent Contact</th>
+                                            <th class="d-none d-md-table-cell">Parent</th>
+                                            <th>Contact</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -188,19 +188,27 @@ require_once '../includes/header.php';
                                                 <td>
                                                     <i class="fas fa-user-graduate text-primary me-2"></i>
                                                     <strong><?php echo htmlspecialchars($student['student_name']); ?></strong>
+                                                    <!-- Show minimal parent info on mobile -->
+                                                    <div class="d-md-none small text-muted mt-1">
+                                                        <i
+                                                            class="fas fa-user me-1"></i><?php echo htmlspecialchars($student['parent_name']); ?>
+                                                    </div>
                                                 </td>
-                                                <td><?php echo htmlspecialchars($student['grade'] ?? 'N/A'); ?></td>
+                                                <td class="d-none d-md-table-cell">
+                                                    <?php echo htmlspecialchars($student['grade'] ?? 'N/A'); ?></td>
                                                 <td>
                                                     <i class="fas fa-map-marker-alt text-danger me-1"></i>
                                                     <?php echo htmlspecialchars($student['stop_name']); ?>
                                                 </td>
-                                                <td><?php echo htmlspecialchars($student['parent_name']); ?></td>
+                                                <td class="d-none d-md-table-cell">
+                                                    <?php echo htmlspecialchars($student['parent_name']); ?></td>
                                                 <td>
                                                     <?php if ($student['parent_phone']): ?>
                                                         <a href="tel:<?php echo htmlspecialchars($student['parent_phone']); ?>"
                                                             class="btn btn-sm btn-outline-success">
-                                                            <i
-                                                                class="fas fa-phone me-1"></i><?php echo htmlspecialchars($student['parent_phone']); ?>
+                                                            <i class="fas fa-phone"></i><span
+                                                                class="d-none d-lg-inline ms-1"><?php echo htmlspecialchars($student['parent_phone']); ?></span>
+                                                            <span class="d-lg-none">Call</span>
                                                         </a>
                                                     <?php else: ?>
                                                         <span class="text-muted">N/A</span>

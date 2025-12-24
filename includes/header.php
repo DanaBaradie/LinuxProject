@@ -162,7 +162,7 @@
                 <i class="fas fa-bus me-2"></i><?php echo SITE_NAME; ?>
             </a>
             <div class="d-flex align-items-center">
-                <span class="text-white me-3">
+                <span class="text-white me-3 d-none d-md-inline-block">
                     <i class="fas fa-user-circle me-1"></i>
                     <?php echo htmlspecialchars($_SESSION['user_name']); ?>
                     <?php
