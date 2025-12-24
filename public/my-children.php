@@ -33,7 +33,8 @@ require_once '../includes/header.php';
         <?php require_once '../includes/sidebar.php'; ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-child me-2"></i>My Children</h1>
             </div>
 
@@ -47,7 +48,7 @@ require_once '../includes/header.php';
                     <?php foreach ($children as $child): ?>
                         <div class="col-md-6 mb-4">
                             <div class="card border-0 shadow-sm">
-                                <div class="card-header bg-primary text-white">
+                                <div class="card-header bg-light text-primary border-bottom">
                                     <h5 class="mb-0">
                                         <i class="fas fa-user-graduate me-2"></i>
                                         <?php echo htmlspecialchars($child['student_name']); ?>
@@ -74,7 +75,7 @@ require_once '../includes/header.php';
 
                                         <div class="mb-3">
                                             <strong><i class="fas fa-clock me-2 text-warning"></i>Schedule:</strong>
-                                            <?php echo date('h:i A', strtotime($child['start_time'])); ?> - 
+                                            <?php echo date('h:i A', strtotime($child['start_time'])); ?> -
                                             <?php echo date('h:i A', strtotime($child['end_time'])); ?>
                                         </div>
                                     <?php endif; ?>
@@ -82,10 +83,11 @@ require_once '../includes/header.php';
                                     <?php if ($child['bus_number']): ?>
                                         <hr>
                                         <h6 class="text-success"><i class="fas fa-bus me-2"></i>Bus Information</h6>
-                                        
+
                                         <div class="mb-2">
-                                            <strong>Bus Number:</strong> 
-                                            <span class="badge bg-success"><?php echo htmlspecialchars($child['bus_number']); ?></span>
+                                            <strong>Bus Number:</strong>
+                                            <span
+                                                class="badge bg-success"><?php echo htmlspecialchars($child['bus_number']); ?></span>
                                         </div>
 
                                         <div class="mb-2">
@@ -96,7 +98,8 @@ require_once '../includes/header.php';
                                         <?php if ($child['current_latitude'] && $child['current_longitude']): ?>
                                             <div class="alert alert-success mt-3 mb-0">
                                                 <strong><i class="fas fa-check-circle me-2"></i>Bus is being tracked!</strong><br>
-                                                <small>Last update: <?php echo date('h:i A', strtotime($child['last_location_update'])); ?></small><br>
+                                                <small>Last update:
+                                                    <?php echo date('h:i A', strtotime($child['last_location_update'])); ?></small><br>
                                                 <a href="/track-bus.php" class="btn btn-sm btn-success mt-2">
                                                     <i class="fas fa-map-marked-alt me-1"></i>Track Bus Now
                                                 </a>

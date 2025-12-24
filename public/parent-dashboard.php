@@ -84,7 +84,7 @@ require_once '../includes/header.php';
                     <?php foreach ($children as $child): ?>
                         <div class="col-md-6 col-lg-4 mb-3">
                             <div class="card border-0 shadow-sm h-100">
-                                <div class="card-header bg-primary text-white">
+                                <div class="card-header bg-light text-primary border-bottom">
                                     <h5 class="mb-0">
                                         <i class="fas fa-user-graduate me-2"></i>
                                         <?php echo htmlspecialchars($child['student_name']); ?>
@@ -249,66 +249,66 @@ require_once '../includes/header.php';
 </div>
 
 <script>
-function markAsRead(notificationId) {
-    if (!notificationId) return;
-    
-    // Find the button and show loading state
-    const btn = document.querySelector(`#notif-${notificationId} .mark-read-btn`);
-    if (btn) {
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div>';
-        btn.disabled = true;
-    }
+    function markAsRead(notificationId) {
+        if (!notificationId) return;
 
-    fetch('/api/notifications/mark-read.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            notification_id: notificationId
+        // Find the button and show loading state
+        const btn = document.querySelector(`#notif-${notificationId} .mark-read-btn`);
+        if (btn) {
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div>';
+            btn.disabled = true;
+        }
+
+        fetch('/api/notifications/mark-read.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                notification_id: notificationId
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update UI
-            const item = document.getElementById(`notif-${notificationId}`);
-            if (item) {
-                // Remove highlighting
-                item.classList.remove('bg-light');
-                // Remove button
-                if (btn) btn.remove();
-                
-                // Update badge count if exists
-                const badge = document.querySelector('.badge.bg-danger');
-                if (badge) {
-                    let count = parseInt(badge.innerText);
-                    if (count > 1) {
-                        badge.innerText = count - 1;
-                    } else {
-                        badge.remove();
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update UI
+                    const item = document.getElementById(`notif-${notificationId}`);
+                    if (item) {
+                        // Remove highlighting
+                        item.classList.remove('bg-light');
+                        // Remove button
+                        if (btn) btn.remove();
+
+                        // Update badge count if exists
+                        const badge = document.querySelector('.badge.bg-danger');
+                        if (badge) {
+                            let count = parseInt(badge.innerText);
+                            if (count > 1) {
+                                badge.innerText = count - 1;
+                            } else {
+                                badge.remove();
+                            }
+                        }
+                    }
+                } else {
+                    console.error('Failed to mark read:', data.message);
+                    // Revert button state
+                    if (btn) {
+                        btn.innerHTML = originalHtml;
+                        btn.disabled = false;
+                        alert('Failed to mark as read. Please try again.');
                     }
                 }
-            }
-        } else {
-            console.error('Failed to mark read:', data.message);
-            // Revert button state
-            if (btn) {
-                btn.innerHTML = originalHtml;
-                btn.disabled = false;
-                alert('Failed to mark as read. Please try again.');
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        if (btn) {
-            btn.innerHTML = originalHtml;
-            btn.disabled = false;
-        }
-    });
-}
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                if (btn) {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }
+            });
+    }
 </script>
 
 <?php require_once '../includes/footer.php'; ?>

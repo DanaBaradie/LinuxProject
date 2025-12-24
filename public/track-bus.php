@@ -31,7 +31,8 @@ require_once '../includes/header.php';
         <?php require_once '../includes/sidebar.php'; ?>
 
         <main class="main-content-area">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-map-marked-alt me-2"></i>Track School Bus</h1>
                 <button class="btn btn-primary" onclick="location.reload()">
                     <i class="fas fa-sync-alt me-2"></i>Refresh
@@ -53,7 +54,7 @@ require_once '../includes/header.php';
                     <?php foreach ($buses as $bus): ?>
                         <div class="col-md-6 mb-4">
                             <div class="card border-0 shadow-sm">
-                                <div class="card-header bg-success text-white">
+                                <div class="card-header bg-light text-success border-bottom">
                                     <h5 class="mb-0">
                                         <i class="fas fa-bus me-2"></i>
                                         Bus <?php echo htmlspecialchars($bus['bus_number']); ?>
@@ -85,10 +86,10 @@ require_once '../includes/header.php';
                                             <strong>Latitude:</strong> <?php echo $bus['current_latitude']; ?><br>
                                             <strong>Longitude:</strong> <?php echo $bus['current_longitude']; ?>
                                         </div>
-                                        
+
                                         <div class="d-grid gap-2">
-                                            <a href="https://www.google.com/maps?q=<?php echo $bus['current_latitude']; ?>,<?php echo $bus['current_longitude']; ?>" 
-                                               target="_blank" class="btn btn-primary">
+                                            <a href="https://www.google.com/maps?q=<?php echo $bus['current_latitude']; ?>,<?php echo $bus['current_longitude']; ?>"
+                                                target="_blank" class="btn btn-primary">
                                                 <i class="fas fa-map me-2"></i>View on Google Maps
                                             </a>
                                         </div>
