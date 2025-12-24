@@ -223,6 +223,10 @@ require_once '../includes/header.php';
     function updateGPSLocation() {
         const btn = event.target.closest('button');
         const originalHTML = btn.innerHTML;
+
+        // Prevent double clicking
+        if (btn.disabled) return;
+
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting Location...';
 
@@ -233,8 +237,16 @@ require_once '../includes/header.php';
             return;
         }
 
+        // Set a timeout of 10 seconds
+        const timeoutId = setTimeout(() => {
+            showGPSAlert('Location request timed out. If you are using HTTP, browser might block GPS. Please use "My Bus" to update manually.', 'warning');
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        }, 10000);
+
         navigator.geolocation.getCurrentPosition(
             function (position) {
+                clearTimeout(timeoutId);
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
 
@@ -256,21 +268,22 @@ require_once '../includes/header.php';
                             setTimeout(() => location.reload(), 1500);
                         } else {
                             showGPSAlert('Failed to update location: ' + (data.message || 'Unknown error'), 'danger');
+                            btn.disabled = false;
+                            btn.innerHTML = originalHTML;
                         }
                     })
                     .catch(error => {
                         showGPSAlert('Error updating location: ' + error.message, 'danger');
-                    })
-                    .finally(() => {
                         btn.disabled = false;
                         btn.innerHTML = originalHTML;
                     });
             },
             function (error) {
+                clearTimeout(timeoutId);
                 let message = 'Unable to get location';
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        message = 'Location permission denied. Please enable location access.';
+                        message = 'Location permission denied. Please enable location access or use Manual Update.';
                         break;
                     case error.POSITION_UNAVAILABLE:
                         message = 'Location information unavailable.';
@@ -279,9 +292,20 @@ require_once '../includes/header.php';
                         message = 'Location request timed out.';
                         break;
                 }
+
+                // If on HTTP, suggest manual update
+                if (window.location.protocol !== 'https:') {
+                    message += ' (HTTP connections may block GPS)';
+                }
+
                 showGPSAlert(message, 'danger');
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
             }
         );
     }

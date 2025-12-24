@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     if ($my_bus) {
         $latitude = floatval($_POST['latitude']);
         $longitude = floatval($_POST['longitude']);
-        
+
         try {
             $query = "UPDATE buses 
                       SET current_latitude = :lat, 
@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $stmt->bindParam(':lng', $longitude);
             $stmt->bindParam(':bus_id', $my_bus['id']);
             $stmt->execute();
-            
+
             $success = 'Location updated successfully! Parents can now track your bus.';
-            
+
             // Refresh bus data
             $stmt = $db->prepare("SELECT * FROM buses WHERE driver_id = :driver_id");
             $stmt->bindParam(':driver_id', $_SESSION['user_id']);
@@ -57,7 +57,8 @@ require_once '../includes/header.php';
         <?php require_once '../includes/sidebar.php'; ?>
 
         <main class="main-content-area">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2"><i class="fas fa-location-arrow me-2"></i>Update My Location</h1>
             </div>
 
@@ -121,19 +122,19 @@ require_once '../includes/header.php';
                 </div>
 
                 <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-success text-white">
+                    <div class="card-header bg-light text-success border-bottom">
                         <h5 class="mb-0"><i class="fas fa-crosshairs me-2"></i>Quick Update</h5>
                     </div>
                     <div class="card-body text-center p-5">
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
-                            <strong>Note:</strong> GPS auto-detection requires HTTPS. Use manual entry instead.
+                            <strong>Note:</strong> GPS auto-detection works best on HTTPS. If button is disabled or stuck,
+                            use manual entry.
                         </div>
 
-                        <button class="btn btn-success btn-lg px-5 py-3" onclick="updateMyLocation()" id="updateBtn" disabled>
+                        <button class="btn btn-success btn-lg px-5 py-3" onclick="updateMyLocation()" id="updateBtn">
                             <i class="fas fa-crosshairs fa-2x mb-2"></i><br>
                             Get My Current Location
-                            <br><small>(Requires HTTPS)</small>
                         </button>
 
                         <div id="locationStatus" class="alert alert-secondary mt-3" style="display: none;">
@@ -150,13 +151,14 @@ require_once '../includes/header.php';
                 </div>
 
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-light text-primary border-bottom">
                         <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Manual Location Entry</h5>
                     </div>
                     <div class="card-body">
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-triangle me-2"></i>
-                            <strong>Instructions:</strong> Enter your current GPS coordinates below. You can get these from Google Maps or your phone's GPS.
+                            <strong>Instructions:</strong> Enter your current GPS coordinates below. You can get these from
+                            Google Maps or your phone's GPS.
                         </div>
 
                         <?php if ($my_bus['current_latitude'] && $my_bus['current_longitude']): ?>
@@ -169,15 +171,15 @@ require_once '../includes/header.php';
 
                         <form method="POST" class="form-container">
                             <input type="hidden" name="action" value="update_location">
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label">
                                         <i class="fas fa-map-marker-alt me-1"></i>Latitude <span class="required">*</span>
                                     </label>
-                                    <input type="number" step="0.000001" class="form-control" 
-                                           name="latitude" placeholder="33.8886" required
-                                           value="<?php echo $my_bus['current_latitude'] ?? ''; ?>">
+                                    <input type="number" step="0.000001" class="form-control" name="latitude"
+                                        placeholder="33.8886" required
+                                        value="<?php echo $my_bus['current_latitude'] ?? ''; ?>">
                                     <small class="form-text">Example: 33.8886 (Beirut)</small>
                                 </div>
 
@@ -185,9 +187,9 @@ require_once '../includes/header.php';
                                     <label class="form-label">
                                         <i class="fas fa-map-marker-alt me-1"></i>Longitude <span class="required">*</span>
                                     </label>
-                                    <input type="number" step="0.000001" class="form-control" 
-                                           name="longitude" placeholder="35.4955" required
-                                           value="<?php echo $my_bus['current_longitude'] ?? ''; ?>">
+                                    <input type="number" step="0.000001" class="form-control" name="longitude"
+                                        placeholder="35.4955" required
+                                        value="<?php echo $my_bus['current_longitude'] ?? ''; ?>">
                                     <small class="form-text">Example: 35.4955 (Beirut)</small>
                                 </div>
                             </div>
@@ -232,35 +234,53 @@ require_once '../includes/header.php';
 </div>
 
 <script>
-function setLocation(lat, lng) {
-    document.querySelector('input[name="latitude"]').value = lat;
-    document.querySelector('input[name="longitude"]').value = lng;
-}
-
-function updateMyLocation() {
-    const btn = document.getElementById('updateBtn');
-    const status = document.getElementById('locationStatus');
-    
-    if (navigator.geolocation) {
-        btn.disabled = true;
-        status.style.display = 'block';
-        
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                document.getElementById('latitude').value = position.coords.latitude;
-                document.getElementById('longitude').value = position.coords.longitude;
-                document.getElementById('locationForm').submit();
-            },
-            function(error) {
-                status.className = 'alert alert-danger';
-                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error: ' + error.message;
-                btn.disabled = false;
-            }
-        );
-    } else {
-        alert('Geolocation is not supported by your browser');
+    function setLocation(lat, lng) {
+        document.querySelector('input[name="latitude"]').value = lat;
+        document.querySelector('input[name="longitude"]').value = lng;
     }
-}
+
+    function updateMyLocation() {
+        const btn = document.getElementById('updateBtn');
+        const status = document.getElementById('locationStatus');
+        const originalHTML = btn.innerHTML;
+
+        if (navigator.geolocation) {
+            btn.disabled = true;
+            status.style.display = 'block';
+
+            // Timeout
+            const timeoutId = setTimeout(() => {
+                status.className = 'alert alert-warning';
+                status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Location timeout. Please use Manual Entry below (HTTP blocks GPS).';
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }, 8000);
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    clearTimeout(timeoutId);
+                    document.getElementById('latitude').value = position.coords.latitude;
+                    document.getElementById('longitude').value = position.coords.longitude;
+                    document.getElementById('locationForm').submit();
+                },
+                function (error) {
+                    clearTimeout(timeoutId);
+                    status.className = 'alert alert-danger';
+                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error: ' + error.message;
+                    if (window.location.protocol !== 'https:') {
+                        status.innerHTML += '<br><strong>Hint:</strong> Your browser likely blocked GPS because this site is not HTTPS. Use Manual Entry below.';
+                    }
+                    btn.disabled = false;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 8000
+                }
+            );
+        } else {
+            alert('Geolocation is not supported by your browser');
+        }
+    }
 </script>
 
 <?php require_once '../includes/footer.php'; ?>

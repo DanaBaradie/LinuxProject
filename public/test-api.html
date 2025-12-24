@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Testing Tool - School Bus Tracking System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .endpoint-card { margin-bottom: 20px; }
-        .response-box { 
-            background: #f8f9fa; 
-            border: 1px solid #dee2e6; 
-            border-radius: 4px; 
-            padding: 15px; 
-            max-height: 400px; 
+        .endpoint-card {
+            margin-bottom: 20px;
+        }
+
+        .response-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            max-height: 400px;
             overflow-y: auto;
             font-family: monospace;
             font-size: 12px;
         }
-        .success { color: #198754; }
-        .error { color: #dc3545; }
+
+        .success {
+            color: #198754;
+        }
+
+        .error {
+            color: #dc3545;
+        }
     </style>
 </head>
+
 <body class="bg-light">
     <div class="container py-5">
         <h1 class="mb-4">API Testing Tool</h1>
@@ -34,8 +45,10 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Email" value="admin@school.com">
-                        <input type="password" id="loginPassword" class="form-control mb-2" placeholder="Password" value="admin123">
+                        <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Email"
+                            value="admin@school.com">
+                        <input type="password" id="loginPassword" class="form-control mb-2" placeholder="Password"
+                            value="admin123">
                         <button class="btn btn-primary" onclick="testLogin()">Login</button>
                     </div>
                     <div class="col-md-6">
@@ -67,13 +80,16 @@
                         <input type="number" id="busId" class="form-control" placeholder="Bus ID" value="1">
                     </div>
                     <div class="col-md-3">
-                        <input type="number" step="0.000001" id="latitude" class="form-control" placeholder="Latitude" value="33.8886">
+                        <input type="number" step="0.000001" id="latitude" class="form-control" placeholder="Latitude"
+                            value="33.8886">
                     </div>
                     <div class="col-md-3">
-                        <input type="number" step="0.000001" id="longitude" class="form-control" placeholder="Longitude" value="35.4955">
+                        <input type="number" step="0.000001" id="longitude" class="form-control" placeholder="Longitude"
+                            value="35.4955">
                     </div>
                     <div class="col-md-3">
-                        <input type="number" step="0.1" id="speed" class="form-control" placeholder="Speed" value="45.5">
+                        <input type="number" step="0.1" id="speed" class="form-control" placeholder="Speed"
+                            value="45.5">
                     </div>
                 </div>
                 <button class="btn btn-primary" onclick="testUpdateGPS()">Update Location</button>
@@ -103,6 +119,30 @@
             </div>
         </div>
 
+        <!-- Email Testing -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>6. Email Services (Admin Only)</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Send Test Email</h6>
+                        <input type="email" id="testEmailTo" class="form-control mb-2" placeholder="Recipient"
+                            value="baradiedana@gmail.com">
+                        <button class="btn btn-warning" onclick="testSendEmail()">Send Email</button>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Password Reset Request</h6>
+                        <input type="email" id="resetEmail" class="form-control mb-2" placeholder="User Email"
+                            value="baradiedana@gmail.com">
+                        <button class="btn btn-danger" onclick="testPasswordReset()">Request Reset</button>
+                    </div>
+                </div>
+                <div class="response-box" id="emailResponse">Email response will appear here...</div>
+            </div>
+        </div>
+
         <!-- Session Info -->
         <div class="card endpoint-card">
             <div class="card-header">
@@ -117,7 +157,7 @@
     </div>
 
     <script>
-        const API_BASE = '/backend/api';
+        const API_BASE = '/api';
         let sessionCookie = '';
 
         async function makeRequest(endpoint, options = {}) {
@@ -128,13 +168,20 @@
                     'Content-Type': 'application/json'
                 }
             };
-            
+
             const config = { ...defaultOptions, ...options };
-            
+
             try {
                 const response = await fetch(url, config);
-                const data = await response.json();
-                return { success: true, data, status: response.status };
+                // Handle non-JSON responses (like errors) gracefully
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const data = await response.json();
+                    return { success: true, data, status: response.status };
+                } else {
+                    const text = await response.text();
+                    return { success: false, error: "Non-JSON response: " + text.substring(0, 100) };
+                }
             } catch (error) {
                 return { success: false, error: error.message };
             }
@@ -152,16 +199,17 @@
         async function testLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
+
             const result = await makeRequest('/auth/login.php', {
                 method: 'POST',
                 body: JSON.stringify({ email, password })
             });
-            
+
             displayResponse('loginResponse', result);
-            
+
             if (result.success && result.data.success) {
                 alert('Login successful! You can now test other endpoints.');
+                checkSession();
             }
         }
 
@@ -175,7 +223,7 @@
             const latitude = parseFloat(document.getElementById('latitude').value);
             const longitude = parseFloat(document.getElementById('longitude').value);
             const speed = parseFloat(document.getElementById('speed').value);
-            
+
             const result = await makeRequest('/gps/update.php', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -185,7 +233,7 @@
                     speed: speed
                 })
             });
-            
+
             displayResponse('gpsResponse', result);
         }
 
@@ -197,6 +245,28 @@
         async function testGetNotifications() {
             const result = await makeRequest('/notifications/index.php');
             displayResponse('notificationsResponse', result);
+        }
+
+        async function testSendEmail() {
+            const recipient = document.getElementById('testEmailTo').value;
+            const result = await makeRequest('/email/send.php', {
+                method: 'POST',
+                body: JSON.stringify({
+                    recipient_email: recipient,
+                    subject: 'API Test Email',
+                    message: 'This is a test email sent from the API Analysis Tool.'
+                })
+            });
+            displayResponse('emailResponse', result);
+        }
+
+        async function testPasswordReset() {
+            const email = document.getElementById('resetEmail').value;
+            const result = await makeRequest('/email/send-password-reset.php', {
+                method: 'POST',
+                body: JSON.stringify({ email: email })
+            });
+            displayResponse('emailResponse', result);
         }
 
         async function checkSession() {
@@ -220,5 +290,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>
