@@ -28,6 +28,14 @@
         max-width: 100vw;
     }
 
+    /* GLOBAL MOBILE SPACING FIX */
+    /* Ensure consistent gap between fixed Navbar and Page Content */
+    main.main-content-area,
+    .main-content-area {
+        margin-top: 25px !important;
+        padding-top: 20px !important;
+    }
+
     /* Header adjustments */
     .main-content-area h1.h2 {
         font-size: 1.5rem;
