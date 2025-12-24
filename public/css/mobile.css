@@ -28,12 +28,22 @@
         max-width: 100vw;
     }
 
-    /* GLOBAL MOBILE SPACING FIX */
+    /* GLOBAL MOBILE SPACING & ALIGNMENT FIX */
     /* Ensure consistent gap between fixed Navbar and Page Content */
+    /* Also fixes right-shift on Bootstrap Dashboard templates (tracking.php etc) */
     main.main-content-area,
-    .main-content-area {
+    .main-content-area,
+    main.col-md-9,
+    /* Bootstrap dashboard standard class */
+    main.ms-sm-auto {
+        /* Bootstrap dashboard standard class */
         margin-top: 25px !important;
         padding-top: 20px !important;
+        margin-left: 0 !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
     /* Header adjustments */
