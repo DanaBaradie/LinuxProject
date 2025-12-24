@@ -1,429 +1,66 @@
-/* Mobile-Responsive Styles for Bus Tracking System */
+/* =====================================================
+   MOBILE FIX: REMOVE SIDEBAR OFFSET & CENTER CONTENT
+   ===================================================== */
 
-/* Mobile-first approach */
 @media (max-width: 768px) {
 
-    /* General mobile optimizations */
-    /* General mobile optimizations */
+    /* 1. Kill sidebar-induced layout offset at ROOT level */
     body {
-        font-size: 14px;
-        overflow-x: hidden;
-        /* Prevent horizontal scroll */
-        width: 100%;
-        position: relative;
-    }
-
-    .container-fluid,
-    .container {
-        padding-left: 15px;
-        /* Standard Bootstrap padding */
-        padding-right: 15px;
-        max-width: 100vw;
-        overflow-x: hidden;
-    }
-
-    .row {
-        margin-left: -15px;
-        margin-right: -15px;
-        max-width: 100vw;
-    }
-
-    /* GLOBAL MOBILE SPACING & ALIGNMENT FIX */
-    /* Force ZERO left offset and 100% width globally on mobile */
-    main,
-    main.main-content-area,
-    .main-content-area,
-    .col-md-9,
-    .col-lg-10,
-    .ms-sm-auto,
-    [class*="col-"] {
         margin-left: 0 !important;
-        margin-right: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        overflow-x: hidden;
+    }
+
+    /* 2. Reset ALL common app layout wrappers */
+    .app,
+    .app-layout,
+    .layout,
+    .dashboard-layout,
+    .dashboard-container,
+    .dashboard-wrapper,
+    .content,
+    .content-wrapper,
+    .page-content,
+    .main,
+    main,
+    .main-content,
+    .main-content-area {
+        margin-left: 0 !important;
         left: 0 !important;
         transform: none !important;
         width: 100% !important;
         max-width: 100% !important;
-        flex: 0 0 100% !important;
-        padding-left: 15px !important;
-        padding-right: 15px !important;
+    }
 
-        /* Consistent Vertical Spacing from Top Navbar */
-        margin-top: 15px !important;
-        padding-top: 35px !important;
-
-        /* Grid resets */
+    /* 3. Collapse grid/flex layouts that include sidebar */
+    .app-layout,
+    .layout,
+    .dashboard-layout {
+        display: block !important;
         grid-template-columns: 1fr !important;
     }
 
-    /* Prevent any parent row from horizontal overflow */
+    /* 4. Ensure rows do NOT reintroduce horizontal shift */
     .row {
         margin-left: 0 !important;
         margin-right: 0 !important;
-        width: 100% !important;
-    }
-
-    /* Header adjustments */
-    .main-content-area h1.h2 {
-        font-size: 1.5rem;
-    }
-
-    .main-content-area h4 {
-        font-size: 1.2rem;
-    }
-
-    /* Button groups */
-    .d-flex.justify-content-between {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .d-flex.justify-content-between>div {
         width: 100%;
     }
 
-    .d-flex.justify-content-between .btn {
-        width: 100%;
-        margin-bottom: 5px;
-    }
-
-    /* Cards */
-    .card {
-        margin-bottom: 15px;
-    }
-
-    .card-body {
-        padding: 15px;
-    }
-
-    /* Tables */
-    .table-responsive {
-        font-size: 0.875rem;
-    }
-
-    .table td,
-    .table th {
-        padding: 0.5rem;
-    }
-
-    /* Hide less important columns on mobile */
-    .table .hide-mobile {
-        display: none;
-    }
-
-    /* Forms */
-    .form-row {
-        flex-direction: column;
-    }
-
-    .form-row .form-group {
+    /* 5. Cards must be visually centered */
+    .card,
+    .stat-card,
+    .widget {
+        margin-left: auto !important;
+        margin-right: auto !important;
         width: 100% !important;
-        margin-bottom: 15px;
     }
 
-    /* Modals */
-    .modal-dialog {
-        margin: 10px;
-    }
-
-    .modal-body {
-        padding: 15px;
-    }
-
-    /* Navigation */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: -250px;
-        width: 250px;
-        height: 100vh;
-        transition: left 0.3s ease;
-        z-index: 1050;
-    }
-
-    .sidebar.show {
-        left: 0;
-    }
-
+    /* 6. Consistent spacing below fixed navbar */
+    .main-content,
     .main-content-area {
-        margin-left: 0 !important;
-        width: 100%;
+        padding-top: 16px !important;
     }
 
-    /* Statistics cards */
-    .row>[class*='col-'] {
-        margin-bottom: 15px;
-    }
-
-    /* Children cards on parent dashboard */
-    .col-md-6.col-lg-4 {
-        margin-bottom: 20px;
-    }
-
-    /* Bus tracking map */
-    #map {
-        height: 300px !important;
-    }
-
-    /* Action buttons in tables */
-    .btn-sm {
-        padding: 0.25rem 0.4rem;
-        font-size: 0.75rem;
-    }
-
-    /* Alerts */
-    .alert {
-        font-size: 0.875rem;
-        padding: 10px;
-    }
-
-    /* Badges */
-    .badge {
-        font-size: 0.7rem;
-    }
-
-    /* List groups */
-    .list-group-item {
-        padding: 10px;
-    }
-
-    .list-group-item h6 {
-        font-size: 0.95rem;
-    }
-
-    /* Profile page */
-    .col-md-8,
-    .col-md-4 {
-        width: 100%;
-    }
-
-    /* Dashboard quick actions */
-    .d-grid {
-        margin-top: 10px;
-    }
-}
-
-/* Tablet adjustments */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .col-md-6 {
-        width: 50%;
-    }
-
-    .col-lg-4 {
-        width: 33.333%;
-    }
-
-    /* REMOVED hardcoded margins that cause gutters on tablets/landscape phones */
-    /* Handled by header.php and body classes now */
-
-    .sidebar {
-        width: 200px;
-    }
-
-    /* Ensure content adjusts to sidebar width if visible */
-    body:not(.sidebar-collapsed) .main-content-area {
-        margin-left: 200px;
-    }
-
-    body.sidebar-collapsed .main-content-area {
-        margin-left: 0 !important;
-    }
-}
-
-/* Touch-friendly improvements */
-@media (hover: none) and (pointer: coarse) {
-
-    /* Larger touch targets */
-    .btn {
-        min-height: 44px;
-        padding: 12px 20px;
-    }
-
-    .btn-sm {
-        min-height: 36px;
-        padding: 8px 12px;
-    }
-
-    /* Larger form inputs */
-    .form-control,
-    .form-select {
-        min-height: 44px;
-        font-size: 16px;
-        /* Prevents zoom on iOS */
-    }
-
-    /* Larger clickable areas */
-    .list-group-item {
-        min-height: 44px;
-        padding: 12px;
-    }
-
-    /* Larger table rows */
-    .table td,
-    .table th {
-        padding: 12px 8px;
-    }
-}
-
-/* Landscape mobile */
-@media (max-width: 768px) and (orientation: landscape) {
-    #map {
-        height: 250px !important;
-    }
-
-    .card-body {
-        padding: 10px;
-    }
-}
-
-/* Small mobile devices */
-@media (max-width: 375px) {
-    .main-content-area h1.h2 {
-        font-size: 1.25rem;
-    }
-
-    .btn {
-        font-size: 0.875rem;
-        padding: 8px 12px;
-    }
-
-    .card-header h5 {
-        font-size: 1rem;
-    }
-
-    .table {
-        font-size: 0.75rem;
-    }
-}
-
-/* Print styles */
-@media print {
-
-    .sidebar,
-    .btn,
-    .alert,
-    .modal {
-        display: none !important;
-    }
-
-    .main-content-area {
-        margin-left: 0 !important;
-        width: 100% !important;
-    }
-
-    .card {
-        break-inside: avoid;
-    }
-}
-
-/* Dark mode support (optional) */
-@media (prefers-color-scheme: dark) {
-    /* Add dark mode styles if needed */
-}
-
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Loading states */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.loading::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* Utility classes for mobile */
-.mobile-only {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .mobile-only {
-        display: block;
-    }
-
-    .desktop-only {
-        display: none;
-    }
-}
-
-/* Sticky headers on mobile */
-@media (max-width: 768px) {
-    .sticky-mobile {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-}
-
-/* MOBILE FIX: Login Page Responsiveness */
-@media (max-width: 768px) {
-
-    /* Override Bootstrap p-5 (3rem) on mobile */
-    .card-body.p-5 {
-        padding: 1.5rem !important;
-        /* 24px instead of 48px */
-    }
-
-    /* Ensure login card doesn't touch edges */
-    .col-md-5.col-lg-4 {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    /* Login Icon size reduction */
-    .fa-3x {
-        font-size: 2em;
-        /* Reduce from 3em */
-    }
-
-    /* Login Heading */
-    h2.fw-bold {
-        font-size: 1.5rem;
-    }
-}
-
-/* MOBILE FIX: Parent Dashboard Table */
-@media (max-width: 768px) {
-
-    /* Hide 'Route' column (3rd) in schedule table to save space */
-    /* Note: This assumes standard 5-column layout: Student, Bus, Route, Start, End */
-    .table-responsive .table th:nth-child(3),
-    .table-responsive .table td:nth-child(3) {
-        display: none;
-    }
-
-    /* Make 'Bus' column (2nd) smaller text */
-    .table-responsive .table td:nth-child(2) {
-        font-size: 0.8em;
-    }
 }
