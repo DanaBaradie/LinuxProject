@@ -29,21 +29,37 @@
     }
 
     /* GLOBAL MOBILE SPACING & ALIGNMENT FIX */
-    /* Ensure consistent gap between fixed Navbar and Page Content */
-    /* Also fixes right-shift on Bootstrap Dashboard templates (tracking.php etc) */
+    /* Force ZERO left offset and 100% width globally on mobile */
+    main,
     main.main-content-area,
     .main-content-area,
-    main.col-md-9,
-    /* Bootstrap dashboard standard class */
-    main.ms-sm-auto {
-        /* Bootstrap dashboard standard class */
-        margin-top: 25px !important;
-        padding-top: 20px !important;
+    .col-md-9,
+    .col-lg-10,
+    .ms-sm-auto,
+    [class*="col-"] {
         margin-left: 0 !important;
-        padding-left: 15px !important;
-        padding-right: 15px !important;
+        margin-right: 0 !important;
+        left: 0 !important;
+        transform: none !important;
         width: 100% !important;
         max-width: 100% !important;
+        flex: 0 0 100% !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+
+        /* Consistent Vertical Spacing from Top Navbar */
+        margin-top: 15px !important;
+        padding-top: 35px !important;
+
+        /* Grid resets */
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Prevent any parent row from horizontal overflow */
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
     }
 
     /* Header adjustments */
