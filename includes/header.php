@@ -181,3 +181,4 @@
             </div>
         </div>
     </nav>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
