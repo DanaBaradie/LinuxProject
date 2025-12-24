@@ -64,3 +64,29 @@
     }
 
 }
+
+/* =====================================================
+   FINAL MOBILE FIX: CENTER BOOTSTRAP DASHBOARD COLUMNS
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+    /* Force rows to center their columns */
+    .row {
+        justify-content: center !important;
+        align-items: stretch !important;
+    }
+
+    /* Force main dashboard column to truly center */
+    .row>[class*="col-"] {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        float: none !important;
+    }
+
+    /* Ensure dashboard content fills screen */
+    .row>[class*="col-"]>* {
+        width: 100% !important;
+    }
+
+}
