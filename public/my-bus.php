@@ -195,26 +195,110 @@ require_once '../includes/header.php';
     function updateMyLocation() {
         const btn = document.getElementById('updateBtn');
         const status = document.getElementById('locationStatus');
+        const originalHTML = btn.innerHTML;
 
-        if (navigator.geolocation) {
-            btn.disabled = true;
+        // Check if geolocation is supported
+        if (!navigator.geolocation) {
+            status.className = 'alert alert-danger';
             status.style.display = 'block';
-
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    document.getElementById('latitude').value = position.coords.latitude;
-                    document.getElementById('longitude').value = position.coords.longitude;
-                    document.getElementById('locationForm').submit();
-                },
-                function (error) {
-                    status.className = 'alert alert-danger';
-                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error: ' + error.message;
-                    btn.disabled = false;
-                }
-            );
-        } else {
-            alert('Geolocation is not supported by your browser');
+            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Geolocation is not supported by your browser. Please use Manual Entry below.';
+            return;
         }
+
+        // Disable button and show loading
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+        status.style.display = 'block';
+        status.className = 'alert alert-info';
+        status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Getting your location...';
+
+        // Set timeout
+        const timeoutId = setTimeout(() => {
+            status.className = 'alert alert-warning';
+            status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Location request timed out. Please use Manual Entry below.';
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        }, 15000);
+
+        // Get current position
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                clearTimeout(timeoutId);
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                // Update status
+                status.className = 'alert alert-info';
+                status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Updating location on server...';
+
+                // Send to API
+                fetch('/api/location/update-quick.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        latitude: lat,
+                        longitude: lng
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        status.className = 'alert alert-success';
+                        status.innerHTML = '<i class="fas fa-check-circle me-2"></i>Location updated successfully!';
+                        // Reload page after 2 seconds
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        status.className = 'alert alert-danger';
+                        status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Failed to update: ' + (data.message || 'Unknown error');
+                        btn.disabled = false;
+                        btn.innerHTML = originalHTML;
+                    }
+                })
+                .catch(error => {
+                    clearTimeout(timeoutId);
+                    status.className = 'alert alert-danger';
+                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error updating location: ' + error.message + '. Please try Manual Entry below.';
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                });
+            },
+            function (error) {
+                clearTimeout(timeoutId);
+                status.className = 'alert alert-danger';
+                let errorMessage = 'Unable to get location: ';
+                
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage += 'Location permission denied. Please enable location access or use Manual Entry below.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage += 'Location information unavailable. Please use Manual Entry below.';
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage += 'Location request timed out. Please use Manual Entry below.';
+                        break;
+                    default:
+                        errorMessage += error.message;
+                }
+
+                if (window.location.protocol !== 'https:') {
+                    errorMessage += '<br><strong>Note:</strong> HTTP connections may block GPS. Use Manual Entry below.';
+                }
+
+                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage;
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            }
+        );
     }
 </script>
 

@@ -244,42 +244,108 @@ require_once '../includes/header.php';
         const status = document.getElementById('locationStatus');
         const originalHTML = btn.innerHTML;
 
-        if (navigator.geolocation) {
-            btn.disabled = true;
+        // Check if geolocation is supported
+        if (!navigator.geolocation) {
+            status.className = 'alert alert-danger';
             status.style.display = 'block';
+            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Geolocation is not supported by your browser. Please use Manual Entry below.';
+            return;
+        }
 
-            // Timeout
-            const timeoutId = setTimeout(() => {
-                status.className = 'alert alert-warning';
-                status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Location timeout. Please use Manual Entry below (HTTP blocks GPS).';
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
-            }, 8000);
+        // Disable button and show loading
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin fa-2x mb-2"></i><br>Getting Location...';
+        status.style.display = 'block';
+        status.className = 'alert alert-info';
+        status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Getting your location...';
 
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    clearTimeout(timeoutId);
-                    document.getElementById('latitude').value = position.coords.latitude;
-                    document.getElementById('longitude').value = position.coords.longitude;
-                    document.getElementById('locationForm').submit();
-                },
-                function (error) {
+        // Set timeout
+        const timeoutId = setTimeout(() => {
+            status.className = 'alert alert-warning';
+            status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Location request timed out. If you are using HTTP, browser might block GPS. Please use Manual Entry below.';
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        }, 15000);
+
+        // Get current position
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                clearTimeout(timeoutId);
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                // Update status
+                status.className = 'alert alert-info';
+                status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Updating location on server...';
+
+                // Send to API
+                fetch('/api/location/update-quick.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        latitude: lat,
+                        longitude: lng
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        status.className = 'alert alert-success';
+                        status.innerHTML = '<i class="fas fa-check-circle me-2"></i>Location updated successfully! Parents can now track your bus.';
+                        // Reload page after 2 seconds to show updated location
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        status.className = 'alert alert-danger';
+                        status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Failed to update: ' + (data.message || 'Unknown error');
+                        btn.disabled = false;
+                        btn.innerHTML = originalHTML;
+                    }
+                })
+                .catch(error => {
                     clearTimeout(timeoutId);
                     status.className = 'alert alert-danger';
-                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error: ' + error.message;
-                    if (window.location.protocol !== 'https:') {
-                        status.innerHTML += '<br><strong>Hint:</strong> Your browser likely blocked GPS because this site is not HTTPS. Use Manual Entry below.';
-                    }
+                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error updating location: ' + error.message + '. Please try Manual Entry below.';
                     btn.disabled = false;
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 8000
+                    btn.innerHTML = originalHTML;
+                });
+            },
+            function (error) {
+                clearTimeout(timeoutId);
+                status.className = 'alert alert-danger';
+                let errorMessage = 'Unable to get location: ';
+                
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage += 'Location permission denied. Please enable location access in your browser settings or use Manual Entry below.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage += 'Location information is unavailable. Please use Manual Entry below.';
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage += 'Location request timed out. Please use Manual Entry below.';
+                        break;
+                    default:
+                        errorMessage += error.message;
                 }
-            );
-        } else {
-            alert('Geolocation is not supported by your browser');
-        }
+
+                if (window.location.protocol !== 'https:') {
+                    errorMessage += '<br><strong>Note:</strong> HTTP connections may block GPS. Use Manual Entry below or access via HTTPS.';
+                }
+
+                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage;
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            }
+        );
     }
 </script>
 

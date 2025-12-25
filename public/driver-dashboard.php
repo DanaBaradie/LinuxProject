@@ -235,28 +235,30 @@ require_once '../includes/header.php';
         // Prevent double clicking
         if (btn.disabled) return;
 
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting Location...';
-
+        // Check if geolocation is supported
         if (!navigator.geolocation) {
-            showGPSAlert('Geolocation is not supported by your browser', 'danger');
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
+            showGPSAlert('Geolocation is not supported by your browser. Please use "Update Location" page for manual entry.', 'danger');
             return;
         }
 
-        // Set a timeout of 10 seconds
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting Location...';
+
+        // Set a timeout of 15 seconds
         const timeoutId = setTimeout(() => {
-            showGPSAlert('Location request timed out. If you are using HTTP, browser might block GPS. Please use "My Bus" to update manually.', 'warning');
+            showGPSAlert('Location request timed out. If you are using HTTP, browser might block GPS. Please use "Update Location" page to update manually.', 'warning');
             btn.disabled = false;
             btn.innerHTML = originalHTML;
-        }, 10000);
+        }, 15000);
 
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 clearTimeout(timeoutId);
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
+
+                // Update button to show uploading
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating Location...';
 
                 // Send to server
                 fetch('/api/location/update-quick.php', {
@@ -269,10 +271,15 @@ require_once '../includes/header.php';
                         longitude: lng
                     })
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.success) {
-                            showGPSAlert('GPS location updated successfully!', 'success');
+                            showGPSAlert('GPS location updated successfully! Refreshing page...', 'success');
                             setTimeout(() => location.reload(), 1500);
                         } else {
                             showGPSAlert('Failed to update location: ' + (data.message || 'Unknown error'), 'danger');
@@ -281,29 +288,32 @@ require_once '../includes/header.php';
                         }
                     })
                     .catch(error => {
-                        showGPSAlert('Error updating location: ' + error.message, 'danger');
+                        console.error('GPS update error:', error);
+                        showGPSAlert('Error updating location: ' + error.message + '. Please try again or use "Update Location" page.', 'danger');
                         btn.disabled = false;
                         btn.innerHTML = originalHTML;
                     });
             },
             function (error) {
                 clearTimeout(timeoutId);
-                let message = 'Unable to get location';
+                let message = 'Unable to get location: ';
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        message = 'Location permission denied. Please enable location access or use Manual Update.';
+                        message += 'Location permission denied. Please enable location access in your browser settings or use "Update Location" page for manual entry.';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        message = 'Location information unavailable.';
+                        message += 'Location information unavailable. Please use "Update Location" page for manual entry.';
                         break;
                     case error.TIMEOUT:
-                        message = 'Location request timed out.';
+                        message += 'Location request timed out. Please use "Update Location" page for manual entry.';
                         break;
+                    default:
+                        message += error.message;
                 }
 
                 // If on HTTP, suggest manual update
                 if (window.location.protocol !== 'https:') {
-                    message += ' (HTTP connections may block GPS)';
+                    message += ' (HTTP connections may block GPS. Use "Update Location" page for manual entry.)';
                 }
 
                 showGPSAlert(message, 'danger');
@@ -312,7 +322,7 @@ require_once '../includes/header.php';
             },
             {
                 enableHighAccuracy: true,
-                timeout: 10000,
+                timeout: 15000,
                 maximumAge: 0
             }
         );
