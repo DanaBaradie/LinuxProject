@@ -177,8 +177,8 @@
             main[class*="col-"] {
                 margin-left: 0 !important;
                 width: 100% !important;
-                padding: 90px 15px 20px 15px !important;
-                /* Consistent spacing from navbar on mobile (56px navbar + 34px extra) */
+                padding: 110px 15px 20px 15px !important;
+                /* Increased spacing from navbar on mobile (56px navbar + 54px extra for better mobile UX) */
             }
 
             /* Override Bootstrap's px-md-4 on mobile */
@@ -186,12 +186,12 @@
             main.col-lg-10.px-md-4 {
                 padding-left: 15px !important;
                 padding-right: 15px !important;
-                padding-top: 90px !important;
+                padding-top: 110px !important;
             }
 
             /* Container-fluid direct spacing on mobile */
             body.with-navbar > .container-fluid:first-child {
-                padding-top: 90px !important;
+                padding-top: 110px !important;
                 padding-left: 15px !important;
                 padding-right: 15px !important;
             }

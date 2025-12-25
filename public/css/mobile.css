@@ -44,8 +44,8 @@
         max-width: 100% !important;
         padding-left: 15px !important;
         padding-right: 15px !important;
-        padding-top: 90px !important;
-        /* Consistent spacing from navbar (56px navbar + 34px extra) */
+        padding-top: 110px !important;
+        /* Increased spacing from navbar on mobile (56px navbar + 54px extra for better mobile UX) */
     }
 
     /* 3. Collapse grid/flex layouts that include sidebar */
@@ -78,8 +78,8 @@
     .main-content-area,
     main.col-md-9,
     main.col-lg-10 {
-        padding-top: 90px !important;
-        /* Consistent spacing from navbar (56px navbar + 34px extra) */
+        padding-top: 110px !important;
+        /* Increased spacing from navbar on mobile (56px navbar + 54px extra for better mobile UX) */
         padding-left: 15px !important;
         padding-right: 15px !important;
     }
