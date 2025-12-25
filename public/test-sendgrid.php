@@ -139,9 +139,38 @@ require_once '../includes/header.php';
                     <?php if (empty($apiKey) || $apiKey === 'YOUR_SENDGRID_API_KEY_HERE'): ?>
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-triangle me-2"></i>
-                            <strong>SendGrid not configured!</strong><br>
-                            Please configure SendGrid API key in <code>config/config.php</code><br>
-                            See <code>SENDGRID_SETUP.md</code> for instructions.
+                            <strong>SendGrid not configured!</strong><br><br>
+                            <strong>How to Configure SendGrid:</strong><br><br>
+                            <strong>Step 1: Get SendGrid API Key</strong><br>
+                            1. Sign up at <a href="https://sendgrid.com/" target="_blank">https://sendgrid.com/</a> (free tier available)<br>
+                            2. Log in to your SendGrid account<br>
+                            3. Go to <strong>Settings → API Keys</strong><br>
+                            4. Click <strong>"Create API Key"</strong><br>
+                            5. Name it (e.g., "Bus Tracking System")<br>
+                            6. Select <strong>"Full Access"</strong> or <strong>"Restricted Access"</strong> with Mail Send permission<br>
+                            7. Click <strong>"Create & View"</strong><br>
+                            8. <strong>COPY THE API KEY</strong> (starts with "SG.") - you won't see it again!<br><br>
+                            
+                            <strong>Step 2: Verify Your Sender Email</strong><br>
+                            1. Go to <strong>Settings → Sender Authentication</strong><br>
+                            2. Click <strong>"Single Sender Verification"</strong> or <strong>"Domain Authentication"</strong><br>
+                            3. Follow the verification steps<br>
+                            4. Wait for verification email and confirm<br><br>
+                            
+                            <strong>Step 3: Update Configuration</strong><br>
+                            Edit the file: <code>config/config.php</code><br><br>
+                            Replace this line:<br>
+                            <code>define('SENDGRID_API_KEY', 'YOUR_SENDGRID_API_KEY_HERE');</code><br><br>
+                            With your actual API key:<br>
+                            <code>define('SENDGRID_API_KEY', 'SG.your_actual_api_key_here');</code><br><br>
+                            
+                            Also update the from email:<br>
+                            <code>define('SENDGRID_FROM_EMAIL', 'your-verified-email@yourdomain.com');</code><br><br>
+                            
+                            <strong>Step 4: Test</strong><br>
+                            After saving the file, refresh this page and try sending a test email!<br><br>
+                            
+                            <strong>Need Help?</strong> See <code>SENDGRID_SETUP.md</code> for detailed instructions.
                         </div>
                     <?php endif; ?>
                 </div>
