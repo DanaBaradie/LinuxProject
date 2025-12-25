@@ -44,8 +44,8 @@
         max-width: 100% !important;
         padding-left: 15px !important;
         padding-right: 15px !important;
-        padding-top: 130px !important;
-        /* Extra spacing from navbar on mobile (56px navbar + 74px extra for comfortable mobile viewing) */
+        padding-top: 160px !important;
+        /* Maximum spacing from navbar on mobile (56px navbar + 104px extra for optimal mobile viewing) */
     }
 
     /* 3. Collapse grid/flex layouts that include sidebar */
@@ -78,8 +78,8 @@
     .main-content-area,
     main.col-md-9,
     main.col-lg-10 {
-        padding-top: 130px !important;
-        /* Extra spacing from navbar on mobile (56px navbar + 74px extra for comfortable mobile viewing) */
+        padding-top: 160px !important;
+        /* Maximum spacing from navbar on mobile (56px navbar + 104px extra for optimal mobile viewing) */
         padding-left: 15px !important;
         padding-right: 15px !important;
     }
