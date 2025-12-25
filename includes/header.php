@@ -119,16 +119,19 @@
 
         /* Navbar layout - keep brand next to sidebar toggle */
         .navbar .container-fluid {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: flex !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            padding-left: 0.5rem !important;
+            padding-right: 1rem !important;
         }
 
         .navbar-brand {
-            margin-left: 0 !important;
-            margin-right: auto;
-            flex: 0 0 auto;
-            white-space: nowrap;
+            margin-left: 0.5rem !important;
+            margin-right: 0 !important;
+            flex: 0 0 auto !important;
+            white-space: nowrap !important;
+            padding: 0 !important;
         }
 
         /* Adjust Header when sidebar is collapsed */

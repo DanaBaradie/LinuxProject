@@ -30,33 +30,36 @@ body:has(nav.navbar) {
 .navbar .container-fluid {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
     flex-wrap: nowrap !important;
+    padding-left: 0.5rem !important;
+    padding-right: 1rem !important;
+    justify-content: flex-start !important; /* Changed from space-between */
 }
 
 .navbar-brand {
-    margin-left: 0 !important;
-    margin-right: auto !important;
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
     flex: 0 0 auto !important;
     white-space: nowrap !important;
     order: 2;
-    padding-left: 0.5rem !important; /* Small gap after toggle button */
+    padding: 0 !important;
 }
 
 /* Ensure brand stays next to toggle when sidebar is collapsed */
 body.sidebar-collapsed .navbar-brand,
 .sidebar.collapsed ~ nav .navbar-brand {
-    margin-left: 0 !important;
-    margin-right: auto !important;
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
     flex: 0 0 auto !important;
     order: 2;
-    padding-left: 0.5rem !important;
+    padding: 0 !important;
 }
 
 #sidebarToggle {
     order: 1;
     flex: 0 0 auto;
     margin-right: 0 !important;
+    margin-left: 0 !important;
 }
 
 /* Ensure toggle stays in place when sidebar is collapsed */
@@ -65,12 +68,14 @@ body.sidebar-collapsed #sidebarToggle,
     order: 1;
     flex: 0 0 auto;
     margin-right: 0 !important;
+    margin-left: 0 !important;
 }
 
 .navbar .d-flex.align-items-center {
     order: 3;
     flex: 0 0 auto;
-    margin-left: auto;
+    margin-left: auto !important;
+    margin-right: 0 !important;
 }
 
 /* Alternative: Add class to body in header.php */
