@@ -126,11 +126,18 @@ require_once '../includes/header.php';
                         <h5 class="mb-0"><i class="fas fa-crosshairs me-2"></i>Quick Update</h5>
                     </div>
                     <div class="card-body text-center p-5">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            <strong>Note:</strong> GPS auto-detection works best on HTTPS. If button is disabled or stuck,
-                            use manual entry.
-                        </div>
+                        <?php if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'): ?>
+                            <div class="alert alert-success">
+                                <i class="fas fa-lock me-2"></i>
+                                <strong>Secure Connection:</strong> GPS location detection is available on HTTPS.
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>HTTP Connection Detected:</strong> Most browsers block GPS on HTTP for security. 
+                                <br><strong>Solution:</strong> Use the Manual Entry form below, or access this site via HTTPS.
+                            </div>
+                        <?php endif; ?>
 
                         <button class="btn btn-success btn-lg px-5 py-3" onclick="updateMyLocation()" id="updateBtn">
                             <i class="fas fa-crosshairs fa-2x mb-2"></i><br>
@@ -140,6 +147,18 @@ require_once '../includes/header.php';
                         <div id="locationStatus" class="alert alert-secondary mt-3" style="display: none;">
                             <div class="spinner-border spinner-border-sm me-2" role="status"></div>
                             Getting your location...
+                        </div>
+
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                <strong>Tip:</strong> If GPS doesn't work, you can:
+                                <ul class="mt-2 mb-0">
+                                    <li>Use the Manual Entry form below</li>
+                                    <li>Get coordinates from Google Maps (right-click on location → coordinates)</li>
+                                    <li>Use your phone's GPS app to get coordinates</li>
+                                </ul>
+                            </small>
                         </div>
 
                         <form method="POST" id="locationForm" style="display: none;">
@@ -155,10 +174,14 @@ require_once '../includes/header.php';
                         <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Manual Location Entry</h5>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            <strong>Instructions:</strong> Enter your current GPS coordinates below. You can get these from
-                            Google Maps or your phone's GPS.
+                        <div class="alert alert-primary">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>How to Get Your Coordinates:</strong>
+                            <ol class="mb-0 mt-2">
+                                <li><strong>Google Maps:</strong> Right-click on your location → Click the coordinates that appear → Copy them</li>
+                                <li><strong>Phone GPS App:</strong> Open any GPS/maps app and note the coordinates</li>
+                                <li><strong>Quick Select:</strong> Use the preset locations below for common areas</li>
+                            </ol>
                         </div>
 
                         <?php if ($my_bus['current_latitude'] && $my_bus['current_longitude']): ?>
@@ -203,23 +226,34 @@ require_once '../includes/header.php';
 
                         <hr class="my-4">
 
-                        <h6><i class="fas fa-lightbulb me-2 text-warning"></i>Common Locations (Quick Select)</h6>
-                        <div class="row">
-                            <div class="col-md-4 mb-2">
-                                <button class="btn btn-outline-secondary w-100" onclick="setLocation(33.8886, 35.4955)">
-                                    <i class="fas fa-map-marker-alt me-2"></i>Beirut Downtown
-                                </button>
+                        <div class="alert alert-success">
+                            <h6 class="mb-3"><i class="fas fa-lightbulb me-2 text-warning"></i>Quick Select - Common Locations</h6>
+                            <p class="mb-2 small">Click a location below to auto-fill the coordinates:</p>
+                            <div class="row g-2">
+                                <div class="col-md-4 col-6">
+                                    <button class="btn btn-outline-primary w-100" onclick="setLocation(33.8886, 35.4955)">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Beirut Downtown
+                                    </button>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    <button class="btn btn-outline-primary w-100" onclick="setLocation(33.9010, 35.5300)">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Achrafieh
+                                    </button>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    <button class="btn btn-outline-primary w-100" onclick="setLocation(33.8547, 35.8623)">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Zahle
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-md-4 mb-2">
-                                <button class="btn btn-outline-secondary w-100" onclick="setLocation(33.9010, 35.5300)">
-                                    <i class="fas fa-map-marker-alt me-2"></i>Achrafieh
-                                </button>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <button class="btn btn-outline-secondary w-100" onclick="setLocation(33.8547, 35.8623)">
-                                    <i class="fas fa-map-marker-alt me-2"></i>Zahle
-                                </button>
-                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-question-circle me-2"></i>
+                            <strong>Need Help?</strong> 
+                            <a href="https://support.google.com/maps/answer/18539" target="_blank" class="alert-link">
+                                Learn how to get coordinates from Google Maps
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -316,27 +350,57 @@ require_once '../includes/header.php';
             function (error) {
                 clearTimeout(timeoutId);
                 status.className = 'alert alert-danger';
-                let errorMessage = 'Unable to get location: ';
+                let errorMessage = '';
+                let showManualEntry = true;
                 
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        errorMessage += 'Location permission denied. Please enable location access in your browser settings or use Manual Entry below.';
+                        errorMessage = '<strong>Location Permission Denied</strong><br>';
+                        if (window.location.protocol !== 'https:') {
+                            errorMessage += 'Your browser blocks GPS on HTTP connections for security. ';
+                        } else {
+                            errorMessage += 'Your browser blocked location access. ';
+                        }
+                        errorMessage += '<br><br><strong>Solutions:</strong><br>';
+                        errorMessage += '1. <strong>Use Manual Entry</strong> below (recommended for HTTP)<br>';
+                        errorMessage += '2. Enable location permission in browser settings<br>';
+                        errorMessage += '3. Access this site via HTTPS if available<br>';
+                        errorMessage += '<br><small>You can get coordinates from Google Maps by right-clicking on your location.</small>';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        errorMessage += 'Location information is unavailable. Please use Manual Entry below.';
+                        errorMessage = '<strong>Location Unavailable</strong><br>';
+                        errorMessage += 'GPS signal is not available. Please use Manual Entry below.';
                         break;
                     case error.TIMEOUT:
-                        errorMessage += 'Location request timed out. Please use Manual Entry below.';
+                        errorMessage = '<strong>Request Timed Out</strong><br>';
+                        errorMessage += 'Location request took too long. Please use Manual Entry below.';
                         break;
                     default:
-                        errorMessage += error.message;
+                        errorMessage = '<strong>Error Getting Location</strong><br>' + error.message;
                 }
 
                 if (window.location.protocol !== 'https:') {
-                    errorMessage += '<br><strong>Note:</strong> HTTP connections may block GPS. Use Manual Entry below or access via HTTPS.';
+                    errorMessage = '<div class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i><strong>HTTP Connection Detected</strong></div>' + errorMessage;
                 }
 
                 status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage;
+                
+                // Scroll to manual entry section
+                if (showManualEntry) {
+                    setTimeout(() => {
+                        const manualSection = document.querySelector('.card:last-of-type');
+                        if (manualSection) {
+                            manualSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            manualSection.style.border = '2px solid #0d6efd';
+                            manualSection.style.boxShadow = '0 0 10px rgba(13, 110, 253, 0.3)';
+                            setTimeout(() => {
+                                manualSection.style.border = '';
+                                manualSection.style.boxShadow = '';
+                            }, 3000);
+                        }
+                    }, 500);
+                }
+                
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
             },

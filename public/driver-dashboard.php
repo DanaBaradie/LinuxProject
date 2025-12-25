@@ -296,24 +296,30 @@ require_once '../includes/header.php';
             },
             function (error) {
                 clearTimeout(timeoutId);
-                let message = 'Unable to get location: ';
+                let message = '';
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        message += 'Location permission denied. Please enable location access in your browser settings or use "Update Location" page for manual entry.';
+                        message = '<strong>Location Permission Denied</strong><br>';
+                        if (window.location.protocol !== 'https:') {
+                            message += 'Your browser blocks GPS on HTTP connections. ';
+                        } else {
+                            message += 'Your browser blocked location access. ';
+                        }
+                        message += '<br><strong>Solution:</strong> Go to <a href="/update-location.php" class="alert-link">Update Location</a> page and use Manual Entry.';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        message += 'Location information unavailable. Please use "Update Location" page for manual entry.';
+                        message = '<strong>Location Unavailable</strong><br>GPS signal not available. Use <a href="/update-location.php" class="alert-link">Update Location</a> page for manual entry.';
                         break;
                     case error.TIMEOUT:
-                        message += 'Location request timed out. Please use "Update Location" page for manual entry.';
+                        message = '<strong>Request Timed Out</strong><br>Please use <a href="/update-location.php" class="alert-link">Update Location</a> page for manual entry.';
                         break;
                     default:
-                        message += error.message;
+                        message = '<strong>Error:</strong> ' + error.message + '<br>Use <a href="/update-location.php" class="alert-link">Update Location</a> page for manual entry.';
                 }
 
-                // If on HTTP, suggest manual update
+                // If on HTTP, add warning
                 if (window.location.protocol !== 'https:') {
-                    message += ' (HTTP connections may block GPS. Use "Update Location" page for manual entry.)';
+                    message = '<div class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i><strong>HTTP Connection</strong> - GPS blocked for security</div>' + message;
                 }
 
                 showGPSAlert(message, 'danger');
@@ -333,12 +339,17 @@ require_once '../includes/header.php';
         const messageSpan = document.getElementById('gps-message');
 
         alert.className = `alert alert-${type} alert-dismissible fade show`;
-        messageSpan.textContent = message;
+        messageSpan.innerHTML = message; // Changed to innerHTML to support links
         alert.style.display = 'block';
 
+        // Scroll to alert
+        alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Auto-hide after longer time for important messages
+        const hideDelay = type === 'danger' ? 8000 : 5000;
         setTimeout(() => {
             alert.style.display = 'none';
-        }, 5000);
+        }, hideDelay);
     }
 </script>
 
