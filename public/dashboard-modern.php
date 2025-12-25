@@ -201,9 +201,9 @@ require_once '../includes/header.php';
                 </div>
                 
                 <!-- Custom Date Range Picker Modal -->
-                <div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel" aria-hidden="true" style="z-index: 1055;">
-                    <div class="modal-dialog modal-dialog-centered" style="z-index: 1056; pointer-events: auto;">
-                        <div class="modal-content" style="pointer-events: auto; position: relative; z-index: 1056;">
+                <div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel" aria-hidden="true" style="z-index: 9999 !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important;">
+                    <div class="modal-dialog modal-dialog-centered" style="z-index: 10000 !important; pointer-events: auto !important; position: relative !important;">
+                        <div class="modal-content" style="pointer-events: auto !important; position: relative !important; z-index: 10000 !important; cursor: default !important;">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="customDateModalLabel">
                                     <i class="fas fa-calendar-check me-2"></i>Select Date Range
@@ -220,15 +220,15 @@ require_once '../includes/header.php';
                                     <input type="date" class="form-control" id="endDate" value="<?php echo $date_range_end; ?>">
                                 </div>
                                 <div class="btn-group w-100 mb-2" role="group">
-                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('today')">Today</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('yesterday')">Yesterday</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('week')">This Week</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('month')">This Month</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="event.stopPropagation(); setQuickDate('today'); return false;">Today</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="event.stopPropagation(); setQuickDate('yesterday'); return false;">Yesterday</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="event.stopPropagation(); setQuickDate('week'); return false;">This Week</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="event.stopPropagation(); setQuickDate('month'); return false;">This Month</button>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" onclick="closeCustomDateModal()">Cancel</button>
-                                <button type="button" class="btn btn-primary" onclick="applyCustomDateRange()">Apply Filter</button>
+                                <button type="button" class="btn btn-secondary" onclick="event.stopPropagation(); closeCustomDateModal(); return false;">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="event.stopPropagation(); applyCustomDateRange(); return false;">Apply Filter</button>
                             </div>
                         </div>
                     </div>
@@ -584,23 +584,48 @@ function showCustomDatePicker() {
         console.log('Bootstrap Modal not available, using fallback:', e);
     }
     
+    // Close sidebar if open (it might be blocking)
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    if (sidebar && sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+    }
+    if (sidebarOverlay && sidebarOverlay.classList.contains('show')) {
+        sidebarOverlay.classList.remove('show');
+    }
+    
     // Fallback: show modal manually
     modalElement.classList.add('show');
     modalElement.style.display = 'block';
-    modalElement.style.zIndex = '1055';
+    modalElement.style.zIndex = '9999'; // Very high z-index
     modalElement.style.pointerEvents = 'auto';
+    modalElement.style.position = 'fixed';
+    modalElement.style.top = '0';
+    modalElement.style.left = '0';
+    modalElement.style.width = '100%';
+    modalElement.style.height = '100%';
     modalElement.setAttribute('aria-hidden', 'false');
     modalElement.setAttribute('aria-modal', 'true');
     document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
     document.body.style.paddingRight = '0'; // Prevent body shift
     
-    // Ensure modal dialog is visible
+    // Ensure modal dialog is visible and centered
     const modalDialog = modalElement.querySelector('.modal-dialog');
     if (modalDialog) {
-        modalDialog.style.zIndex = '1056';
+        modalDialog.style.zIndex = '10000';
         modalDialog.style.pointerEvents = 'auto';
         modalDialog.style.position = 'relative';
+        modalDialog.style.margin = '1rem auto';
+        modalDialog.style.maxWidth = '500px';
+    }
+    
+    // Ensure modal content is interactive
+    const modalContent = modalElement.querySelector('.modal-content');
+    if (modalContent) {
+        modalContent.style.zIndex = '10000';
+        modalContent.style.pointerEvents = 'auto';
+        modalContent.style.position = 'relative';
     }
     
     // Remove existing backdrop if any
@@ -613,26 +638,47 @@ function showCustomDatePicker() {
     const backdrop = document.createElement('div');
     backdrop.className = 'modal-backdrop fade show';
     backdrop.id = 'modalBackdrop';
-    backdrop.style.zIndex = '1040';
+    backdrop.style.zIndex = '9998';
     backdrop.style.pointerEvents = 'auto';
+    backdrop.style.position = 'fixed';
+    backdrop.style.top = '0';
+    backdrop.style.left = '0';
+    backdrop.style.width = '100%';
+    backdrop.style.height = '100%';
+    backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     document.body.appendChild(backdrop);
     
     // Close on backdrop click (but not on modal content)
     backdrop.addEventListener('click', function(e) {
-        if (e.target === backdrop) {
+        // Only close if clicking directly on backdrop, not on modal content
+        if (e.target === backdrop && !modalContent.contains(e.target)) {
             closeCustomDateModal();
         }
     });
     
-    // Prevent clicks on modal from closing it
+    // Prevent clicks on modal wrapper from closing it, but allow clicks on content
     modalElement.addEventListener('click', function(e) {
+        // Only close if clicking on the modal wrapper itself, not on content
         if (e.target === modalElement) {
             closeCustomDateModal();
         }
     });
     
-    // Focus on first input
+    // Stop propagation on modal content to prevent backdrop clicks
+    if (modalContent) {
+        modalContent.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+    
+    // Make all inputs and buttons explicitly interactive
     setTimeout(() => {
+        const inputs = modalElement.querySelectorAll('input, button, label');
+        inputs.forEach(el => {
+            el.style.pointerEvents = 'auto';
+            el.style.zIndex = '10001';
+        });
+        
         const startDateInput = document.getElementById('startDate');
         if (startDateInput) {
             startDateInput.focus();

@@ -459,31 +459,58 @@ textarea.form-control {
 
 /* Date Picker Modal */
 #customDateModal {
-    z-index: 1055 !important;
+    z-index: 9999 !important;
     pointer-events: auto !important;
 }
 
 #customDateModal.show {
     display: block !important;
     pointer-events: auto !important;
+    z-index: 9999 !important;
+}
+
+/* Override any navbar or sidebar z-index when modal is open */
+body.modal-open .navbar {
+    z-index: 1030 !important;
+}
+
+body.modal-open .sidebar {
+    z-index: 1030 !important;
+}
+
+body.modal-open .sidebar-overlay {
+    z-index: 1029 !important;
+    display: none !important;
 }
 
 #customDateModal .modal-dialog {
     margin: 1rem auto;
     max-width: 500px;
     position: relative;
-    z-index: 1056 !important;
+    z-index: 10000 !important;
     pointer-events: auto !important;
     transform: translate(0, 0) !important;
 }
 
 #customDateModal .modal-content {
     position: relative;
-    z-index: 1056 !important;
+    z-index: 10000 !important;
     pointer-events: auto !important;
     background: white !important;
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    cursor: default;
+}
+
+#customDateModal .modal-content * {
+    pointer-events: auto !important;
+    cursor: auto;
+}
+
+#customDateModal .modal-content input,
+#customDateModal .modal-content button,
+#customDateModal .modal-content label {
+    cursor: pointer !important;
 }
 
 #customDateModal .modal-header,
@@ -536,7 +563,7 @@ textarea.form-control {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1040 !important;
+    z-index: 9998 !important;
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
@@ -549,11 +576,15 @@ textarea.form-control {
 
 /* Ensure modal content is above backdrop */
 body.modal-open #customDateModal {
-    z-index: 1055 !important;
+    z-index: 9999 !important;
 }
 
 body.modal-open #customDateModal .modal-dialog {
-    z-index: 1056 !important;
+    z-index: 10000 !important;
+}
+
+body.modal-open #customDateModal .modal-content {
+    z-index: 10000 !important;
 }
 
 .modal-title {

@@ -116,6 +116,23 @@
         display: block !important;
     }
 
+    /* Ensure modal is above sidebar overlay */
+    body.modal-open .sidebar-overlay {
+        z-index: 1030 !important;
+    }
+
+    body.modal-open #customDateModal {
+        z-index: 1055 !important;
+    }
+
+    body.modal-open #customDateModal .modal-dialog {
+        z-index: 1056 !important;
+    }
+
+    body.modal-open .modal-backdrop {
+        z-index: 1040 !important;
+    }
+
     /* 8. Navbar adjustments */
     .navbar {
         padding: 0.5rem 1rem;
