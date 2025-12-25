@@ -146,6 +146,11 @@ require_once '../includes/header.php';
                                     id="updateBtn">
                                     <i class="fas fa-crosshairs me-2"></i>Get My Current Location
                                 </button>
+                                
+                                <button class="btn btn-info btn-lg w-100 mb-3" onclick="useDemoLocation()"
+                                    id="demoBtn" style="display: none;">
+                                    <i class="fas fa-mobile-alt me-2"></i>Use Demo Location (iPhone)
+                                </button>
 
                                 <div id="locationStatus" class="alert alert-secondary" style="display: none;">
                                     <div class="spinner-border spinner-border-sm me-2" role="status"></div>
@@ -194,6 +199,7 @@ require_once '../includes/header.php';
 <script>
     function updateMyLocation() {
         const btn = document.getElementById('updateBtn');
+        const demoBtn = document.getElementById('demoBtn');
         const status = document.getElementById('locationStatus');
         const originalHTML = btn.innerHTML;
 
@@ -201,23 +207,30 @@ require_once '../includes/header.php';
         if (!navigator.geolocation) {
             status.className = 'alert alert-danger';
             status.style.display = 'block';
-            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Geolocation is not supported by your browser. Please use Manual Entry below.';
+            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Geolocation is not supported by your browser. <button class="btn btn-sm btn-info mt-2" onclick="useDemoLocation()">Use Demo Location Instead</button>';
+            // Show demo button
+            if (demoBtn) demoBtn.style.display = 'block';
             return;
         }
 
-        // Disable button and show loading
+        // Disable buttons and show loading
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+        if (demoBtn) demoBtn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting Location...';
         status.style.display = 'block';
         status.className = 'alert alert-info';
-        status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Getting your location...';
+        status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Getting your location... Please allow location access if prompted.';
 
         // Set timeout
         const timeoutId = setTimeout(() => {
             status.className = 'alert alert-warning';
-            status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Location request timed out. Please use Manual Entry below.';
+            status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Location request timed out. <button class="btn btn-sm btn-info mt-2" onclick="useDemoLocation()">Use Demo Location Instead</button>';
             btn.disabled = false;
             btn.innerHTML = originalHTML;
+            if (demoBtn) {
+                demoBtn.disabled = false;
+                demoBtn.style.display = 'block';
+            }
         }, 15000);
 
         // Get current position
@@ -232,64 +245,45 @@ require_once '../includes/header.php';
                 status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Updating location on server...';
 
                 // Send to API
-                fetch('/api/location/update-quick.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        latitude: lat,
-                        longitude: lng
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        status.className = 'alert alert-success';
-                        status.innerHTML = '<i class="fas fa-check-circle me-2"></i>Location updated successfully!';
-                        // Reload page after 2 seconds
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                    } else {
-                        status.className = 'alert alert-danger';
-                        status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Failed to update: ' + (data.message || 'Unknown error');
-                        btn.disabled = false;
-                        btn.innerHTML = originalHTML;
-                    }
-                })
-                .catch(error => {
-                    clearTimeout(timeoutId);
-                    status.className = 'alert alert-danger';
-                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error updating location: ' + error.message + '. Please try Manual Entry below.';
-                    btn.disabled = false;
-                    btn.innerHTML = originalHTML;
-                });
+                sendLocationToServer(lat, lng, btn, demoBtn, status, originalHTML);
             },
             function (error) {
                 clearTimeout(timeoutId);
-                status.className = 'alert alert-danger';
-                let errorMessage = 'Unable to get location: ';
+                status.className = 'alert alert-warning';
+                let errorMessage = '';
                 
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        errorMessage += 'Location permission denied. Please enable location access or use Manual Entry below.';
+                        errorMessage = '<strong>Location Permission Denied</strong><br>';
+                        if (window.location.protocol !== 'https:') {
+                            errorMessage += 'Your browser blocks GPS on HTTP connections for security.<br>';
+                        } else {
+                            errorMessage += 'Your browser blocked location access.<br>';
+                        }
+                        errorMessage += '<br><strong>Try Demo Location:</strong> Click the "Use Demo Location" button below to test with a sample iPhone location.';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        errorMessage += 'Location information unavailable. Please use Manual Entry below.';
+                        errorMessage = '<strong>Location Unavailable</strong><br>GPS signal is not available. Try the Demo Location button below.';
                         break;
                     case error.TIMEOUT:
-                        errorMessage += 'Location request timed out. Please use Manual Entry below.';
+                        errorMessage = '<strong>Request Timed Out</strong><br>Location request took too long. Try the Demo Location button below.';
                         break;
                     default:
-                        errorMessage += error.message;
+                        errorMessage = '<strong>Error Getting Location</strong><br>' + error.message;
                 }
 
                 if (window.location.protocol !== 'https:') {
-                    errorMessage += '<br><strong>Note:</strong> HTTP connections may block GPS. Use Manual Entry below.';
+                    errorMessage = '<div class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i><strong>HTTP Connection Detected</strong></div>' + errorMessage;
                 }
 
                 status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage;
+                
+                // Show demo button
+                if (demoBtn) {
+                    demoBtn.style.display = 'block';
+                    demoBtn.disabled = false;
+                }
+                
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
             },
@@ -299,6 +293,84 @@ require_once '../includes/header.php';
                 maximumAge: 0
             }
         );
+    }
+
+    function useDemoLocation() {
+        const btn = document.getElementById('updateBtn');
+        const demoBtn = document.getElementById('demoBtn');
+        const status = document.getElementById('locationStatus');
+        
+        // Demo location - simulating iPhone location (example: Beirut, Lebanon)
+        // You can change these coordinates to any location you want to demo
+        const demoLat = 33.8886;  // Example: Beirut coordinates
+        const demoLng = 35.4955;
+        
+        // Disable buttons
+        if (demoBtn) {
+            demoBtn.disabled = true;
+            demoBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+        }
+        if (btn) btn.disabled = true;
+        
+        status.style.display = 'block';
+        status.className = 'alert alert-info';
+        status.innerHTML = '<i class="fas fa-mobile-alt me-2"></i>Using demo location (iPhone simulation)...<br><small>Lat: ' + demoLat + ', Lng: ' + demoLng + '</small>';
+
+        // Send demo location to server
+        sendLocationToServer(demoLat, demoLng, btn, demoBtn, status, 'Get My Current Location');
+    }
+
+    function sendLocationToServer(lat, lng, btn, demoBtn, status, originalHTML) {
+        fetch('/api/location/update-quick.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                latitude: lat,
+                longitude: lng
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                status.className = 'alert alert-success';
+                status.innerHTML = '<i class="fas fa-check-circle me-2"></i><strong>Location updated successfully!</strong><br>Your bus location has been updated. Parents can now track your bus.';
+                // Reload page after 2 seconds
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                status.className = 'alert alert-danger';
+                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Failed to update: ' + (data.message || 'Unknown error');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                }
+                if (demoBtn) {
+                    demoBtn.disabled = false;
+                    demoBtn.innerHTML = '<i class="fas fa-mobile-alt me-2"></i>Use Demo Location (iPhone)';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            status.className = 'alert alert-danger';
+            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error updating location: ' + error.message + '<br><small>Please check your connection and try again.</small>';
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+            if (demoBtn) {
+                demoBtn.disabled = false;
+                demoBtn.innerHTML = '<i class="fas fa-mobile-alt me-2"></i>Use Demo Location (iPhone)';
+            }
+        });
     }
 </script>
 
