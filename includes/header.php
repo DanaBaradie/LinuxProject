@@ -135,10 +135,27 @@
 
             .sidebar {
                 transform: translateX(-100%);
+                width: 280px;
+                max-width: 85vw;
             }
 
             .sidebar.show {
                 transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 56px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1019;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
             }
 
             main.main-content-area,

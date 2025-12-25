@@ -114,14 +114,73 @@ main > .row:first-child {
     padding-top: 25px !important;
 }
 
+/* Enhanced Mobile Responsive Styles */
 @media (max-width: 768px) {
     .sidebar {
-        position: static;
-        width: 100%;
+        position: fixed;
+        top: 56px;
+        left: 0;
+        width: 280px;
+        max-width: 85vw;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1030;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
     }
     
-    main {
-        margin-left: 0;
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    main,
+    main.main-content-area,
+    .main-content-area {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    /* Table responsive improvements */
+    .table-responsive {
+        border-radius: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Map container mobile */
+    .map-container {
+        height: 400px !important;
+        border-radius: 8px;
+    }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 992px) {
+    .sidebar {
+        width: 220px;
+    }
+    
+    main,
+    main.main-content-area,
+    .main-content-area {
+        margin-left: 220px !important;
+        width: calc(100% - 220px) !important;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 576px) {
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+
+    .map-container {
+        height: 350px !important;
     }
 }
 
