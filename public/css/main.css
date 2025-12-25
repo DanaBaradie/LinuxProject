@@ -40,11 +40,31 @@ body:has(nav.navbar) {
     flex: 0 0 auto !important;
     white-space: nowrap !important;
     order: 2;
+    padding-left: 0.5rem !important; /* Small gap after toggle button */
+}
+
+/* Ensure brand stays next to toggle when sidebar is collapsed */
+body.sidebar-collapsed .navbar-brand,
+.sidebar.collapsed ~ nav .navbar-brand {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    flex: 0 0 auto !important;
+    order: 2;
+    padding-left: 0.5rem !important;
 }
 
 #sidebarToggle {
     order: 1;
     flex: 0 0 auto;
+    margin-right: 0 !important;
+}
+
+/* Ensure toggle stays in place when sidebar is collapsed */
+body.sidebar-collapsed #sidebarToggle,
+.sidebar.collapsed ~ nav #sidebarToggle {
+    order: 1;
+    flex: 0 0 auto;
+    margin-right: 0 !important;
 }
 
 .navbar .d-flex.align-items-center {
