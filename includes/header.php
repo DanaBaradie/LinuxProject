@@ -108,9 +108,13 @@
         .sidebar.collapsed~main.main-content-area,
         .sidebar.collapsed~.main-content-area,
         body.sidebar-collapsed main.main-content-area,
-        body.sidebar-collapsed .main-content-area {
+        body.sidebar-collapsed .main-content-area,
+        body.sidebar-collapsed main.col-md-9,
+        body.sidebar-collapsed main.col-lg-10,
+        body.sidebar-collapsed main[class*="col-"] {
             margin-left: 0 !important;
             width: 100% !important;
+            padding-left: 20px !important;
         }
 
         /* Adjust Header when sidebar is collapsed */
