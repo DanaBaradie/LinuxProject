@@ -315,21 +315,61 @@
     }
 
     /* Date picker modal on mobile */
+    #customDateModal {
+        z-index: 1055 !important;
+    }
+
+    #customDateModal .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+
     #customDateModal .modal-body {
         padding: 1rem;
     }
 
+    #customDateModal .form-label {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+
+    #customDateModal input[type="date"] {
+        font-size: 16px; /* Prevents zoom on iOS */
+        min-height: 44px;
+    }
+
     #customDateModal .btn-group {
         flex-direction: column;
+        width: 100%;
     }
 
     #customDateModal .btn-group .btn {
         width: 100%;
         margin-bottom: 0.5rem;
+        min-height: 44px;
     }
 
     #customDateModal .btn-group .btn:last-child {
         margin-bottom: 0;
+    }
+
+    #customDateModal .modal-footer {
+        flex-direction: column;
+    }
+
+    #customDateModal .modal-footer .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        min-height: 44px;
+    }
+
+    #customDateModal .modal-footer .btn:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Ensure modal backdrop is visible */
+    .modal-backdrop {
+        z-index: 1040 !important;
     }
 
     /* Dropdown adjustments */

@@ -189,7 +189,7 @@ require_once '../includes/header.php';
                                     <i class="fas fa-calendar-alt me-2"></i>This Month
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#" onclick="showCustomDatePicker(); return false;">
+                                <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(function(){ showCustomDatePicker(); }, 100); return false;">
                                     <i class="fas fa-calendar-check me-2"></i>Custom Date Range
                                 </a></li>
                             </ul>
@@ -208,7 +208,7 @@ require_once '../includes/header.php';
                                 <h5 class="modal-title" id="customDateModalLabel">
                                     <i class="fas fa-calendar-check me-2"></i>Select Date Range
                                 </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" onclick="closeCustomDateModal()" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
@@ -227,7 +227,7 @@ require_once '../includes/header.php';
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" onclick="closeCustomDateModal()">Cancel</button>
                                 <button type="button" class="btn btn-primary" onclick="applyCustomDateRange()">Apply Filter</button>
                             </div>
                         </div>
@@ -539,8 +539,100 @@ function setDateFilter(filter) {
 }
 
 function showCustomDatePicker() {
-    const modal = new bootstrap.Modal(document.getElementById('customDateModal'));
-    modal.show();
+    const modalElement = document.getElementById('customDateModal');
+    if (!modalElement) {
+        console.error('Modal element not found');
+        alert('Date picker modal not found. Please refresh the page.');
+        return;
+    }
+    
+    // Set default dates if not set
+    if (!document.getElementById('startDate').value) {
+        document.getElementById('startDate').value = '<?php echo $date_range_start; ?>';
+    }
+    if (!document.getElementById('endDate').value) {
+        document.getElementById('endDate').value = '<?php echo $date_range_end; ?>';
+    }
+    
+    // Try Bootstrap Modal first
+    try {
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            let modal = bootstrap.Modal.getInstance(modalElement);
+            if (!modal) {
+                modal = new bootstrap.Modal(modalElement);
+            }
+            modal.show();
+            return;
+        }
+    } catch (e) {
+        console.log('Bootstrap Modal not available, using fallback');
+    }
+    
+    // Fallback: show modal manually
+    modalElement.classList.add('show');
+    modalElement.style.display = 'block';
+    modalElement.setAttribute('aria-hidden', 'false');
+    modalElement.setAttribute('aria-modal', 'true');
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+    
+    // Remove existing backdrop if any
+    const existingBackdrop = document.getElementById('modalBackdrop');
+    if (existingBackdrop) {
+        existingBackdrop.remove();
+    }
+    
+    // Add backdrop
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop fade show';
+    backdrop.id = 'modalBackdrop';
+    backdrop.style.zIndex = '1040';
+    document.body.appendChild(backdrop);
+    
+    // Close on backdrop click
+    backdrop.addEventListener('click', function() {
+        closeCustomDateModal();
+    });
+    
+    // Focus on first input
+    setTimeout(() => {
+        const startDateInput = document.getElementById('startDate');
+        if (startDateInput) {
+            startDateInput.focus();
+        }
+    }, 300);
+}
+
+function closeCustomDateModal() {
+    const modalElement = document.getElementById('customDateModal');
+    if (modalElement) {
+        // Try Bootstrap Modal first
+        try {
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                    return;
+                }
+            }
+        } catch (e) {
+            console.log('Bootstrap Modal not available, using fallback');
+        }
+        
+        // Fallback: hide modal manually
+        modalElement.classList.remove('show');
+        modalElement.style.display = 'none';
+        modalElement.setAttribute('aria-hidden', 'true');
+        modalElement.removeAttribute('aria-modal');
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        
+        // Remove backdrop
+        const backdrop = document.getElementById('modalBackdrop');
+        if (backdrop) {
+            backdrop.remove();
+        }
+    }
 }
 
 function setQuickDate(type) {
@@ -639,6 +731,24 @@ function exportDashboard() {
 document.addEventListener('DOMContentLoaded', () => {
     // Add page transition
     document.body.classList.add('page-transition');
+    
+    // Initialize modal event listeners
+    const modalElement = document.getElementById('customDateModal');
+    if (modalElement) {
+        // Close modal on backdrop click
+        modalElement.addEventListener('click', function(e) {
+            if (e.target === modalElement) {
+                closeCustomDateModal();
+            }
+        });
+        
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalElement.classList.contains('show')) {
+                closeCustomDateModal();
+            }
+        });
+    }
     
     // Auto-refresh stats every 30 seconds
     if (typeof refreshStats === 'function') {
