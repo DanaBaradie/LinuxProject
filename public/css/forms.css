@@ -459,21 +459,55 @@ textarea.form-control {
 
 /* Date Picker Modal */
 #customDateModal {
-    z-index: 1055;
+    z-index: 1055 !important;
+    pointer-events: auto !important;
+}
+
+#customDateModal.show {
+    display: block !important;
+    pointer-events: auto !important;
 }
 
 #customDateModal .modal-dialog {
     margin: 1rem auto;
     max-width: 500px;
+    position: relative;
+    z-index: 1056 !important;
+    pointer-events: auto !important;
+    transform: translate(0, 0) !important;
+}
+
+#customDateModal .modal-content {
+    position: relative;
+    z-index: 1056 !important;
+    pointer-events: auto !important;
+    background: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+#customDateModal .modal-header,
+#customDateModal .modal-body,
+#customDateModal .modal-footer {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1;
 }
 
 #customDateModal .modal-body {
     padding: 1.5rem;
+    pointer-events: auto !important;
 }
 
 #customDateModal .form-label {
     font-weight: 600;
     margin-bottom: 0.5rem;
+}
+
+#customDateModal input[type="date"],
+#customDateModal .form-control {
+    pointer-events: auto !important;
+    z-index: 1;
 }
 
 #customDateModal .btn-group {
@@ -485,13 +519,14 @@ textarea.form-control {
 #customDateModal .btn-group .btn {
     flex: 1;
     min-width: 100px;
+    pointer-events: auto !important;
+}
+
+#customDateModal .modal-footer .btn {
+    pointer-events: auto !important;
 }
 
 /* Ensure modal is visible when shown */
-#customDateModal.show {
-    display: block !important;
-}
-
 #customDateModal.show .modal-dialog {
     transform: translate(0, 0);
 }
@@ -501,14 +536,24 @@ textarea.form-control {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1040;
+    z-index: 1040 !important;
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: auto !important;
 }
 
 .modal-backdrop.show {
     opacity: 0.5;
+}
+
+/* Ensure modal content is above backdrop */
+body.modal-open #customDateModal {
+    z-index: 1055 !important;
+}
+
+body.modal-open #customDateModal .modal-dialog {
+    z-index: 1056 !important;
 }
 
 .modal-title {

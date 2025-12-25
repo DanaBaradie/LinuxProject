@@ -201,9 +201,9 @@ require_once '../includes/header.php';
                 </div>
                 
                 <!-- Custom Date Range Picker Modal -->
-                <div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
+                <div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel" aria-hidden="true" style="z-index: 1055;">
+                    <div class="modal-dialog modal-dialog-centered" style="z-index: 1056; pointer-events: auto;">
+                        <div class="modal-content" style="pointer-events: auto; position: relative; z-index: 1056;">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="customDateModalLabel">
                                     <i class="fas fa-calendar-check me-2"></i>Select Date Range
@@ -547,11 +547,14 @@ function showCustomDatePicker() {
     }
     
     // Set default dates if not set
-    if (!document.getElementById('startDate').value) {
-        document.getElementById('startDate').value = '<?php echo $date_range_start; ?>';
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    
+    if (startDateInput && !startDateInput.value) {
+        startDateInput.value = '<?php echo $date_range_start; ?>';
     }
-    if (!document.getElementById('endDate').value) {
-        document.getElementById('endDate').value = '<?php echo $date_range_end; ?>';
+    if (endDateInput && !endDateInput.value) {
+        endDateInput.value = '<?php echo $date_range_end; ?>';
     }
     
     // Try Bootstrap Modal first
@@ -559,22 +562,46 @@ function showCustomDatePicker() {
         if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
             let modal = bootstrap.Modal.getInstance(modalElement);
             if (!modal) {
-                modal = new bootstrap.Modal(modalElement);
+                modal = new bootstrap.Modal(modalElement, {
+                    backdrop: true,
+                    keyboard: true,
+                    focus: true
+                });
             }
             modal.show();
+            
+            // Ensure modal is interactive after Bootstrap shows it
+            setTimeout(() => {
+                modalElement.style.pointerEvents = 'auto';
+                const modalContent = modalElement.querySelector('.modal-content');
+                if (modalContent) {
+                    modalContent.style.pointerEvents = 'auto';
+                }
+            }, 100);
             return;
         }
     } catch (e) {
-        console.log('Bootstrap Modal not available, using fallback');
+        console.log('Bootstrap Modal not available, using fallback:', e);
     }
     
     // Fallback: show modal manually
     modalElement.classList.add('show');
     modalElement.style.display = 'block';
+    modalElement.style.zIndex = '1055';
+    modalElement.style.pointerEvents = 'auto';
     modalElement.setAttribute('aria-hidden', 'false');
     modalElement.setAttribute('aria-modal', 'true');
     document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = '0'; // Prevent body shift
+    
+    // Ensure modal dialog is visible
+    const modalDialog = modalElement.querySelector('.modal-dialog');
+    if (modalDialog) {
+        modalDialog.style.zIndex = '1056';
+        modalDialog.style.pointerEvents = 'auto';
+        modalDialog.style.position = 'relative';
+    }
     
     // Remove existing backdrop if any
     const existingBackdrop = document.getElementById('modalBackdrop');
@@ -587,11 +614,21 @@ function showCustomDatePicker() {
     backdrop.className = 'modal-backdrop fade show';
     backdrop.id = 'modalBackdrop';
     backdrop.style.zIndex = '1040';
+    backdrop.style.pointerEvents = 'auto';
     document.body.appendChild(backdrop);
     
-    // Close on backdrop click
-    backdrop.addEventListener('click', function() {
-        closeCustomDateModal();
+    // Close on backdrop click (but not on modal content)
+    backdrop.addEventListener('click', function(e) {
+        if (e.target === backdrop) {
+            closeCustomDateModal();
+        }
+    });
+    
+    // Prevent clicks on modal from closing it
+    modalElement.addEventListener('click', function(e) {
+        if (e.target === modalElement) {
+            closeCustomDateModal();
+        }
     });
     
     // Focus on first input
@@ -622,10 +659,13 @@ function closeCustomDateModal() {
         // Fallback: hide modal manually
         modalElement.classList.remove('show');
         modalElement.style.display = 'none';
+        modalElement.style.zIndex = '';
+        modalElement.style.pointerEvents = '';
         modalElement.setAttribute('aria-hidden', 'true');
         modalElement.removeAttribute('aria-modal');
         document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
         
         // Remove backdrop
         const backdrop = document.getElementById('modalBackdrop');

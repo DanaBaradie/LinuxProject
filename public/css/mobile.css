@@ -317,11 +317,28 @@
     /* Date picker modal on mobile */
     #customDateModal {
         z-index: 1055 !important;
+        pointer-events: auto !important;
+    }
+
+    #customDateModal.show {
+        display: block !important;
+        pointer-events: auto !important;
     }
 
     #customDateModal .modal-dialog {
         margin: 0.5rem;
         max-width: calc(100% - 1rem);
+        position: relative;
+        z-index: 1056 !important;
+        pointer-events: auto !important;
+    }
+
+    #customDateModal .modal-content {
+        position: relative;
+        z-index: 1056 !important;
+        pointer-events: auto !important;
+        background: white;
+        border-radius: 0.5rem;
     }
 
     #customDateModal .modal-body {
@@ -370,6 +387,18 @@
     /* Ensure modal backdrop is visible */
     .modal-backdrop {
         z-index: 1040 !important;
+    }
+
+    /* Ensure modal is fully interactive */
+    #customDateModal.show .modal-content * {
+        pointer-events: auto !important;
+    }
+
+    #customDateModal.show input,
+    #customDateModal.show button,
+    #customDateModal.show label {
+        pointer-events: auto !important;
+        -webkit-tap-highlight-color: rgba(13, 110, 253, 0.2);
     }
 
     /* Dropdown adjustments */
