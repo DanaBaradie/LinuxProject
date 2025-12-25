@@ -144,12 +144,7 @@ require_once '../includes/header.php';
 
                                 <button class="btn btn-success btn-lg w-100 mb-3" onclick="updateMyLocation()"
                                     id="updateBtn">
-                                    <i class="fas fa-crosshairs me-2"></i>Get My Current Location
-                                </button>
-                                
-                                <button class="btn btn-info btn-lg w-100 mb-3" onclick="useDemoLocation()"
-                                    id="demoBtn" style="display: none;">
-                                    <i class="fas fa-mobile-alt me-2"></i>Use Demo Location (iPhone)
+                                    <i class="fas fa-crosshairs me-2"></i>Get My Current Location (iPhone GPS)
                                 </button>
 
                                 <div id="locationStatus" class="alert alert-secondary" style="display: none;">
@@ -199,128 +194,153 @@ require_once '../includes/header.php';
 <script>
     function updateMyLocation() {
         const btn = document.getElementById('updateBtn');
-        const demoBtn = document.getElementById('demoBtn');
         const status = document.getElementById('locationStatus');
         const originalHTML = btn.innerHTML;
+
+        console.log('updateMyLocation called');
+        console.log('Protocol:', window.location.protocol);
+        console.log('Geolocation available:', typeof navigator.geolocation !== 'undefined');
 
         // Check if geolocation is supported
         if (!navigator.geolocation) {
             status.className = 'alert alert-danger';
             status.style.display = 'block';
-            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Geolocation is not supported by your browser. <button class="btn btn-sm btn-info mt-2" onclick="useDemoLocation()">Use Demo Location Instead</button>';
-            // Show demo button
-            if (demoBtn) demoBtn.style.display = 'block';
+            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i><strong>Geolocation not supported</strong><br>Your browser does not support GPS location. Please use Manual Entry below.';
             return;
         }
 
-        // Disable buttons and show loading
+        // Check protocol and warn but don't block (some setups might work)
+        const isHTTPS = window.location.protocol === 'https:' || 
+                       window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname.includes('192.168.');
+        
+        if (!isHTTPS) {
+            status.className = 'alert alert-warning';
+            status.style.display = 'block';
+            status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i><strong>HTTP Connection Detected</strong><br>iPhone may block GPS on HTTP. If permission prompt doesn\'t appear, try:<br>1. Access via HTTPS<br>2. Use Manual Entry below<br><br><button class="btn btn-sm btn-primary" onclick="tryLocationAnyway()">Try Anyway</button>';
+            return;
+        }
+
+        // Disable button and show loading
         btn.disabled = true;
-        if (demoBtn) demoBtn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting Location...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting Your iPhone Location...';
         status.style.display = 'block';
         status.className = 'alert alert-info';
-        status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Getting your location... Please allow location access if prompted.';
+        status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div><strong>Requesting GPS access...</strong><br><small>Please allow location access when prompted by your iPhone. If no prompt appears, check Safari settings.</small>';
 
-        // Set timeout
-        const timeoutId = setTimeout(() => {
-            status.className = 'alert alert-warning';
-            status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Location request timed out. <button class="btn btn-sm btn-info mt-2" onclick="useDemoLocation()">Use Demo Location Instead</button>';
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-            if (demoBtn) {
-                demoBtn.disabled = false;
-                demoBtn.style.display = 'block';
-            }
-        }, 15000);
+        // Check permission state first
+        if (navigator.permissions && navigator.permissions.query) {
+            navigator.permissions.query({name: 'geolocation'}).then(function(result) {
+                console.log('Permission state:', result.state);
+                if (result.state === 'denied') {
+                    status.className = 'alert alert-warning';
+                    status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i><strong>Location Permission Previously Denied</strong><br>Please enable it in:<br><strong>iPhone Settings → Safari → Location Services</strong><br>Then refresh this page.';
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                    return;
+                }
+                // Continue with location request
+                requestLocation();
+            }).catch(function() {
+                // Permissions API not supported, continue anyway
+                requestLocation();
+            });
+        } else {
+            // Permissions API not available, proceed directly
+            requestLocation();
+        }
 
-        // Get current position
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                clearTimeout(timeoutId);
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-
-                // Update status
-                status.className = 'alert alert-info';
-                status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Updating location on server...';
-
-                // Send to API
-                sendLocationToServer(lat, lng, btn, demoBtn, status, originalHTML);
-            },
-            function (error) {
-                clearTimeout(timeoutId);
+        function requestLocation() {
+            console.log('Requesting location...');
+            
+            // Set timeout (longer for iPhone)
+            const timeoutId = setTimeout(() => {
                 status.className = 'alert alert-warning';
-                let errorMessage = '';
-                
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        errorMessage = '<strong>Location Permission Denied</strong><br>';
-                        if (window.location.protocol !== 'https:') {
-                            errorMessage += 'Your browser blocks GPS on HTTP connections for security.<br>';
-                        } else {
-                            errorMessage += 'Your browser blocked location access.<br>';
-                        }
-                        errorMessage += '<br><strong>Try Demo Location:</strong> Click the "Use Demo Location" button below to test with a sample iPhone location.';
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        errorMessage = '<strong>Location Unavailable</strong><br>GPS signal is not available. Try the Demo Location button below.';
-                        break;
-                    case error.TIMEOUT:
-                        errorMessage = '<strong>Request Timed Out</strong><br>Location request took too long. Try the Demo Location button below.';
-                        break;
-                    default:
-                        errorMessage = '<strong>Error Getting Location</strong><br>' + error.message;
-                }
-
-                if (window.location.protocol !== 'https:') {
-                    errorMessage = '<div class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i><strong>HTTP Connection Detected</strong></div>' + errorMessage;
-                }
-
-                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage;
-                
-                // Show demo button
-                if (demoBtn) {
-                    demoBtn.style.display = 'block';
-                    demoBtn.disabled = false;
-                }
-                
+                status.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i><strong>Location request timed out</strong><br>Your iPhone may need more time to get GPS signal. Please try again or use Manual Entry below.';
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 0
-            }
-        );
-    }
+            }, 20000); // 20 seconds for iPhone
 
-    function useDemoLocation() {
-        const btn = document.getElementById('updateBtn');
-        const demoBtn = document.getElementById('demoBtn');
-        const status = document.getElementById('locationStatus');
-        
-        // Demo location - simulating iPhone location (example: Beirut, Lebanon)
-        // You can change these coordinates to any location you want to demo
-        const demoLat = 33.8886;  // Example: Beirut coordinates
-        const demoLng = 35.4955;
-        
-        // Disable buttons
-        if (demoBtn) {
-            demoBtn.disabled = true;
-            demoBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+            // Get current position with iPhone-optimized settings
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    console.log('Location received:', position);
+                    clearTimeout(timeoutId);
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const accuracy = position.coords.accuracy; // Accuracy in meters
+
+                    // Update status
+                    status.className = 'alert alert-info';
+                    status.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div><strong>Location received from iPhone!</strong><br><small>Lat: ' + lat.toFixed(6) + ', Lng: ' + lng.toFixed(6) + ' (Accuracy: ±' + Math.round(accuracy) + 'm)</small><br>Updating on server...';
+
+                    // Send to API
+                    sendLocationToServer(lat, lng, btn, status, originalHTML);
+                },
+                function (error) {
+                    console.error('Geolocation error:', error);
+                    clearTimeout(timeoutId);
+                    status.className = 'alert alert-danger';
+                    let errorMessage = '';
+                    
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage = '<strong>Location Permission Denied</strong><br>';
+                            if (window.location.protocol !== 'https:') {
+                                errorMessage += 'iPhone requires HTTPS for GPS access. Your browser blocked location access on HTTP.<br><br>';
+                                errorMessage += '<strong>Solutions:</strong><br>';
+                                errorMessage += '1. Access this site via HTTPS (secure connection)<br>';
+                                errorMessage += '2. Use Manual Entry below with coordinates from Maps app<br>';
+                            } else {
+                                errorMessage += 'You denied location permission or it was previously denied.<br><br>';
+                                errorMessage += '<strong>To enable:</strong><br>';
+                                errorMessage += '1. Go to <strong>iPhone Settings → Safari → Location Services</strong><br>';
+                                errorMessage += '2. Make sure Location Services is ON<br>';
+                                errorMessage += '3. Find this website and set it to "Ask" or "Allow"<br>';
+                                errorMessage += '4. Refresh this page and try again<br><br>';
+                                errorMessage += 'Or use Manual Entry below.';
+                            }
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage = '<strong>GPS Signal Unavailable</strong><br>';
+                            errorMessage += 'Your iPhone cannot get GPS signal. This may happen if:<br>';
+                            errorMessage += '• You are indoors or in a building<br>';
+                            errorMessage += '• GPS is disabled in Settings<br>';
+                            errorMessage += '• Poor signal reception<br><br>';
+                            errorMessage += 'Please try again or use Manual Entry below.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage = '<strong>GPS Request Timed Out</strong><br>';
+                            errorMessage += 'Your iPhone took too long to get GPS coordinates. This may happen if:<br>';
+                            errorMessage += '• GPS signal is weak<br>';
+                            errorMessage += '• You are in a building or underground<br><br>';
+                            errorMessage += 'Please try again or use Manual Entry below.';
+                            break;
+                        default:
+                            errorMessage = '<strong>Error Getting Location</strong><br>' + error.message;
+                    }
+
+                    status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage;
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                },
+                {
+                    enableHighAccuracy: true,  // Use GPS, not just network location
+                    timeout: 20000,            // 20 seconds timeout for iPhone
+                    maximumAge: 0              // Don't use cached location
+                }
+            );
         }
-        if (btn) btn.disabled = true;
-        
-        status.style.display = 'block';
-        status.className = 'alert alert-info';
-        status.innerHTML = '<i class="fas fa-mobile-alt me-2"></i>Using demo location (iPhone simulation)...<br><small>Lat: ' + demoLat + ', Lng: ' + demoLng + '</small>';
-
-        // Send demo location to server
-        sendLocationToServer(demoLat, demoLng, btn, demoBtn, status, 'Get My Current Location');
     }
 
-    function sendLocationToServer(lat, lng, btn, demoBtn, status, originalHTML) {
+    function tryLocationAnyway() {
+        const status = document.getElementById('locationStatus');
+        status.style.display = 'none';
+        updateMyLocation();
+    }
+
+    function sendLocationToServer(lat, lng, btn, status, originalHTML) {
         fetch('/api/location/update-quick.php', {
             method: 'POST',
             headers: {
@@ -333,43 +353,31 @@ require_once '../includes/header.php';
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Network response was not ok: ' + response.status);
             }
             return response.json();
         })
         .then(data => {
             if (data.success) {
                 status.className = 'alert alert-success';
-                status.innerHTML = '<i class="fas fa-check-circle me-2"></i><strong>Location updated successfully!</strong><br>Your bus location has been updated. Parents can now track your bus.';
-                // Reload page after 2 seconds
+                status.innerHTML = '<i class="fas fa-check-circle me-2"></i><strong>Location Updated Successfully!</strong><br>Your iPhone location has been set as the driver location.<br><small>Lat: ' + lat.toFixed(6) + ', Lng: ' + lng.toFixed(6) + '</small><br><br>Parents can now track your bus in real-time.';
+                // Reload page after 2 seconds to show updated location
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
             } else {
                 status.className = 'alert alert-danger';
-                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Failed to update: ' + (data.message || 'Unknown error');
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = originalHTML;
-                }
-                if (demoBtn) {
-                    demoBtn.disabled = false;
-                    demoBtn.innerHTML = '<i class="fas fa-mobile-alt me-2"></i>Use Demo Location (iPhone)';
-                }
+                status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i><strong>Failed to update location</strong><br>' + (data.message || 'Unknown error occurred. Please try again.');
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
             }
         })
         .catch(error => {
             console.error('Error:', error);
             status.className = 'alert alert-danger';
-            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Error updating location: ' + error.message + '<br><small>Please check your connection and try again.</small>';
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
-            }
-            if (demoBtn) {
-                demoBtn.disabled = false;
-                demoBtn.innerHTML = '<i class="fas fa-mobile-alt me-2"></i>Use Demo Location (iPhone)';
-            }
+            status.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i><strong>Error updating location</strong><br>' + error.message + '<br><small>Please check your internet connection and try again.</small>';
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
         });
     }
 </script>
