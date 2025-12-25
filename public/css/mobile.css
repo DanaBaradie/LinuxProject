@@ -213,6 +213,47 @@
         font-size: 0.95rem;
     }
 
+    /* Ensure colored card headers maintain their colors on mobile */
+    .card-header.bg-primary,
+    .card-header.bg-success,
+    .card-header.bg-info,
+    .card-header.bg-danger {
+        background-color: var(--bs-primary) !important;
+        color: white !important;
+        border-bottom: none !important;
+    }
+
+    .card-header.bg-primary h5,
+    .card-header.bg-success h5,
+    .card-header.bg-info h5,
+    .card-header.bg-danger h5 {
+        color: white !important;
+    }
+
+    .card-header.bg-info {
+        background-color: var(--bs-info) !important;
+    }
+
+    .card-header.bg-warning:not(.text-white) {
+        background-color: var(--bs-warning) !important;
+        color: #212529 !important;
+        border-bottom: none !important;
+    }
+
+    .card-header.bg-warning:not(.text-white) h5 {
+        color: #212529 !important;
+    }
+
+    .card-header.bg-warning.text-dark {
+        background-color: var(--bs-warning) !important;
+        color: #212529 !important;
+        border-bottom: none !important;
+    }
+
+    .card-header.bg-warning.text-dark h5 {
+        color: #212529 !important;
+    }
+
     /* 15. Stats cards stack */
     .grid-responsive {
         grid-template-columns: 1fr !important;

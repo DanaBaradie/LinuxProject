@@ -435,6 +435,32 @@
     padding: 1.25rem 1.5rem;
     font-weight: 600;
     border-radius: 16px 16px 0 0;
+    color: #212529;
+}
+
+/* Colored card headers override default styling */
+.card-header.bg-primary,
+.card-header.bg-success,
+.card-header.bg-info,
+.card-header.bg-danger {
+    background: var(--bs-primary) !important;
+    border-bottom: none !important;
+    color: white !important;
+}
+
+.card-header.bg-info {
+    background: var(--bs-info) !important;
+}
+
+.card-header.bg-warning:not(.text-white) {
+    background: var(--bs-warning) !important;
+    border-bottom: none !important;
+    color: #212529 !important;
+}
+
+.card-header.bg-warning.text-dark {
+    background: var(--bs-warning) !important;
+    border-bottom: none !important;
     color: #212529 !important;
 }
 
