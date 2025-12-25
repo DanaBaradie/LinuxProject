@@ -26,6 +26,33 @@ body:has(nav.navbar) {
     padding-top: 0; /* Space handled by content areas */
 }
 
+/* Navbar layout - ensure brand stays next to sidebar toggle */
+.navbar .container-fluid {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+}
+
+.navbar-brand {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    order: 2;
+}
+
+#sidebarToggle {
+    order: 1;
+    flex: 0 0 auto;
+}
+
+.navbar .d-flex.align-items-center {
+    order: 3;
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
 /* Alternative: Add class to body in header.php */
 body.with-navbar {
     padding-top: 0; /* Space handled by content areas */

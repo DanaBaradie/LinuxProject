@@ -117,6 +117,20 @@
             padding-left: 20px !important;
         }
 
+        /* Navbar layout - keep brand next to sidebar toggle */
+        .navbar .container-fluid {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand {
+            margin-left: 0 !important;
+            margin-right: auto;
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+
         /* Adjust Header when sidebar is collapsed */
         body.sidebar-collapsed .navbar-brand {
             width: auto !important;
