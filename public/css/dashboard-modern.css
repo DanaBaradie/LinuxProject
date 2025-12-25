@@ -443,16 +443,32 @@
 .card-header.bg-primary h5,
 .card-header.bg-success h5,
 .card-header.bg-info h5,
-.card-header.bg-danger h5,
-.card-header.bg-warning h5 {
+.card-header.bg-danger h5 {
     color: white !important;
 }
 
 .card-header.bg-primary,
 .card-header.bg-success,
 .card-header.bg-info,
-.card-header.bg-danger,
-.card-header.bg-warning {
+.card-header.bg-danger {
+    color: white !important;
+}
+
+/* Warning background should use dark text unless explicitly set to white */
+.card-header.bg-warning:not(.text-white) h5 {
+    color: #212529 !important;
+}
+
+.card-header.bg-warning:not(.text-white) {
+    color: #212529 !important;
+}
+
+/* If explicitly set to white, respect it */
+.card-header.bg-warning.text-white h5 {
+    color: white !important;
+}
+
+.card-header.bg-warning.text-white {
     color: white !important;
 }
 
