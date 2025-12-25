@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 require_once '../../../config/config.php';
 require_once '../../../config/database.php';
-require_once '../../../includes/MailgunService.php';
+require_once '../../../includes/SendGridService.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
@@ -51,8 +51,8 @@ try {
     ]);
 
     // Send email
-    $mailgun = new MailgunService();
-    $result = $mailgun->sendPasswordResetEmail($email, $user['full_name'], $token);
+    $sendgrid = new SendGridService();
+    $result = $sendgrid->sendPasswordResetEmail($email, $user['full_name'], $token);
 
     if ($result['success']) {
         echo json_encode(['success' => true, 'message' => 'Password reset email sent successfully']);

@@ -17,6 +17,13 @@ define('PASSWORD_MIN_LENGTH', 8);
 // Google Maps API Key (get from https://console.cloud.google.com/)
 define('GOOGLE_MAPS_API_KEY', 'YOUR_API_KEY_HERE');
 
+// SendGrid Configuration (get from https://app.sendgrid.com/)
+define('SENDGRID_API_KEY', 'YOUR_SENDGRID_API_KEY_HERE');
+define('SENDGRID_FROM_EMAIL', 'noreply@yourdomain.com');
+define('SENDGRID_FROM_NAME', 'School Bus Tracking System');
+define('SENDGRID_REPLY_TO', 'support@yourdomain.com');
+define('SENDGRID_WEBHOOK_PUBLIC_KEY', ''); // Optional: for webhook verification
+
 // Timezone
 date_default_timezone_set('Asia/Beirut');
 

@@ -39,6 +39,16 @@
                         <i class="fas fa-bell"></i>Send Notifications
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'messages.php' ? 'active' : ''; ?>" href="/messages.php">
+                        <i class="fas fa-envelope"></i>Email Messages
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'test-sendgrid.php' ? 'active' : ''; ?>" href="/test-sendgrid.php">
+                        <i class="fas fa-vial"></i>Test SendGrid
+                    </a>
+                </li>
             <?php elseif (getUserRole() === 'parent'): ?>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'my-children.php' ? 'active' : ''; ?>" href="/my-children.php">
