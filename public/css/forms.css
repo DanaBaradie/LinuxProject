@@ -457,6 +457,27 @@ textarea.form-control {
     border-radius: 12px 12px 0 0;
 }
 
+/* Date Picker Modal */
+#customDateModal .modal-body {
+    padding: 1.5rem;
+}
+
+#customDateModal .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+#customDateModal .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+#customDateModal .btn-group .btn {
+    flex: 1;
+    min-width: 100px;
+}
+
 .modal-title {
     font-weight: 600;
     color: #212529;

@@ -18,9 +18,38 @@ $db = $database->getConnection();
 $role = getUserRole();
 $stats = [];
 
+// Get date filter parameters
+$date_filter = $_GET['date'] ?? 'today';
+$selected_date = $_GET['selected_date'] ?? date('Y-m-d');
+$date_range_start = $selected_date;
+$date_range_end = $selected_date;
+
+// Calculate date range based on filter
+switch ($date_filter) {
+    case 'today':
+        $date_range_start = date('Y-m-d');
+        $date_range_end = date('Y-m-d');
+        break;
+    case 'week':
+        // Get start of week (Monday)
+        $day_of_week = date('w', strtotime($selected_date));
+        $days_to_monday = ($day_of_week == 0) ? 6 : $day_of_week - 1;
+        $date_range_start = date('Y-m-d', strtotime($selected_date . ' -' . $days_to_monday . ' days'));
+        $date_range_end = date('Y-m-d', strtotime($date_range_start . ' +6 days'));
+        break;
+    case 'month':
+        $date_range_start = date('Y-m-01', strtotime($selected_date));
+        $date_range_end = date('Y-m-t', strtotime($selected_date));
+        break;
+    case 'custom':
+        $date_range_start = $_GET['start_date'] ?? $selected_date;
+        $date_range_end = $_GET['end_date'] ?? $selected_date;
+        break;
+}
+
 try {
     if ($role === 'admin') {
-        // Enhanced statistics
+        // Enhanced statistics (these are not date-dependent, but we'll add date filters where applicable)
         $query = "SELECT COUNT(*) as count FROM buses WHERE status = 'active'";
         $stats['active_buses'] = $db->query($query)->fetch()['count'];
         
@@ -43,12 +72,37 @@ try {
                     AND current_longitude IS NOT NULL";
         $stats['tracking_buses'] = $db->query($query)->fetch()['count'];
         
-        // Recent activity
+        // Recent activity with date filter (fallback to all if no results in date range)
         $query = "SELECT b.*, u.full_name as driver_name 
                   FROM buses b 
                   LEFT JOIN users u ON b.driver_id = u.id 
+                  WHERE DATE(b.updated_at) BETWEEN :start_date AND :end_date
                   ORDER BY b.updated_at DESC LIMIT 5";
-        $buses = $db->query($query)->fetchAll();
+        $stmt = $db->prepare($query);
+        $stmt->execute([
+            ':start_date' => $date_range_start,
+            ':end_date' => $date_range_end
+        ]);
+        $buses = $stmt->fetchAll();
+        
+        // If no buses in date range, show most recent buses
+        if (empty($buses)) {
+            $query = "SELECT b.*, u.full_name as driver_name 
+                      FROM buses b 
+                      LEFT JOIN users u ON b.driver_id = u.id 
+                      ORDER BY b.updated_at DESC LIMIT 5";
+            $buses = $db->query($query)->fetchAll();
+        }
+        
+        // GPS logs count for selected period
+        $query = "SELECT COUNT(DISTINCT bus_id) as count FROM gps_logs 
+                  WHERE DATE(timestamp) BETWEEN :start_date AND :end_date";
+        $stmt = $db->prepare($query);
+        $stmt->execute([
+            ':start_date' => $date_range_start,
+            ':end_date' => $date_range_end
+        ]);
+        $stats['gps_updates'] = $stmt->fetch()['count'] ?? 0;
         
     } elseif ($role === 'parent') {
         $query = "SELECT COUNT(*) as count FROM students WHERE parent_id = :parent_id";
@@ -93,15 +147,90 @@ require_once '../includes/header.php';
                         <i class="fas fa-tachometer-alt me-2 text-primary"></i>Dashboard
                     </h1>
                     <p class="text-muted mb-0">Welcome back, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</p>
+                    <?php if ($date_filter !== 'today'): ?>
+                        <small class="text-info">
+                            <i class="fas fa-filter me-1"></i>
+                            Showing data from 
+                            <?php 
+                                if ($date_filter === 'week') {
+                                    echo date('M d', strtotime($date_range_start)) . ' - ' . date('M d', strtotime($date_range_end));
+                                } elseif ($date_filter === 'month') {
+                                    echo date('F Y', strtotime($date_range_start));
+                                } elseif ($date_filter === 'custom') {
+                                    echo date('M d', strtotime($date_range_start)) . ' - ' . date('M d', strtotime($date_range_end));
+                                }
+                            ?>
+                        </small>
+                    <?php endif; ?>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-calendar me-1"></i>Today
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" id="dateFilterBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-calendar me-1"></i>
+                                <span id="dateFilterText"><?php 
+                                    switch($date_filter) {
+                                        case 'today': echo 'Today'; break;
+                                        case 'week': echo 'This Week'; break;
+                                        case 'month': echo 'This Month'; break;
+                                        case 'custom': echo date('M d', strtotime($date_range_start)) . ' - ' . date('M d', strtotime($date_range_end)); break;
+                                        default: echo 'Today';
+                                    }
+                                ?></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dateFilterBtn">
+                                <li><a class="dropdown-item" href="#" onclick="setDateFilter('today'); return false;">
+                                    <i class="fas fa-calendar-day me-2"></i>Today
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="setDateFilter('week'); return false;">
+                                    <i class="fas fa-calendar-week me-2"></i>This Week
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="setDateFilter('month'); return false;">
+                                    <i class="fas fa-calendar-alt me-2"></i>This Month
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="showCustomDatePicker(); return false;">
+                                    <i class="fas fa-calendar-check me-2"></i>Custom Date Range
+                                </a></li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportDashboard()">
                             <i class="fas fa-download me-1"></i>Export
                         </button>
+                    </div>
+                </div>
+                
+                <!-- Custom Date Range Picker Modal -->
+                <div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="customDateModalLabel">
+                                    <i class="fas fa-calendar-check me-2"></i>Select Date Range
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate" value="<?php echo $date_range_start; ?>">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">End Date</label>
+                                    <input type="date" class="form-control" id="endDate" value="<?php echo $date_range_end; ?>">
+                                </div>
+                                <div class="btn-group w-100 mb-2" role="group">
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('today')">Today</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('yesterday')">Yesterday</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('week')">This Week</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDate('month')">This Month</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="applyCustomDateRange()">Apply Filter</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -399,6 +528,113 @@ require_once '../includes/header.php';
 </div>
 
 <script>
+// Date Filter Functions
+function setDateFilter(filter) {
+    const url = new URL(window.location);
+    url.searchParams.set('date', filter);
+    url.searchParams.set('selected_date', '<?php echo date('Y-m-d'); ?>');
+    url.searchParams.delete('start_date');
+    url.searchParams.delete('end_date');
+    window.location.href = url.toString();
+}
+
+function showCustomDatePicker() {
+    const modal = new bootstrap.Modal(document.getElementById('customDateModal'));
+    modal.show();
+}
+
+function setQuickDate(type) {
+    const today = new Date();
+    let startDate, endDate;
+    
+    switch(type) {
+        case 'today':
+            startDate = endDate = today.toISOString().split('T')[0];
+            break;
+        case 'yesterday':
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            startDate = endDate = yesterday.toISOString().split('T')[0];
+            break;
+        case 'week':
+            const dayOfWeek = today.getDay();
+            const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+            const monday = new Date(today);
+            monday.setDate(today.getDate() - daysToMonday);
+            startDate = monday.toISOString().split('T')[0];
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+            endDate = sunday.toISOString().split('T')[0];
+            break;
+        case 'month':
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+            endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+            break;
+    }
+    
+    document.getElementById('startDate').value = startDate;
+    document.getElementById('endDate').value = endDate;
+}
+
+function applyCustomDateRange() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    
+    if (!startDate || !endDate) {
+        alert('Please select both start and end dates');
+        return;
+    }
+    
+    if (new Date(startDate) > new Date(endDate)) {
+        alert('Start date cannot be after end date');
+        return;
+    }
+    
+    const url = new URL(window.location);
+    url.searchParams.set('date', 'custom');
+    url.searchParams.set('start_date', startDate);
+    url.searchParams.set('end_date', endDate);
+    window.location.href = url.toString();
+}
+
+// Export Dashboard Data
+function exportDashboard() {
+    const btn = event.target.closest('button');
+    const originalHTML = btn.innerHTML;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Exporting...';
+    
+    // Get current filter parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateFilter = urlParams.get('date') || 'today';
+    const selectedDate = urlParams.get('selected_date') || '<?php echo date('Y-m-d'); ?>';
+    const startDate = urlParams.get('start_date') || '';
+    const endDate = urlParams.get('end_date') || '';
+    
+    // Build export URL
+    let exportUrl = '/api/reports/generate.php?format=csv';
+    exportUrl += '&date=' + encodeURIComponent(dateFilter);
+    exportUrl += '&selected_date=' + encodeURIComponent(selectedDate);
+    if (startDate) exportUrl += '&start_date=' + encodeURIComponent(startDate);
+    if (endDate) exportUrl += '&end_date=' + encodeURIComponent(endDate);
+    
+    // Create temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = exportUrl;
+    link.download = 'dashboard-export-' + new Date().toISOString().split('T')[0] + '.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Show success message
+    setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        showToast('Dashboard data exported successfully!', 'success');
+    }, 1000);
+}
+
 // Initialize components
 document.addEventListener('DOMContentLoaded', () => {
     // Add page transition
