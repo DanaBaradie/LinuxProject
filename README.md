@@ -27,14 +27,22 @@ A comprehensive web-based School Bus Tracking System that enables real-time GPS 
 - ✅ Session-based authentication
 - ✅ Role-based authorization
 - ✅ Input validation and sanitization
+- ✅ CSRF protection
+- ✅ Security headers (CSP, X-Frame-Options, etc.)
+- ✅ Rate limiting
+- ✅ Environment-based configuration
 
 ### Technical Features
 - ✅ RESTful API architecture
 - ✅ Clean code structure
 - ✅ Comprehensive documentation
 - ✅ Database normalization
-- ✅ Error handling and logging
+- ✅ Professional error handling and logging
 - ✅ Responsive design (Bootstrap 5)
+- ✅ Environment-based configuration (.env)
+- ✅ Input validation system
+- ✅ Professional logging with multiple levels
+- ✅ PSR-4 autoloading
 
 ## Technology Stack
 
@@ -110,24 +118,44 @@ mysql -u root -p school_bus_tracking < database/seed.sql
 
 ### Step 3: Configuration
 
-1. Update database credentials in `config/database.php`:
-```php
-private $host = 'localhost';
-private $db_name = 'school_bus_tracking';
-private $username = 'your_username';
-private $password = 'your_password';
+1. **Create environment file:**
+```bash
+cp .env.example .env
 ```
 
-2. Update site URL in `config/config.php`:
-```php
-define('SITE_URL', 'http://your-domain.com');
+2. **Update `.env` file with your configuration:**
+```env
+# Application
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://your-domain.com
+
+# Database
+DB_HOST=localhost
+DB_NAME=school_bus_tracking
+DB_USER=your_username
+DB_PASS=your_password
+
+# Google Maps API
+GOOGLE_MAPS_API_KEY=your-api-key-here
+
+# Security
+SESSION_TIMEOUT=3600
+PASSWORD_MIN_LENGTH=8
 ```
 
-3. (Optional) Add Google Maps API key in `config/config.php`:
-```php
-define('GOOGLE_MAPS_API_KEY', 'your-api-key-here');
+3. **Install dependencies:**
+```bash
+composer install
 ```
-Get API key from: https://console.cloud.google.com/
+
+4. **Set proper permissions:**
+```bash
+chmod 755 -R .
+chmod 777 -R logs/ storage/
+```
+
+> **Note:** The system now uses environment-based configuration. See `PROFESSIONAL_IMPROVEMENTS.md` for details on new features.
 
 ### Step 4: Web Server Configuration
 
@@ -329,10 +357,14 @@ Seed data includes:
 
 1. **Change default passwords** immediately
 2. **Use HTTPS** in production
-3. **Regular security updates** for PHP and dependencies
-4. **Implement rate limiting** for API endpoints
-5. **Regular backups** of database
-6. **Monitor error logs** for suspicious activity
+3. **Set APP_ENV=production** in `.env` file
+4. **Set APP_DEBUG=false** in production
+5. **Regular security updates** for PHP and dependencies
+6. **Regular backups** of database
+7. **Monitor error logs** for suspicious activity
+8. **Review CORS_ALLOWED_ORIGINS** in `.env`
+9. **Keep `.env` file secure** (not in version control)
+10. **Enable rate limiting** (already implemented, configure in `.env`)
 
 ## Future Enhancements
 

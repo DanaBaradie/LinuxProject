@@ -1,24 +1,68 @@
 <?php
-// Application Configuration
-session_start();
+/**
+ * Application Configuration
+ * 
+ * Main configuration file with environment-based settings
+ * 
+ * @author Dana Baradie
+ * @course IT404
+ */
 
-// Error reporting (disable in production)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Load environment configuration
+require_once __DIR__ . '/env.php';
+require_once __DIR__ . '/logger.php';
+require_once __DIR__ . '/validator.php';
+require_once __DIR__ . '/security.php';
 
-// Site settings
-define('SITE_NAME', 'School Bus Tracking System');
-define('SITE_URL', 'http://165.22.21.116'); // Your server IP
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Security settings
-define('SESSION_TIMEOUT', 3600); // 1 hour
-define('PASSWORD_MIN_LENGTH', 8);
+// Error reporting based on environment
+if (Env::isProduction()) {
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+} else {
+    error_reporting(E_ALL);
+    ini_set('display_errors', Env::isDebug() ? 1 : 0);
+    ini_set('log_errors', 1);
+}
 
-// Google Maps API Key (get from https://console.cloud.google.com/)
-define('GOOGLE_MAPS_API_KEY', 'YOUR_API_KEY_HERE');
+// Set error handler
+set_error_handler(function($severity, $message, $file, $line) {
+    if (!(error_reporting() & $severity)) {
+        return false;
+    }
+    Logger::error("PHP Error: $message", ['file' => $file, 'line' => $line]);
+    return true;
+});
 
-// Timezone
-date_default_timezone_set('Asia/Beirut');
+// Set exception handler
+set_exception_handler(function($exception) {
+    Logger::exception($exception);
+    if (!Env::isProduction()) {
+        echo "<pre>" . $exception->getMessage() . "\n" . $exception->getTraceAsString() . "</pre>";
+    }
+});
+
+// Set security headers
+Security::setHeaders();
+
+// Site settings from environment
+define('SITE_NAME', Env::get('SITE_NAME', 'School Bus Tracking System'));
+define('SITE_URL', Env::get('APP_URL', 'http://localhost'));
+
+// Security settings from environment
+define('SESSION_TIMEOUT', Env::get('SESSION_TIMEOUT', 3600));
+define('PASSWORD_MIN_LENGTH', Env::get('PASSWORD_MIN_LENGTH', 8));
+
+// Google Maps API Key from environment
+define('GOOGLE_MAPS_API_KEY', Env::get('GOOGLE_MAPS_API_KEY', ''));
+
+// Timezone from environment
+date_default_timezone_set(Env::get('APP_TIMEZONE', 'Asia/Beirut'));
 
 // Helper functions
 function isLoggedIn()

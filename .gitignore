@@ -1,2 +1,51 @@
+# Environment and Configuration
+.env
+.env.local
+.env.*.local
 config/database.php
+
+# Logs
 *.log
+logs/
+storage/logs/
+
+# Dependencies
+vendor/
+node_modules/
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+storage/cache/
+storage/rate_limit/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Composer
+composer.lock
+composer.phar
+
+# PHP
+.phpunit.result.cache
