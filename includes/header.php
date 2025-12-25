@@ -84,14 +84,25 @@
         }
 
         main.main-content-area,
-        .main-content-area {
+        .main-content-area,
+        main.col-md-9,
+        main.col-lg-10,
+        main[class*="col-"] {
             margin-left: 240px !important;
             width: calc(100% - 240px);
             padding: 20px 20px 20px 50px !important;
             /* Added left padding (50px) for spacing from sidebar */
-            padding-top: 80px !important;
-            /* Consistent spacing from navbar (56px navbar + 24px extra) */
+            padding-top: 90px !important;
+            /* Consistent spacing from navbar (56px navbar + 34px extra for better visual separation) */
             transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+        }
+
+        /* Override Bootstrap's px-md-4 to maintain our spacing */
+        main.col-md-9.px-md-4,
+        main.col-lg-10.px-md-4 {
+            padding-left: 50px !important;
+            padding-right: 20px !important;
+            padding-top: 90px !important;
         }
 
         .sidebar.collapsed~main.main-content-area,
@@ -128,7 +139,8 @@
 
         @media (max-width: 768px) {
             body {
-                padding-top: 56px;
+                padding-top: 0 !important;
+                /* Spacing handled by content areas */
             }
 
             .sidebar {
@@ -159,11 +171,29 @@
             }
 
             main.main-content-area,
-            .main-content-area {
+            .main-content-area,
+            main.col-md-9,
+            main.col-lg-10,
+            main[class*="col-"] {
                 margin-left: 0 !important;
                 width: 100% !important;
-                padding: 80px 15px 20px 15px !important;
-                /* Consistent spacing from navbar on mobile */
+                padding: 90px 15px 20px 15px !important;
+                /* Consistent spacing from navbar on mobile (56px navbar + 34px extra) */
+            }
+
+            /* Override Bootstrap's px-md-4 on mobile */
+            main.col-md-9.px-md-4,
+            main.col-lg-10.px-md-4 {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+                padding-top: 90px !important;
+            }
+
+            /* Container-fluid direct spacing on mobile */
+            body.with-navbar > .container-fluid:first-child {
+                padding-top: 90px !important;
+                padding-left: 15px !important;
+                padding-right: 15px !important;
             }
         }
     </style>

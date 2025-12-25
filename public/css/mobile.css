@@ -19,7 +19,8 @@
         left: 0 !important;
         transform: none !important;
         overflow-x: hidden;
-        padding-top: 56px !important;
+        padding-top: 0 !important;
+        /* Spacing handled by content areas */
     }
 
     /* 2. Reset ALL common app layout wrappers */
@@ -43,8 +44,8 @@
         max-width: 100% !important;
         padding-left: 15px !important;
         padding-right: 15px !important;
-        padding-top: 80px !important;
-        /* Consistent spacing from navbar */
+        padding-top: 90px !important;
+        /* Consistent spacing from navbar (56px navbar + 34px extra) */
     }
 
     /* 3. Collapse grid/flex layouts that include sidebar */
@@ -74,9 +75,11 @@
 
     /* 6. Consistent spacing below fixed navbar */
     .main-content,
-    .main-content-area {
-        padding-top: 80px !important;
-        /* Consistent spacing from navbar (56px navbar + 24px extra) */
+    .main-content-area,
+    main.col-md-9,
+    main.col-lg-10 {
+        padding-top: 90px !important;
+        /* Consistent spacing from navbar (56px navbar + 34px extra) */
         padding-left: 15px !important;
         padding-right: 15px !important;
     }

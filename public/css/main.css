@@ -23,12 +23,26 @@ body {
 
 /* Add padding-top only when navbar is present (pages with header.php) */
 body:has(nav.navbar) {
-    padding-top: 0; /* Space handled by main-content-area */
+    padding-top: 0; /* Space handled by content areas */
 }
 
 /* Alternative: Add class to body in header.php */
 body.with-navbar {
-    padding-top: 0; /* Space handled by main-content-area */
+    padding-top: 0; /* Space handled by content areas */
+}
+
+/* Universal rule: Any direct child content after navbar needs spacing */
+body.with-navbar > *:not(nav):not(script):not(style):not(.sidebar):not(.sidebar-overlay):first-of-type,
+body:has(nav.navbar) > *:not(nav):not(script):not(style):not(.sidebar):not(.sidebar-overlay):first-of-type {
+    margin-top: 90px;
+}
+
+/* But don't apply to elements that already have their own spacing */
+body.with-navbar > main:first-of-type,
+body.with-navbar > .container-fluid:first-of-type,
+body:has(nav.navbar) > main:first-of-type,
+body:has(nav.navbar) > .container-fluid:first-of-type {
+    margin-top: 0; /* They have padding-top instead */
 }
 
 /* Sidebar Styles */
@@ -76,21 +90,41 @@ body.with-navbar {
     margin-right: 10px;
 }
 
-/* Main Content */
+/* Main Content - All main elements need spacing from navbar */
 main,
 main.main-content-area,
-.main-content-area {
+.main-content-area,
+main.col-md-9,
+main.col-lg-10,
+main[class*="col-"] {
     margin-left: 240px !important;
     width: calc(100% - 240px);
     padding: 20px 20px 20px 50px !important; /* Added left padding (50px) for spacing from sidebar */
-    padding-top: 80px !important; /* Consistent spacing from fixed navbar (56px navbar + 24px extra) */
+    padding-top: 90px !important; /* Consistent spacing from fixed navbar (56px navbar + 34px extra for better visual separation) */
     min-height: calc(100vh - 56px);
     position: relative;
     z-index: 1;
 }
 
-/* Container spacing after navbar */
-.container-fluid {
+/* Override Bootstrap's px-md-4 to maintain our spacing */
+main.col-md-9.px-md-4,
+main.col-lg-10.px-md-4 {
+    padding-left: 50px !important;
+    padding-right: 20px !important;
+    padding-top: 90px !important;
+}
+
+/* Container spacing after navbar - ensure spacing when used directly */
+body.with-navbar > .container-fluid:first-child,
+body:has(nav.navbar) > .container-fluid:first-child {
+    padding-top: 90px !important; /* Spacing from navbar when container-fluid is direct child */
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+/* Container-fluid inside main should not have extra padding */
+main .container-fluid,
+.main-content-area .container-fluid {
     padding-top: 0 !important; /* Padding handled by main-content-area */
     padding-left: 0 !important; /* Remove extra left padding to allow main's padding to work */
 }
@@ -134,11 +168,30 @@ main > .row:first-child {
     
     main,
     main.main-content-area,
-    .main-content-area {
+    .main-content-area,
+    main.col-md-9,
+    main.col-lg-10,
+    main[class*="col-"] {
         margin-left: 0 !important;
         width: 100% !important;
-        padding: 80px 15px 20px 15px !important;
-        /* Consistent spacing from navbar on mobile */
+        padding: 90px 15px 20px 15px !important;
+        /* Consistent spacing from navbar on mobile (56px navbar + 34px extra) */
+    }
+
+    /* Override Bootstrap's px-md-4 on mobile */
+    main.col-md-9.px-md-4,
+    main.col-lg-10.px-md-4 {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        padding-top: 90px !important;
+    }
+
+    /* Container-fluid direct spacing on mobile */
+    body.with-navbar > .container-fluid:first-child,
+    body:has(nav.navbar) > .container-fluid:first-child {
+        padding-top: 90px !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
     }
 
     /* Table responsive improvements */
