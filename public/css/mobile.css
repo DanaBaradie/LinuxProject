@@ -43,6 +43,8 @@
         max-width: 100% !important;
         padding-left: 15px !important;
         padding-right: 15px !important;
+        padding-top: 80px !important;
+        /* Consistent spacing from navbar */
     }
 
     /* 3. Collapse grid/flex layouts that include sidebar */
@@ -73,7 +75,8 @@
     /* 6. Consistent spacing below fixed navbar */
     .main-content,
     .main-content-area {
-        padding-top: 16px !important;
+        padding-top: 80px !important;
+        /* Consistent spacing from navbar (56px navbar + 24px extra) */
         padding-left: 15px !important;
         padding-right: 15px !important;
     }
@@ -83,10 +86,14 @@
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
         z-index: 1030;
+        position: fixed !important;
+        top: 56px !important;
+        left: 0 !important;
+        height: calc(100vh - 56px) !important;
     }
 
     .sidebar.show {
-        transform: translateX(0);
+        transform: translateX(0) !important;
     }
 
     .sidebar-overlay {
@@ -98,10 +105,12 @@
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 1029;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .sidebar-overlay.show {
-        display: block;
+        display: block !important;
     }
 
     /* 8. Navbar adjustments */
@@ -115,6 +124,22 @@
 
     .navbar .text-white {
         font-size: 0.875rem;
+    }
+
+    /* Sidebar toggle button - ensure it's clickable */
+    #sidebarToggle {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 1040 !important;
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.3);
+    }
+
+    #sidebarToggle:active {
+        opacity: 0.7;
     }
 
     /* 9. Force full-width containers */

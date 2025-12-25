@@ -15,8 +15,8 @@
     <style>
         body {
             background-color: #f8f9fa;
-            padding-top: 70px;
-            /* Space for fixed navbar */
+            padding-top: 0;
+            /* Space handled by main-content-area */
         }
 
         .sidebar {
@@ -24,7 +24,7 @@
             top: 56px;
             bottom: 0;
             left: 0;
-            z-index: 1020;
+            z-index: 1030;
             padding: 48px 0 0;
             box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
             width: 240px;
@@ -45,7 +45,8 @@
             right: 0;
             bottom: 0;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1019;
+            z-index: 1029;
+            cursor: pointer;
         }
 
         .sidebar-overlay.show {
@@ -88,8 +89,8 @@
             width: calc(100% - 240px);
             padding: 20px 20px 20px 50px !important;
             /* Added left padding (50px) for spacing from sidebar */
-            padding-top: 30px !important;
-            /* Extra spacing from navbar */
+            padding-top: 80px !important;
+            /* Consistent spacing from navbar (56px navbar + 24px extra) */
             transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
         }
 
@@ -111,6 +112,8 @@
         .container-fluid {
             padding-left: 0 !important;
             /* Remove extra left padding from container */
+            padding-top: 0 !important;
+            /* Padding handled by main-content-area */
         }
 
         .row {
@@ -118,14 +121,9 @@
             margin-right: 0 !important;
         }
 
-        .container-fluid {
-            padding-top: 25px;
-            /* Additional spacing */
-        }
-
         .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center {
-            margin-top: 10px;
-            padding-top: 15px;
+            margin-top: 0;
+            padding-top: 0;
         }
 
         @media (max-width: 768px) {
@@ -137,6 +135,7 @@
                 transform: translateX(-100%);
                 width: 280px;
                 max-width: 85vw;
+                z-index: 1030;
             }
 
             .sidebar.show {
@@ -151,7 +150,8 @@
                 right: 0;
                 bottom: 0;
                 background-color: rgba(0, 0, 0, 0.5);
-                z-index: 1019;
+                z-index: 1029;
+                cursor: pointer;
             }
 
             .sidebar-overlay.show {
@@ -162,7 +162,8 @@
             .main-content-area {
                 margin-left: 0 !important;
                 width: 100% !important;
-                padding: 20px 15px !important;
+                padding: 80px 15px 20px 15px !important;
+                /* Consistent spacing from navbar on mobile */
             }
         }
     </style>
@@ -172,7 +173,7 @@
     <nav class="navbar navbar-dark bg-primary fixed-top shadow-sm">
         <div class="container-fluid">
             <button class="btn btn-link text-white me-2" id="sidebarToggle" type="button" aria-label="Toggle sidebar"
-                style="text-decoration: none;">
+                style="text-decoration: none; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; z-index: 1040;">
                 <i class="fas fa-bars fa-lg"></i>
             </button>
             <a class="navbar-brand" href="/dashboard.php">

@@ -23,12 +23,12 @@ body {
 
 /* Add padding-top only when navbar is present (pages with header.php) */
 body:has(nav.navbar) {
-    padding-top: 70px; /* Space for fixed navbar (56px navbar + 14px extra) */
+    padding-top: 0; /* Space handled by main-content-area */
 }
 
 /* Alternative: Add class to body in header.php */
 body.with-navbar {
-    padding-top: 70px;
+    padding-top: 0; /* Space handled by main-content-area */
 }
 
 /* Sidebar Styles */
@@ -83,7 +83,7 @@ main.main-content-area,
     margin-left: 240px !important;
     width: calc(100% - 240px);
     padding: 20px 20px 20px 50px !important; /* Added left padding (50px) for spacing from sidebar */
-    padding-top: 50px !important; /* Extra spacing from fixed navbar */
+    padding-top: 80px !important; /* Consistent spacing from fixed navbar (56px navbar + 24px extra) */
     min-height: calc(100vh - 56px);
     position: relative;
     z-index: 1;
@@ -91,27 +91,27 @@ main.main-content-area,
 
 /* Container spacing after navbar */
 .container-fluid {
-    padding-top: 25px; /* Additional spacing from navbar */
+    padding-top: 0 !important; /* Padding handled by main-content-area */
     padding-left: 0 !important; /* Remove extra left padding to allow main's padding to work */
 }
 
-/* Page headers get extra spacing */
+/* Page headers - no extra spacing needed */
 .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center {
-    margin-top: 10px; /* Extra space for page headers */
-    padding-top: 15px; /* Additional padding for headers */
+    margin-top: 0;
+    padding-top: 0;
 }
 
-/* First element in main content gets extra top margin */
+/* First element in main content - no extra margin needed */
 main > .d-flex:first-child,
 main > .container-fluid:first-child,
 main > .row:first-child {
-    margin-top: 15px;
+    margin-top: 0;
 }
 
-/* Page title/header sections get extra spacing */
+/* Page title/header sections - consistent spacing */
 .pt-3.pb-2.mb-3 {
-    margin-top: 20px !important;
-    padding-top: 25px !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 
 /* Enhanced Mobile Responsive Styles */
@@ -137,8 +137,8 @@ main > .row:first-child {
     .main-content-area {
         margin-left: 0 !important;
         width: 100% !important;
-        padding-left: 15px !important;
-        padding-right: 15px !important;
+        padding: 80px 15px 20px 15px !important;
+        /* Consistent spacing from navbar on mobile */
     }
 
     /* Table responsive improvements */
